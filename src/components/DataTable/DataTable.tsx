@@ -1,25 +1,20 @@
 import React from 'react';
-import DataGrid from 'react-data-grid';
-import 'react-data-grid/dist/react-data-grid.css';
-
-const defaultColumnProperties = {
-    resizable: true,
-    //width: 120
-};
+import Paper from '@material-ui/core/Paper';
+import { Grid, Table, TableHeaderRow } from '@devexpress/dx-react-grid-material-ui';
 
 const columns = [
-    { key: 'building_identifier', name: 'Building ID', width: 100 },
-    { key: 'building_name', name: 'Building name', width: 200 },
-    { key: 'project', name: 'Project', width: 130 },
-    //{ key: 'calculation_method', name: 'Calculation method', width: 100 },
-    { key: 'main_data_source', name: 'Data source', width: 100 },
-    { key: 'study_type', name: 'Study type', width: 170 },
-    { key: 'study_year', name: 'Study year', width: 100 },
-    { key: 'lifetime', name: 'Lifetime', width: 80 },
-    { key: 'floor_area', name: 'Floor area (m\xB2)', width: 120 },
-    { key: 'heated_volume', name: 'Heated volume', width: 120 },
-    { key: 'area_footprint', name: 'Area footprint', width: 130 }
-].map(c => ({ ...c, ...defaultColumnProperties }));
+    { name: 'building_identifier', title: 'Building ID', width: 100 },
+    { name: 'building_name', title: 'Building name', width: 200 },
+    { name: 'project', title: 'Project', width: 130 },
+    //{ name: 'calculation_method', title: 'Calculation method', width: 100 },
+    { name: 'main_data_source', title: 'Data source', width: 100 },
+    { name: 'study_type', title: 'Study type', width: 170 },
+    { name: 'study_year', title: 'Study year', width: 100 },
+    { name: 'lifetime', title: 'Lifetime', width: 80 },
+    { name: 'floor_area', title: 'Floor area (m\xB2)', width: 120 },
+    { name: 'heated_volume', title: 'Heated volume', width: 120 },
+    { name: 'area_footprint', title: 'Area footprint', width: 130 }
+];
 
 
 
@@ -31,10 +26,15 @@ const rows = [
 function DataTable() {
     return (
         <div>
-            <DataGrid
-                columns={columns}
-                rows={rows}
-            />
+            <Paper>
+                <Grid
+                    rows={rows}
+                    columns={columns}
+                >
+                    <Table />
+                    <TableHeaderRow />
+                </Grid>
+            </Paper>
         </div>
     );
 }
