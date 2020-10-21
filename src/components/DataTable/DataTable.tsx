@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import { Grid, Table, TableHeaderRow } from '@devexpress/dx-react-grid-material-ui';
 
@@ -16,27 +16,50 @@ const columns = [
     { name: 'area_footprint', title: 'Area footprint', width: 130 }
 ];
 
-
-
-const rows = [
-    { id: 0, building_identifier: 'NU001', building_name: 'Råstølen sykehjem - concrete, lowcarbon', project: 'Asplan Viak', main_data_source: 'EPD', study_type: 'industry, certification', study_year: '2014', lifetime: '60', floor_area: 8076, heated_volume: 319, area_footprint: 485 },
-    { id: 1, building_identifier: 'SC003', building_name: 'Prinsdal skole' }
-];
-
 function DataTable() {
-    return (
-        <div>
-            <Paper>
-                <Grid
-                    rows={rows}
-                    columns={columns}
-                >
-                    <Table />
-                    <TableHeaderRow />
-                </Grid>
-            </Paper>
-        </div>
-    );
+    const [error, setError] = useState<Error|null>(null);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [buildings, setBuildings] = useState([]);
+
+    useEffect(() => {
+        fetch(`/api/buildings`)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    setIsLoaded(true);
+                    setBuildings(result);
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error: Error) => {
+                    setIsLoaded(true);
+                    setError(error);
+                }
+            )
+    }, [])
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+      } else if (!isLoaded) {
+        return <div>Loading...</div>;
+      } else {
+        return (
+            <div>
+                <Paper>
+                    <Grid
+                        rows={buildings}
+                        columns={columns}
+                    >
+                        <Table />
+                        <TableHeaderRow />
+                    </Grid>
+                </Paper>
+            </div>
+        );
+      }
+
+    
 }
 
 export default DataTable;

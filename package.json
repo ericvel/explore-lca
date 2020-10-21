@@ -1,6 +1,7 @@
 {
   "name": "lca-tool-gui",
   "version": "0.1.0",
+  "proxy": "http://localhost:8000",
   "private": true,
   "dependencies": {
     "@devexpress/dx-react-core": "^2.7.2",
@@ -15,6 +16,7 @@
     "@types/node": "^14.14.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.3",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "fontsource-roboto": "^3.0.3",
     "mysql2": "^2.2.5",
@@ -28,7 +30,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "nodemon backend\\index.js",
+    "server": "nodemon -r dotenv\\config backend\\server.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start\""
   },
   "eslintConfig": {
