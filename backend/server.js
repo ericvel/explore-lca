@@ -16,8 +16,8 @@ app.listen(port, () => {
   console.log(`⚡ Express server now listening on port ${port}`);
 });
 
-app.get('/api/buildings', (req, res) => {
-  pool.query(`select * from ${table}`, (err, rows) => {
+app.get('/api/:table', (req, res) => {
+  pool.query(`select * from ${req.params.table}`, (err, rows) => {
     if (err) {
       res.send(err);
     } else {
