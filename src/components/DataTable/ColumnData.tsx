@@ -1,17 +1,6 @@
-interface Column {
-    name: string;
-    title: string;
-}
-
-interface ColumnExtensions {
-    columnName: string;
-    width: number|string;
-    wordWrapEnabled?: boolean;
-}
-
 class ColumnData {
     static readonly buildingsColumns: Column[] = [
-        { name: 'building_identifier', title: 'Building ID' },
+        { name: 'building_identifier', title: 'ID' },
         { name: 'building_name', title: 'Building name' },
         { name: 'project', title: 'Project' },
         { name: 'calculation_method', title: 'Calculation method' },
@@ -25,6 +14,7 @@ class ColumnData {
     ];
 
     static readonly materialsColumns: Column[] = [
+        { name: 'idmaterials', title: 'ID' },
         { name: 'source', title: 'Source' },
         { name: 'name', title: 'Name' },
         { name: 'dataType', title: 'Data type' },
