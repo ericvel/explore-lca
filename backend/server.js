@@ -17,7 +17,16 @@ app.listen(port, () => {
 });
 
 app.get('/api/:table', (req, res) => {
-  const query = `select * from ${req.params.table} limit ${req.query.skip}, ${req.query.take}`;
+  var sortQuery = ``;
+  if (req.query.sort != "[]") {
+    var sortParams = JSON.parse(req.query.sort)[0];
+    const selector = sortParams.selector;
+    sortQuery = ` ORDER BY ${selector}`
+    if (sortParams.desc == true) {
+      sortQuery += ` DESC`
+    }
+  }
+  const query = `SELECT * FROM ${req.params.table}${sortQuery} LIMIT ${req.query.skip}, ${req.query.take}`;
   console.log("Query: " + query)
   pool.query(query, (err, rows) => {
     if (err) {
@@ -31,7 +40,7 @@ app.get('/api/:table', (req, res) => {
           res.send(err);
         } else {
           const count = countObject[0]['count(*)'];
-          var jsonObj = {
+          const jsonObj = {
             data: rows,
             totalCount: count
           }

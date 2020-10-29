@@ -34,6 +34,7 @@ const initialState = {
     loading: false,
     lastQuery: '',
     table: 'buildings',
+    sorting: [],
     forceReload: false,
 };
 
@@ -73,18 +74,16 @@ function reducer(state: any, { type, payload }: any) {
                 forceReload: true,
                 requestedSkip: 0,
                 rows: [],
+                sorting: [],
                 table: payload,
             };
-        case 'RESET_ROWS':
+        case 'CHANGE_SORTING':
             return {
+                ...state,
+                forceReload: true,
                 rows: [],
-                skip: 0,
-                requestedSkip: 0,
-                take: VIRTUAL_PAGE_SIZE * 2,
-                totalCount: 0,
-                loading: false,
-                lastQuery: '',
-            }
+                sorting: payload,
+            };
         default:
             return state;
     }
@@ -121,16 +120,16 @@ function DataTable(props: any) {
             .map(({ columnName, value, operation }) => (
                 `["${columnName}","${operation}","${value}"]`
             )).join(',"and",'); */
-        /* const sortingConfig = sorting
-            .map(({ columnName, direction }) => ({
+        const sortingConfig = sorting
+            .map(({ columnName, direction }: any) => ({
                 selector: columnName,
                 desc: direction === 'desc',
-            })); */
-        //const sortingStr = JSON.stringify(sortingConfig);
+            }));
+        const sortingStr = JSON.stringify(sortingConfig);
         //const filterQuery = filterStr ? `&filter=[${escape(filterStr)}]` : '';
-        //const sortQuery = sortingStr ? `&sort=${escape(`${sortingStr}`)}` : '';
+        const sortQuery = sortingStr ? `&sort=${escape(`${sortingStr}`)}` : '';
 
-        return `/api/${table}?requireTotalCount=true&skip=${requestedSkip}&take=${take}`;
+        return `/api/${table}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${sortQuery}`;
         // return `${URL}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${filterQuery}${sortQuery}`;
     };
 
@@ -161,6 +160,10 @@ function DataTable(props: any) {
         }
     };
 
+    const changeSorting = (value: any) => {
+        dispatch({ type: 'CHANGE_SORTING', payload: value });
+    };
+
     useEffect(() => {
         console.log("UseEffect: Update columns")
         setColumnData(props.tableName);
@@ -173,7 +176,7 @@ function DataTable(props: any) {
     });
 
     const {
-        rows, skip, totalCount, loading, //sorting, filters,
+        rows, skip, totalCount, loading, sorting, //filters,
     } = state;
 
     return (
@@ -192,8 +195,12 @@ function DataTable(props: any) {
                     getRows={getRemoteRows}
                     infiniteScrolling={false}
                 />
+                <SortingState
+                    sorting={sorting}
+                    onSortingChange={changeSorting}
+                />
                 <VirtualTable height="auto" columnExtensions={columnExtensions} />
-                <TableHeaderRow />
+                <TableHeaderRow showSortingControls />
             </Grid>
             {loading && <LoadingIndicator />}
         </Paper>
