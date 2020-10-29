@@ -56,15 +56,15 @@ class ColumnData {
 
     static readonly materialsColumnExtensions: Table.ColumnExtension[] = [
         { columnName: 'idmaterials', width: 100 },
-        { columnName: 'source', width: 200, wordWrapEnabled: true },
-        { columnName: 'name', width: 200, wordWrapEnabled: true },
+        { columnName: 'source', width: 200, /* wordWrapEnabled: true */ },
+        { columnName: 'name', width: 200, /* wordWrapEnabled: true */ },
         { columnName: 'dataType', width: 120 },
         { columnName: 'sourceType', width: 100 },
         { columnName: 'dataYear', width: 100 },
         { columnName: 'FU', width: 70 },
         { columnName: 'idmaterialCat', width: 100 },     
         { columnName: 'idlocationproduction', width: 170 },
-        { columnName: 'comments', width: 400, wordWrapEnabled: true },
+        { columnName: 'comments', width: 400, /* wordWrapEnabled: true */ },
     ];
 
     static getColumnExtensions(tableName: string): Table.ColumnExtension[] {

@@ -16,16 +16,31 @@ app.listen(port, () => {
   console.log(`⚡ Express server now listening on port ${port}`);
 });
 
-app.get('/api/:table', (req, res) => {
+const getSearchQuery = (request) => {
+  if (request.query.search != '') {
+    //where concat(building_name,project) like '%searchterm%'
+  }
+}
+
+const getSortQuery = (request) => {
   var sortQuery = ``;
-  if (req.query.sort != "[]") {
-    var sortParams = JSON.parse(req.query.sort)[0];
+  if (request.query.sort != "[]") {
+    var sortParams = JSON.parse(request.query.sort)[0];
     const selector = sortParams.selector;
     sortQuery = ` ORDER BY ${selector}`
     if (sortParams.desc == true) {
       sortQuery += ` DESC`
     }
   }
+  return sortQuery;
+}
+
+app.get('/api/:table', (req, res) => {
+
+  var searchTerm = req.query.search;
+  console.log("Search term: ", searchTerm)
+  var sortQuery = getSortQuery(req);
+
   const query = `SELECT * FROM ${req.params.table}${sortQuery} LIMIT ${req.query.skip}, ${req.query.take}`;
   console.log("Query: " + query)
   pool.query(query, (err, rows) => {

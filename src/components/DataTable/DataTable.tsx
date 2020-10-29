@@ -1,24 +1,27 @@
-import React, { useState, useEffect, useReducer, useMemo } from 'react';
+import React, { useState, useEffect, useReducer, useMemo, useCallback } from 'react';
 import Paper from '@material-ui/core/Paper';
 import {
     SortingState,
-    IntegratedSorting,
     VirtualTableState,
-    createRowCache
+    createRowCache,
+    SearchState
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
     Table,
+    Toolbar,
+    SearchPanel,
     TableHeaderRow,
     VirtualTable
 } from '@devexpress/dx-react-grid-material-ui';
 import ColumnData from './ColumnData';
 import { Column } from '@devexpress/dx-react-grid';
+import _ from 'lodash';
 
 import LoadingIndicator from '../LoadingIndicator';
 
 
-const VIRTUAL_PAGE_SIZE = 150;
+const VIRTUAL_PAGE_SIZE = 100;
 const MAX_ROWS = 50000;
 var columns: Column[] = []
 var columnExtensions: Table.ColumnExtension[] = []
@@ -35,6 +38,7 @@ const initialState = {
     lastQuery: '',
     table: 'buildings',
     sorting: [],
+    searchTerm: '',
     forceReload: false,
 };
 
@@ -84,6 +88,14 @@ function reducer(state: any, { type, payload }: any) {
                 rows: [],
                 sorting: payload,
             };
+        case 'CHANGE_SEARCH_TERM':
+            return {
+                ...state,
+                forceReload: true,
+                requestedSkip: 0,
+                rows: [],
+                searchTerm: payload,
+            };
         default:
             return state;
     }
@@ -114,7 +126,7 @@ function DataTable(props: any) {
 
     const buildQueryString = () => {
         const {
-            requestedSkip, take, table, filters, sorting,
+            requestedSkip, take, table, searchTerm, filters, sorting,
         } = state;
         /* const filterStr = filters
             .map(({ columnName, value, operation }) => (
@@ -129,7 +141,7 @@ function DataTable(props: any) {
         //const filterQuery = filterStr ? `&filter=[${escape(filterStr)}]` : '';
         const sortQuery = sortingStr ? `&sort=${escape(`${sortingStr}`)}` : '';
 
-        return `/api/${table}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${sortQuery}`;
+        return `/api/${table}?requireTotalCount=true&skip=${requestedSkip}&take=${take}&search=${searchTerm}${sortQuery}`;
         // return `${URL}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${filterQuery}${sortQuery}`;
     };
 
@@ -164,6 +176,14 @@ function DataTable(props: any) {
         dispatch({ type: 'CHANGE_SORTING', payload: value });
     };
 
+    const changeSearchTerm = (value: any) => {
+        console.log("Changed search term: ", value)
+        dispatch({ type: 'CHANGE_SEARCH_TERM', payload: value });
+    };
+
+    // Delays query so it is not fired on every keystroke
+    const delayedCallback = useCallback(_.debounce(changeSearchTerm, 300), []);
+
     useEffect(() => {
         console.log("UseEffect: Update columns")
         setColumnData(props.tableName);
@@ -180,7 +200,7 @@ function DataTable(props: any) {
     } = state;
 
     return (
-        <Paper style={{ height: '700px' }}>
+        <Paper style={{ height: '600px' }}>
             <Grid
                 rows={rows}
                 columns={columns}
@@ -195,12 +215,17 @@ function DataTable(props: any) {
                     getRows={getRemoteRows}
                     infiniteScrolling={false}
                 />
+                <SearchState
+                    onValueChange={delayedCallback}
+                />
                 <SortingState
                     sorting={sorting}
                     onSortingChange={changeSorting}
                 />
                 <VirtualTable height="auto" columnExtensions={columnExtensions} />
                 <TableHeaderRow showSortingControls />
+                <Toolbar />
+                <SearchPanel />
             </Grid>
             {loading && <LoadingIndicator />}
         </Paper>
