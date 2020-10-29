@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 
 const app = express();
 const port = 8000;
-const table ='buildings';
+const table = 'buildings';
 
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST,
@@ -22,7 +22,24 @@ app.get('/api/:table', (req, res) => {
   pool.query(query, (err, rows) => {
     if (err) {
       res.send(err);
+    }
+    else if (req.query.requireTotalCount == 'true') {   
+      // Append total row count to response object
+      const countQuery = `select count(*) from ${req.params.table}`;
+      pool.query(countQuery, (err, countObject) => {
+        if (err) {
+          res.send(err);
+        } else {
+          const count = countObject[0]['count(*)'];
+          var jsonObj = {
+            data: rows,
+            totalCount: count
+          }
+          res.send(jsonObj);
+        }
+      });
     } else {
+      // Only rows without total count
       res.send(rows);
     }
   });
