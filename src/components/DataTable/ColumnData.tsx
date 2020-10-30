@@ -41,7 +41,7 @@ class ColumnData {
             default:
                 return []
         }
-    }    
+    }
 
     static readonly buildingsColumnExtensions: Table.ColumnExtension[] = [
         { columnName: 'building_identifier', width: 100 },
@@ -75,6 +75,17 @@ class ColumnData {
                 return this.materialsColumnExtensions;
             default:
                 return []
+        }
+    }
+
+    static getSearchableColumns(tableName: string): String {
+        switch (tableName) {
+            case 'buildings':
+                return 'building_name,project';
+            case 'materials':
+                return 'source,name';
+            default:
+                return ''
         }
     }
 }

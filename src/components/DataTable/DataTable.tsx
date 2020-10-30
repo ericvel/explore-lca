@@ -25,6 +25,7 @@ const VIRTUAL_PAGE_SIZE = 100;
 const MAX_ROWS = 50000;
 var columns: Column[] = []
 var columnExtensions: Table.ColumnExtension[] = []
+var searchableColumns: String = ''
 const getRowId = (row: any) => row[Object.keys(row)[0]];
 const Root = (props: any) => <Grid.Root {...props} style={{ height: '100%' }} />;
 
@@ -104,6 +105,7 @@ function reducer(state: any, { type, payload }: any) {
 function setColumnData(tableName: string) {
     columns = ColumnData.getColumns(tableName);
     columnExtensions = ColumnData.getColumnExtensions(tableName);
+    searchableColumns = ColumnData.getSearchableColumns(tableName);
 }
 
 
@@ -132,6 +134,13 @@ function DataTable(props: any) {
             .map(({ columnName, value, operation }) => (
                 `["${columnName}","${operation}","${value}"]`
             )).join(',"and",'); */
+        const searchConfig = {
+            searchTerm: searchTerm,
+            columns: searchableColumns,
+        };
+        const searchString = JSON.stringify(searchConfig);
+        const searchQuery = searchString ? `&search=${escape(`${searchString}`)}` : '';
+        
         const sortingConfig = sorting
             .map(({ columnName, direction }: any) => ({
                 selector: columnName,
@@ -141,7 +150,7 @@ function DataTable(props: any) {
         //const filterQuery = filterStr ? `&filter=[${escape(filterStr)}]` : '';
         const sortQuery = sortingStr ? `&sort=${escape(`${sortingStr}`)}` : '';
 
-        return `/api/${table}?requireTotalCount=true&skip=${requestedSkip}&take=${take}&search=${searchTerm}${sortQuery}`;
+        return `/api/${table}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${searchQuery}${sortQuery}`;
         // return `${URL}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${filterQuery}${sortQuery}`;
     };
 

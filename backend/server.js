@@ -3,7 +3,6 @@ const mysql = require('mysql2');
 
 const app = express();
 const port = 8000;
-const table = 'buildings';
 
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST,
@@ -12,44 +11,55 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DB,
 });
 
+pool.config.connectionConfig.namedPlaceholders = true;
+
 app.listen(port, () => {
   console.log(`⚡ Express server now listening on port ${port}`);
 });
 
-const getSearchQuery = (request) => {
-  if (request.query.search != '') {
-    //where concat(building_name,project) like '%searchterm%'
-  }
-}
-
-const getSortQuery = (request) => {
-  var sortQuery = ``;
-  if (request.query.sort != "[]") {
-    var sortParams = JSON.parse(request.query.sort)[0];
-    const selector = sortParams.selector;
-    sortQuery = ` ORDER BY ${selector}`
-    if (sortParams.desc == true) {
-      sortQuery += ` DESC`
+const formatSearchQuery = (searchQuery) => {
+  console.log("SearchQuery: ", searchQuery)
+  var formattedQuery = ``;
+  if (searchQuery != "[]" && searchQuery != '') {
+    const params = JSON.parse(searchQuery);
+    const searchTerm = params.searchTerm;
+    const searchableColumns = params.columns;
+    if (searchTerm != '' && searchableColumns != '') {
+      formattedQuery = ` WHERE concat(${searchableColumns}) like '%${searchTerm}%'`
     }
   }
-  return sortQuery;
+  return formattedQuery;
+}
+
+const formatSortQuery = (sortQuery) => {
+  var formattedQuery = ``;
+  if (sortQuery != "[]" && sortQuery != '') {
+    const params = JSON.parse(sortQuery)[0];
+    const selector = params.selector;
+    formattedQuery = ` ORDER BY ${selector}`
+    if (params.desc == true) {
+      formattedQuery += ` DESC`
+    }
+  }
+  return formattedQuery;
 }
 
 app.get('/api/:table', (req, res) => {
+  const table = req.params.table;
+  const searchQuery = formatSearchQuery(req.query.search);
+  const sortQuery = formatSortQuery(req.query.sort);
+  const skip = req.query.skip;
+  const take = req.query.take;
 
-  var searchTerm = req.query.search;
-  console.log("Search term: ", searchTerm)
-  var sortQuery = getSortQuery(req);
-
-  const query = `SELECT * FROM ${req.params.table}${sortQuery} LIMIT ${req.query.skip}, ${req.query.take}`;
+  const query = `SELECT * FROM ${table}${searchQuery}${sortQuery} LIMIT ${skip}, ${take}`;
   console.log("Query: " + query)
-  pool.query(query, (err, rows) => {
+  pool.execute(query, (err, rows) => {
     if (err) {
       res.send(err);
     }
-    else if (req.query.requireTotalCount == 'true') {   
+    else if (req.query.requireTotalCount == 'true') {
       // Append total row count to response object
-      const countQuery = `select count(*) from ${req.params.table}`;
+      const countQuery = `select count(*) from ${req.params.table}${searchQuery}`;
       pool.query(countQuery, (err, countObject) => {
         if (err) {
           res.send(err);
