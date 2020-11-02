@@ -19,6 +19,7 @@ import { Column } from '@devexpress/dx-react-grid';
 import _ from 'lodash';
 
 import LoadingIndicator from '../LoadingIndicator';
+import { json } from 'body-parser';
 
 
 const VIRTUAL_PAGE_SIZE = 100;
@@ -139,8 +140,9 @@ function DataTable(props: any) {
             columns: searchableColumns,
         };
         const searchString = JSON.stringify(searchConfig);
-        const searchQuery = searchString ? `&search=${escape(`${searchString}`)}` : '';
-        
+        console.log(searchString)
+        const searchQuery = searchString ? `&search=${encodeURIComponent(`${searchString}`)}` : '';
+
         const sortingConfig = sorting
             .map(({ columnName, direction }: any) => ({
                 selector: columnName,

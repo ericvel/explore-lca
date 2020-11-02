@@ -11,14 +11,21 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <h1>
-        LCA Tool - GUI
-      </h1>
-      <br/>
-      <TableSelect tableName={tableName} onChange={handleTableChange} />
-      <br/>
-      <DataTable tableName={tableName} />
+    <div className="container mt-4">
+      <div className="row mb-5">
+        <div className="col">
+          <h1>LCA Tool - GUI</h1>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
+          <TableSelect tableName={tableName} onChange={handleTableChange} />
+          <p>Click on a row to see the building elements related to it.</p>
+        </div>
+        <div className="col-10">
+          <DataTable tableName={tableName} />
+        </div>
+      </div>
     </div>
   );
 }
