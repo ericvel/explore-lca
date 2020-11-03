@@ -1,22 +1,18 @@
 const express = require('express');
-const mysql = require('mysql2');
-
 const app = express();
 const port = 8000;
+var buildings = require('./routes/buildings.js');
+var materials = require('./routes/materials.js');
 
-const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PWD,
-  database: process.env.MYSQL_DB,
-});
-
-pool.config.connectionConfig.namedPlaceholders = true;
 
 app.listen(port, () => {
   console.log(`⚡ Express server now listening on port ${port}`);
 });
 
+app.use('/buildings', buildings);
+app.use('/materials', materials);
+
+/* 
 const formatSearchQuery = (searchQuery) => {
   console.log("SearchQuery: ", searchQuery)
   var formattedQuery = ``;
@@ -77,16 +73,5 @@ app.get('/api/:table', (req, res) => {
       res.send(rows);
     }
   });
-});
-
-app.get('/api/count/:table', (req, res) => {
-  const query = `select count(*) from ${req.params.table}`;
-  console.log("Query: " + query)
-  pool.query(query, (err, rows) => {
-    if (err) {
-      res.send(err);
-    } else {
-      res.send(rows);
-    }
-  });
-});
+}); 
+*/
