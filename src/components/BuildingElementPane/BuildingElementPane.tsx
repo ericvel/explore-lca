@@ -4,36 +4,69 @@ import "react-sliding-pane/dist/react-sliding-pane.css";
 import CloseIcon from '@material-ui/icons/Close';
 import './BuildingElementPane.css'
 
+const initialBuildingState: Building = {
+    idbuildings: 0,
+    building_identifier: 0,
+    building_name: "",
+    country: "",
+    city: "",
+    typology: ""
+};
+
 const BuildingElementPane = (props: any) => {
     const [isPaneOpen, setIsPaneOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [building, setBuilding] = useState<Building>(initialBuildingState);
+    //var building = {} as Building;
 
     useEffect(() => {
         if (props.selectedRowId !== undefined) {
-            setIsPaneOpen(true)
+            loadData();
+            setIsPaneOpen(true);
         } else {
-            setIsPaneOpen(false)
+            setIsPaneOpen(false);
         }
-    }, [props.selectedRowId])
+    }, [props.selectedRowId]);
+
+    const loadData = () => {
+        const queryString = `/buildings/${props.selectedRowId}`;
+        if (!loading) {
+            setLoading(true);
+            fetch(queryString)
+                .then(response => response.json())
+                .then((data) => {
+                    setBuilding(data[0])
+                    setLoading(false);
+                })
+                .catch(() => setLoading(false));
+        }
+    };
+
+    const {
+        building_identifier, building_name, country, city, typology
+    } = building;
 
     return (
         <div>
-            {/* <button onClick={() => setIsPaneOpen(true)}>
-                Click to open right pane
-          </button> */}
             <SlidingPane
                 className="sliding-pane close-button"
                 overlayClassName="sliding-pane-overlay"
                 isOpen={isPaneOpen}
-                title={`Row ID: ${props.selectedRowId}`}
-                subtitle="Subtitle"
-                width="400px"
-                closeIcon={<CloseIcon fontSize="large"/>}
+                title={loading ? "Loading..." : building_name}
+                subtitle={loading ? "Loading..." : "ID: " + building_identifier}
+                width="100%"
+                closeIcon={<CloseIcon fontSize="large" />}
+                // hideHeader={true}
                 onRequestClose={() => {
                     // triggered on "<" on left top click or on outside click
                     setIsPaneOpen(false);
                 }}
             >
-                <div>Text hello hello</div>
+                <div>
+                    <p>Country: {country}</p>
+                    <p>City: {city}</p>
+                    <p>Typology: {typology}</p>
+                </div>
             </SlidingPane>
         </div>
     );
