@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useReducer, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useReducer, useMemo, useCallback, ReactText } from 'react';
 import Paper from '@material-ui/core/Paper';
 import {
     SortingState,
     VirtualTableState,
     createRowCache,
-    SearchState
+    SearchState,
+    SelectionState
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
@@ -12,14 +13,14 @@ import {
     Toolbar,
     SearchPanel,
     TableHeaderRow,
-    VirtualTable
+    VirtualTable,
+    TableSelection,
 } from '@devexpress/dx-react-grid-material-ui';
 import ColumnData from './ColumnData';
 import { Column } from '@devexpress/dx-react-grid';
 import _ from 'lodash';
 
 import LoadingIndicator from '../LoadingIndicator';
-import { json } from 'body-parser';
 
 
 const VIRTUAL_PAGE_SIZE = 100;
@@ -140,7 +141,6 @@ function DataTable(props: any) {
             columns: searchableColumns,
         };
         const searchString = JSON.stringify(searchConfig);
-        console.log(searchString)
         const searchQuery = searchString ? `&search=${encodeURIComponent(`${searchString}`)}` : '';
 
         const sortingConfig = sorting
@@ -152,7 +152,7 @@ function DataTable(props: any) {
         //const filterQuery = filterStr ? `&filter=[${escape(filterStr)}]` : '';
         const sortQuery = sortingStr ? `&sort=${escape(`${sortingStr}`)}` : '';
 
-        return `/api/${table}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${searchQuery}${sortQuery}`;
+        return `/${table}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${searchQuery}${sortQuery}`;
         // return `${URL}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${filterQuery}${sortQuery}`;
     };
 
@@ -202,9 +202,25 @@ function DataTable(props: any) {
     }, [props.tableName])
 
     useEffect(() => {
-        console.log("UseEffect: LoadData")
         loadData();
     });
+    
+    const [selectedRow, setSelectedRow] = useState<ReactText[]>([]);
+
+    function changeSelection(selection: ReactText[]) {     
+        const lastSelected = selection.find((selected) => selectedRow.indexOf(selected) === -1);
+
+        if (lastSelected !== undefined) {
+            setSelectedRow([lastSelected]);
+        } else {
+            // NOTE: Uncomment the next line in order to allow clear selection by double-click
+            setSelectedRow([])
+        }
+        const rowId = selection[selection.length-1];
+        console.log("Selected row: ", rowId)
+        props.onSelectRow(rowId);
+    }
+
 
     const {
         rows, skip, totalCount, loading, sorting, //filters,
@@ -233,8 +249,17 @@ function DataTable(props: any) {
                     sorting={sorting}
                     onSortingChange={changeSorting}
                 />
+                <SelectionState
+                    selection={selectedRow}
+                    onSelectionChange={changeSelection}
+                />
                 <VirtualTable height="auto" columnExtensions={columnExtensions} />
                 <TableHeaderRow showSortingControls />
+                <TableSelection
+                    selectByRowClick
+                    highlightRow
+                    showSelectionColumn={false}
+                />
                 <Toolbar />
                 <SearchPanel />
             </Grid>

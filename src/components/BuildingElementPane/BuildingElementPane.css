@@ -1,0 +1,13 @@
+.sliding-pane-overlay {
+    background-color: transparent !important;
+    width: 400px;
+    left: auto;
+}
+
+.sliding-pane {
+    transition: transform 0.3s;
+}
+
+.close-button svg {
+    width: 20px;
+}
