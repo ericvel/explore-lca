@@ -6,3 +6,14 @@ interface Building {
     city: string;
     typology: string;
 }
+
+interface BuildingElement {
+    idlevels: number;
+    name: string;
+    A1A3?: number;
+    A4?: number;
+    B4_m?: number;
+    B4_t?: number;
+    hierarchy: number;
+    idparent?: number;
+}
