@@ -66,12 +66,14 @@ router.get('/', (req, res) => {
 
 router.get('/:buildingId', (req, res) => {
     const query = 
-    `SELECT idbuildings, building_identifier, building_name, country, city, typology
+    `SELECT idbuildings, building_identifier, building_name, country, city, typology, construction_type
     FROM buildings AS b
     INNER JOIN location AS l
     ON b.idlocation = l.idlocation
     INNER JOIN typology AS t
     ON b.idtypology = t.idtypology
+    INNER JOIN constructiontype AS c
+    ON b.idconstruction_type = c.idconstruction_type
     WHERE idbuildings = ${req.params.buildingId}`;
 
     console.log("Query: " + query)

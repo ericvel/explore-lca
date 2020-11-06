@@ -5,6 +5,7 @@ interface Building {
     country: string;
     city: string;
     typology: string;
+    construction_type: string;
 }
 
 interface BuildingElement {
