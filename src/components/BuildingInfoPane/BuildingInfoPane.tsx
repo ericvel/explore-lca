@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from "react";
+import { createStyles, Theme, withStyles, WithStyles, makeStyles } from '@material-ui/core/styles';
 import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
-import './BuildingElementPane.css'
+import IconButton from '@material-ui/core/IconButton';
+import './BuildingInfoPane.css';
 import ReactDOM from "react-dom";
+import BuildingElementAccordion from './BuildingElementAccordion';
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            margin: 0,
+            padding: theme.spacing(2),
+        },
+        closeButton: {
+            position: 'absolute',
+            right: theme.spacing(1),
+            top: theme.spacing(1),
+            color: theme.palette.grey[500],
+        },
+    }),
+);
 
 const initialBuildingState: Building = {
     idbuildings: 0,
@@ -21,7 +39,7 @@ const initialSelectedElementState: BuildingElement = {
     hierarchy: 0,
 };
 
-const BuildingElementPane = (props: any) => {
+const BuildingInfoPane = (props: any) => {
     const [isPaneOpen, setIsPaneOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [building, setBuilding] = useState<Building>(initialBuildingState);
@@ -64,16 +82,10 @@ const BuildingElementPane = (props: any) => {
     };
 
     const getChildElements = (parentElement: BuildingElement) => {
-        /* if (parentElement.hierarchy == 0) {
-            return buildingElements.filter(element => element.hierarchy === 1);
-        } */
-
         const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
-
         if (childElements !== undefined) {
             return childElements;
         }
-
         return [];
     }
 
@@ -91,6 +103,7 @@ const BuildingElementPane = (props: any) => {
     } = selectedElement;
 
     const childElements = getChildElements(selectedElement);
+    const classes = useStyles();
 
     return (
         <div>
@@ -99,7 +112,7 @@ const BuildingElementPane = (props: any) => {
                 overlayClassName="sliding-pane-overlay"
                 isOpen={isPaneOpen}
                 title={loading ? "Loading..." : building_name}
-                subtitle={loading ? "Loading..." : "ID: " + building_identifier}
+                subtitle={loading ? "" : "ID: " + building_identifier}
                 width="100%"
                 closeIcon={<CloseIcon fontSize="large" />}
                 // hideHeader={true}
@@ -109,30 +122,47 @@ const BuildingElementPane = (props: any) => {
                 }}
             >
                 <div>
-                    <p>Country: {country}</p>
-                    <p>City: {city}</p>
-                    <p>Typology: {typology}</p>
-                    <h3>GWP</h3>
-                    <p>
-                        <b>A1-A3:</b> {A1A3} <br />
-                        <b>A4:</b> {A4} <br />
-                        <b>B4_m:</b> {B4_m} <br />
-                        <b>B4_t:</b> {B4_t} <br />
-                    </p>
-                    <h2>Building elements</h2>
-                    {childElements.map(child =>
-                        <div>
-                            <p>{child.idlevels} - {child.name}</p>
-
-                            <Button variant="outlined" onClick={() => changeSelectedElement(child.idlevels)}>
-                                See children -{'>'}
-                            </Button>
-                        </div>
-                    )}
+                    <IconButton aria-label="close" className={classes.closeButton} /* onClick={onClose} */>
+                        <CloseIcon />
+                    </IconButton>
                 </div>
+                {loading ? "Loading..." : (
+                    <div>
+                        <div className="row">
+                            <div className="col">
+                                <h4>General info</h4>
+                                <p>
+                                    <b>Country:</b> {country} <br />
+                                    <b>City:</b> {city} <br />
+                                    <b>Typology:</b> {typology} <br />
+                                </p>
+                            </div>
+                            <div className="col">
+                                <h4>GWP</h4>
+                                <p>
+                                    <b>A1-A3:</b> {A1A3} <br />
+                                    <b>A4:</b> {A4} <br />
+                                    <b>B4_m:</b> {B4_m} <br />
+                                    <b>B4_t:</b> {B4_t} <br />
+                                </p>
+                            </div>
+
+                        </div>
+                        <div className="row">
+                            <div className="col">
+                                <h4>Building elements</h4>
+                                {childElements.map(child =>
+                                    <BuildingElementAccordion element={child} changeSelectedElement={changeSelectedElement} />
+
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                )}
             </SlidingPane>
         </div>
     );
 };
 
-export default BuildingElementPane;
+export default BuildingInfoPane;

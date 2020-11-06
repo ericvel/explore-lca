@@ -2,8 +2,9 @@ import React, { useEffect, useState, ReactText } from 'react';
 //import './App.css';
 import TableSelect from '../TableSelect'
 import DataTable from '../DataTable';
-import BuildingElementPane from '../BuildingElementPane';
-import CloseIcon from '@material-ui/icons/Close';
+import BuildingInfoPane from '../BuildingInfoPane';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 
 function App() {
   const [tableName, setTableName] = useState('buildings');
@@ -18,12 +19,12 @@ function App() {
   }
 
   return (
-    <div className="container mt-4">
+    <Container>
       <div className="row mb-5">
         <div className="col">
           <h1>LCA Tool - GUI</h1>
         </div>
-        <BuildingElementPane selectedRowId={selectedRowId} />
+        <BuildingInfoPane selectedRowId={selectedRowId} />
       </div>
       <div className="row">
         <div className="col">
@@ -34,7 +35,7 @@ function App() {
           <DataTable tableName={tableName} onSelectRow={handleSelectRow} />
         </div>
       </div>
-    </div>
+    </Container>
   );
 }
 
