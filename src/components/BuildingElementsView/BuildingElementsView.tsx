@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
 import List from '@material-ui/core/List';
 import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -13,10 +9,12 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,6 +27,11 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         breadCrumbs: {
             marginBottom: theme.spacing(2)
+        },
+        buildingElementPaper: {
+            margin: theme.spacing(1),
+            padding: theme.spacing(1),
+            height: theme.spacing(8)
         }
     }),
 );
@@ -60,7 +63,6 @@ const initialSelectedElementState: BuildingElement = {
 const BuildingElementsView = (props: any) => {
     const [buildingElements, setBuildingElements] = useState<BuildingElement[]>([]);
     const [selectedElement, setSelectedElement] = useState<BuildingElement>(initialSelectedElementState);
-    // const [childElements, setChildElements] = useState<BuildingElement[]>([]);
     const [elementRoute, setElementRoute] = useState<BuildingElement[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -84,7 +86,6 @@ const BuildingElementsView = (props: any) => {
                     const rootElement = data.find((element: BuildingElement) => element.hierarchy === 0);
                     if (rootElement !== undefined) {
                         setSelectedElement(rootElement);
-                        // setChildElements(getChildElements(rootElement));
                     }
                     setLoading(false);
                 }).catch(() => setLoading(false));
@@ -104,7 +105,6 @@ const BuildingElementsView = (props: any) => {
         const childElement = buildingElements.find(element => element.idlevels === elementId);
         if (childElement !== undefined) {
             setSelectedElement(childElement);
-            // setChildElements(getChildElements(childElement));
             setElementRoute([...elementRoute, childElement]);
         }
     }
@@ -113,7 +113,6 @@ const BuildingElementsView = (props: any) => {
         const rootElement = buildingElements.find((element: BuildingElement) => element.hierarchy === 0);
         if (rootElement !== undefined) {
             setSelectedElement(rootElement);
-            // setChildElements(getChildElements(rootElement));
             setElementRoute([]);
         }
     }
@@ -131,14 +130,14 @@ const BuildingElementsView = (props: any) => {
                 setElementRoute([]);
                 return;
             }
-        }   
+        }
 
         var tempRoute = elementRoute;
         for (let i = 0; i < elementRoute.length - hierarchy; i++) {
-            tempRoute.pop();            
+            tempRoute.pop();
             console.log("Poppin, new route: ", tempRoute);
         }
-        setSelectedElement(tempRoute[tempRoute.length-1])
+        setSelectedElement(tempRoute[tempRoute.length - 1])
         setElementRoute(tempRoute);
     };
 
@@ -162,9 +161,9 @@ const BuildingElementsView = (props: any) => {
                             <StyledBreadcrumb
                                 label={element.name}
                                 variant="outlined"
-                                onClick={() => handleBreadcrumbClick(element.hierarchy)}                                
-                                //deleteIcon={<ExpandMoreIcon />}
-                                //onDelete={(() => { })}
+                                onClick={() => handleBreadcrumbClick(element.hierarchy)}
+                            //deleteIcon={<ExpandMoreIcon />}
+                            //onDelete={(() => { })}
                             />
                         )}
 
@@ -174,41 +173,15 @@ const BuildingElementsView = (props: any) => {
                             <Skeleton height={60} /><Skeleton height={60} /><Skeleton height={60} />
                         </div> :
                         childElements.map(child =>
-                            <List component="nav" aria-label="main mailbox folder">
-                                <ListItem>
-                                    <ListItemText primary={child.name} secondary={child.idlevels} />
-                                    {/* Check if element has children to decide if should display button */}
-                                    {(getChildElements(child)?.length > 0) &&
-                                        <ListItemSecondaryAction>
-                                            <IconButton edge="end" aria-label="comments" onClick={() => goToChildElement(child.idlevels)}>
-                                                <ExpandMoreIcon />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    }
-                                </ListItem>
-                            </List>
-                            , {/* <Accordion>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id={child.idbuilding_elements.toString()}
-                                >
-                                    <Typography className={classes.heading}>{child.idlevels} - {child.name}</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    <Typography>
-                                        <b>A1-A3:</b> {child.A1A3} <br />
-                                        <b>A4:</b> {child.A4} <br />
-                                        <b>B4_m:</b> {child.B4_m} <br />
-                                        <b>B4_t:</b> {child.B4_t} <br />
-                                        {(childElements !== []) &&
-                                            <Button variant="outlined" disabled={child.hierarchy === 3} onClick={() => goToChildElement(child.idlevels)}>
-                                                See children -{'>'}
-                                            </Button>
-                                        }
-                                    </Typography>
-                                </AccordionDetails>
-                            </Accordion> */}
+                            <Paper variant="outlined" className={classes.buildingElementPaper}>
+                                {child.name}
+                                {/* Check if element has children to decide if should display button */}
+                                {(getChildElements(child)?.length > 0) &&
+                                    <IconButton edge="end" aria-label="child elements" onClick={() => goToChildElement(child.idlevels)}>
+                                        <NavigateNextIcon />
+                                    </IconButton>
+                                }
+                            </Paper>
                         )
                     }
                 </Grid>

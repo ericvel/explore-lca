@@ -9,7 +9,3 @@
     transition: transform 0.3s;
     /* width: 100%; */
 }
-
-.close-button svg {
-    width: 20px;
-}
