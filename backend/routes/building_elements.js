@@ -6,7 +6,7 @@ const pool = require('../mysql')
 
 router.get('/:buildingId', (req, res) => {
     const query = 
-    `SELECT be.idlevels, name, A1A3, A4, B4_m, B4_t, hierarchy, idparent
+    `SELECT idbuilding_elements, be.idlevels, name, A1A3, A4, B4_m, B4_t, hierarchy, idparent
     FROM buildingelements AS be
     INNER JOIN levels AS l
     ON be.idlevels = l.idlevels
