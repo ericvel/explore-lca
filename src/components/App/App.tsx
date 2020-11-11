@@ -11,14 +11,14 @@ import NavBar from '../NavBar';
 
 function App() {
   const [tableName, setTableName] = useState('buildings');
-  const [selectedRowId, setSelectedRowId] = useState<number>();
+  const [selectedBuildingId, setSelectedBuildingId] = useState<number>();
 
   function handleTableChange(tableName: string) {
     setTableName(tableName);
   }
 
   function handleSelectRow(rowId: number) {
-    setSelectedRowId(rowId);
+    setSelectedBuildingId(rowId);
   }
 
   return (
@@ -42,7 +42,7 @@ function App() {
         </Grid>
       </Grid>
 
-      <BuildingInfoPane selectedRowId={selectedRowId} />
+      <BuildingInfoPane selectedBuildingId={selectedBuildingId} />
     </Container>
   );
 }

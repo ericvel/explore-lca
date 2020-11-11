@@ -66,7 +66,7 @@ router.get('/', (req, res) => {
 
 router.get('/:buildingId', (req, res) => {
     const query = 
-    `SELECT idbuildings, building_identifier, building_name, country, city, typology, construction_type
+    `SELECT b.idbuildings, building_identifier, building_name, country, city, typology, construction_type, A1A3, A4, B4_m, B4_t
     FROM buildings AS b
     INNER JOIN location AS l
     ON b.idlocation = l.idlocation
@@ -74,7 +74,9 @@ router.get('/:buildingId', (req, res) => {
     ON b.idtypology = t.idtypology
     INNER JOIN constructiontype AS c
     ON b.idconstruction_type = c.idconstruction_type
-    WHERE idbuildings = ${req.params.buildingId}`;
+    INNER JOIN buildingelements as be
+    ON b.idbuildings = be.idbuildings
+    WHERE b.idbuildings = ${req.params.buildingId} AND be.idlevels = 0`;
 
     console.log("Query: " + query)
     pool.query(query, (err, result) => {

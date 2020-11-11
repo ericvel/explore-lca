@@ -6,14 +6,14 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import FormLabel from '@material-ui/core/FormLabel';
+import TextField from '@material-ui/core/TextField';
 import CloseIcon from '@material-ui/icons/Close';
-import Button from '@material-ui/core/Button';
+import Skeleton from '@material-ui/lab/Skeleton';
 import IconButton from '@material-ui/core/IconButton';
 import './BuildingInfoPane.css';
 import ReactDOM from "react-dom";
-import BuildingElementAccordion from './BuildingElementAccordion';
-import LoadingIndicator from '../LoadingIndicator';
+import BuildingElementsView from '../BuildingElementsView';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,12 +28,15 @@ const useStyles = makeStyles((theme: Theme) =>
             color: theme.palette.grey[500],
         },
         buildingSection: {
-
+            marginBottom: theme.spacing(2)
+        },
+        divider: {
+            marginBottom: theme.spacing(2)
         },
         elementSection: {
             marginTop: theme.spacing(2)
         },
-        elementInfoLabels: {
+        buildingInfoLabels: {
             fontWeight: "bold"
         }
     }),
@@ -49,76 +52,38 @@ const initialBuildingState: Building = {
     construction_type: ""
 };
 
-const initialSelectedElementState: BuildingElement = {
-    idlevels: 0,
-    name: "",
-    hierarchy: 0,
-};
-
 const BuildingInfoPane = (props: any) => {
     const [isPaneOpen, setIsPaneOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [building, setBuilding] = useState<Building>(initialBuildingState);
-    const [buildingElements, setBuildingElements] = useState<BuildingElement[]>([]);
-    const [selectedElement, setSelectedElement] = useState<BuildingElement>(initialSelectedElementState);
 
     useEffect(() => {
-        if (props.selectedRowId !== undefined) {
+        if (props.selectedBuildingId !== undefined) {
             loadData();
             setIsPaneOpen(true);
         } else {
             setIsPaneOpen(false);
         }
-    }, [props.selectedRowId]);
+    }, [props.selectedBuildingId]);
 
-    /* useEffect(() => {
-        console.log("Re-render")
-    }, [building, buildingElements])
- */
     const loadData = () => {
-        const buildingQuery = `/buildings/${props.selectedRowId}`;
-        const buildingElementQuery = `/building_elements/${props.selectedRowId}`;
+        const buildingQuery = `/buildings/${props.selectedBuildingId}`;
         if (!loading) {
             setLoading(true);
-            Promise.all([
-                fetch(buildingQuery),
-                fetch(buildingElementQuery)
-            ]).then(responses => Promise.all(responses.map(response => response.json())
-            )).then(data => {
-                //console.log("Building elms: ", data[1]);
-                ReactDOM.unstable_batchedUpdates(() => {
-                    setBuilding(data[0][0]);
-                    setBuildingElements(data[1]);
-                    const rootElement = data[1].find((element: BuildingElement) => element.hierarchy === 0);
-                    if (rootElement !== undefined) setSelectedElement(rootElement);
+            fetch(buildingQuery)
+                .then(response => response.json())
+                .then(data => {
+                    setBuilding(data[0]);
                     setLoading(false);
-                });
-            }).catch(() => setLoading(false));
+                }).catch(() => setLoading(false));
         }
     };
 
-    const getChildElements = (parentElement: BuildingElement) => {
-        const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
-        if (childElements !== undefined) {
-            return childElements;
-        }
-        return [];
-    }
 
-    const changeSelectedElement = (elementId: number) => {
-        const newSelection = buildingElements.find(element => element.idlevels === elementId);
-        if (newSelection !== undefined) setSelectedElement(newSelection);
-    }
-    
     const {
-        building_identifier, building_name, country, city, typology, construction_type
+        building_identifier, building_name, country, city, typology, construction_type, A1A3, A4, B4_m, B4_t
     } = building;
 
-    const {
-        name, A1A3, A4, B4_m, B4_t
-    } = selectedElement;
-
-    const childElements = getChildElements(selectedElement);
     const classes = useStyles();
 
     return (
@@ -138,65 +103,146 @@ const BuildingInfoPane = (props: any) => {
                 }}
             >
                 <div>
-                    <IconButton aria-label="close" className={classes.closeButton} onClick={() => {setIsPaneOpen(false)}}>
+                    <IconButton aria-label="close" className={classes.closeButton} onClick={() => { setIsPaneOpen(false) }}>
                         <CloseIcon />
                     </IconButton>
                 </div>
-                {loading ? <LoadingIndicator /> : (
-                    <div>
-                        <Grid container spacing={3}>
-                            <Grid item xs={11}>
-                                <Typography variant="h4" color="textPrimary" >{building_name}</Typography>
-                                <Typography variant="subtitle1" color="textSecondary" gutterBottom>{building_identifier}</Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Typography variant="h5" color="textSecondary" gutterBottom>General info</Typography>
-                                <Grid container>
-                                    <Grid item xs={6}>
-                                        <Typography variant="body1" className={classes.elementInfoLabels}>Country:</Typography>
-                                        <Typography variant="body1" className={classes.elementInfoLabels}>City:</Typography>
-                                        <Typography variant="body1" className={classes.elementInfoLabels}>Typology:</Typography>
-                                        <Typography variant="body1" className={classes.elementInfoLabels}>Construction type:</Typography>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography variant="body1">{country || "nil"}</Typography>
-                                        <Typography variant="body1">{city || "nil"}</Typography>
-                                        <Typography variant="body1">{typology || "nil"}</Typography>
-                                        <Typography variant="body1">{construction_type || "nil"}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs>
-                                <Typography variant="h5" color="textSecondary" gutterBottom>GWP</Typography>
-                                <Grid container>
-                                    <Grid item xs={4}>
-                                        <Typography variant="body1" className={classes.elementInfoLabels}>A1-A3:</Typography>
-                                        <Typography variant="body1" className={classes.elementInfoLabels}>A4:</Typography>
-                                        <Typography variant="body1" className={classes.elementInfoLabels}>B4_m:</Typography>
-                                        <Typography variant="body1" className={classes.elementInfoLabels}>B4_t:</Typography>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography variant="body1" align="right">{A1A3 || "0.0"}</Typography>
-                                        <Typography variant="body1" align="right">{A4 || "0.0"}</Typography>
-                                        <Typography variant="body1" align="right">{B4_m || "0.0"}</Typography>
-                                        <Typography variant="body1" align="right">{B4_t || "0.0"}</Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
+                <div>
+                    <Grid container spacing={3} className={classes.buildingSection}>
+                        <Grid item xs={11}>
+                            <Typography variant="h4" color="textPrimary" >{loading ? <Skeleton /> : building_name}</Typography>
+                            <Typography variant="subtitle1" color="textSecondary" gutterBottom>{loading ? <Skeleton width={70} /> : building_identifier}</Typography>
                         </Grid>
-                        <Divider variant="middle" light={true} />
-                        <Grid container spacing={3} className={classes.elementSection}>
-                            <Grid item xs>
-                                <Typography variant="h5" color="textSecondary" gutterBottom>Building elements</Typography>
-                                {childElements.map(child =>
-                                    <BuildingElementAccordion element={child} changeSelectedElement={changeSelectedElement} />
-
-                                )}
-                            </Grid>
+                        <Grid item xs={6}>
+                            <Typography variant="h5" color="textSecondary" gutterBottom>General info</Typography>
+                            {loading ?
+                                <div>
+                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
+                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
+                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
+                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
+                                </div>
+                                :
+                                <div>
+                                    <TextField
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="Country"
+                                        name="country"
+                                        margin="dense"
+                                        defaultValue={country || "nil"}
+                                    />
+                                    <TextField
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="City"
+                                        name="city"
+                                        margin="dense"
+                                        defaultValue={city || "nil"}
+                                    />
+                                    <TextField
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="Typology"
+                                        name="typology"
+                                        margin="dense"
+                                        defaultValue={typology || "nil"}
+                                    />
+                                    <TextField
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="Construction type"
+                                        name="construction_type"
+                                        margin="dense"
+                                        defaultValue={construction_type || "nil"}
+                                    />
+                                </div>
+                            }
                         </Grid>
-                    </div>
+                        <Grid item xs>
+                            <Typography variant="h5" color="textSecondary" gutterBottom>GWP</Typography>
+                            {loading ?
+                                <div>
+                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
+                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
+                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
+                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
+                                </div>
+                                :
+                                <div>
+                                    <TextField
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="A1-A3"
+                                        name="a1a3"
+                                        margin="dense"
+                                        defaultValue={A1A3 || "0.0"}
+                                    />
+                                    <TextField
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="A4"
+                                        name="a4"
+                                        margin="dense"
+                                        defaultValue={A4 || "0.0"}
+                                    />
+                                    <TextField
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="B4_m"
+                                        name="b4m"
+                                        margin="dense"
+                                        defaultValue={B4_m || "0.0"}
+                                    />
+                                    <TextField
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="B4_t"
+                                        name="b4t"
+                                        margin="dense"
+                                        defaultValue={B4_t || "0.0"}
+                                    />
+                                </div>
+                            }
+                        </Grid>
+                    </Grid>
 
-                )}
+                    <Divider variant="middle" light={true} className={classes.divider} />
+
+                    <BuildingElementsView buildingId={props.selectedBuildingId} parentIsLoading={loading} />
+                </div>
             </SlidingPane>
         </div>
     );
