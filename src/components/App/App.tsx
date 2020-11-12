@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import TableSelect from '../TableSelect'
 import DataTable from '../DataTable';
 import BuildingInfoPane from '../BuildingInfoPane';
+import BuildingInfoDrawer from '../BuildingInfoDrawer';
 import NavBar from '../NavBar';
 
 function App() {
@@ -32,17 +33,18 @@ function App() {
           </Grid>
         </Grid>
       </Box>
-      <Grid container spacing={3}>
+      <Grid container spacing={3}>        
+        <Grid item xs={12} md={10}>
+          <DataTable tableName={tableName} onSelectRow={handleSelectRow} />
+        </Grid>
         <Grid item xs>
           <TableSelect tableName={tableName} onChange={handleTableChange} />
           <p>Click on a row to see the building elements related to it.</p>
         </Grid>
-        <Grid item xs={12} md={10}>
-          <DataTable tableName={tableName} onSelectRow={handleSelectRow} />
-        </Grid>
       </Grid>
 
       <BuildingInfoPane selectedBuildingId={selectedBuildingId} />
+      {/* <BuildingInfoDrawer selectedBuildingId={selectedBuildingId} /> */}
     </Container>
   );
 }

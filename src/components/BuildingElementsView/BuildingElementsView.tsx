@@ -183,7 +183,7 @@ const BuildingElementsView = (props: any) => {
                         </div> :
                         childElements.map(child =>
                             <Paper variant="outlined" className={classes.buildingElementPaper}>
-                                <Grid container alignItems="center">
+                                <Grid container alignItems="center" >
                                     <Grid item xs={10}>
                                         <Typography variant="body1">
                                             {child.name}
@@ -211,10 +211,10 @@ const BuildingElementsView = (props: any) => {
                                                 <Grid item xs={4}>
                                                     <Typography variant="body2" color="textSecondary">
                                                         B4_t:
-                                                </Typography>
+                                                    </Typography>
                                                     <Typography variant="body2" color="textSecondary">
                                                         B4_m:
-                                                </Typography>
+                                                    </Typography>
                                                 </Grid>
                                                 <Grid item xs={6}>
                                                     <Typography variant="body2">
@@ -233,7 +233,7 @@ const BuildingElementsView = (props: any) => {
                                         {/* Check if element has children to decide if should display button */}
                                         {(getChildElements(child)?.length > 0) &&
                                             <Tooltip title="See sub-elements">
-                                                <IconButton /* edge="end" */ aria-label="child elements" onClick={() => goToChildElement(child.idlevels)}>
+                                                <IconButton /* edge="end" */ color="default" aria-label="child elements" onClick={() => goToChildElement(child.idlevels)}>
                                                     <NavigateNextIcon />
                                                 </IconButton>
                                             </Tooltip>
