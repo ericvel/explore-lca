@@ -10,11 +10,17 @@ import Typography from '@material-ui/core/Typography';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
+import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import { CardHeader } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,7 +37,10 @@ const useStyles = makeStyles((theme: Theme) =>
         buildingElementPaper: {
             margin: theme.spacing(1),
             padding: theme.spacing(1),
-            height: theme.spacing(8)
+            // height: theme.spacing(8)
+        },
+        subElementButton: {
+            marginLeft: 'auto',
         }
     }),
 );
@@ -174,13 +183,63 @@ const BuildingElementsView = (props: any) => {
                         </div> :
                         childElements.map(child =>
                             <Paper variant="outlined" className={classes.buildingElementPaper}>
-                                {child.name}
-                                {/* Check if element has children to decide if should display button */}
-                                {(getChildElements(child)?.length > 0) &&
-                                    <IconButton edge="end" aria-label="child elements" onClick={() => goToChildElement(child.idlevels)}>
-                                        <NavigateNextIcon />
-                                    </IconButton>
-                                }
+                                <Grid container alignItems="center">
+                                    <Grid item xs={10}>
+                                        <Typography variant="body1">
+                                            {child.name}
+                                        </Typography>
+                                        <Grid container>
+                                            <Grid container item xs={6}>
+                                                <Grid item xs={4}>
+                                                    <Typography variant="body2" color="textSecondary">
+                                                        A1-A3:
+                                                    </Typography>
+                                                    <Typography variant="body2" color="textSecondary">
+                                                        A4:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid item xs={6}>
+                                                    <Typography variant="body2">
+                                                        {child.A1A3 || "0.0"}
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                    {child.A4 || "0.0"}
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                            <Grid container item xs={6}>
+                                                <Grid item xs={4}>
+                                                    <Typography variant="body2" color="textSecondary">
+                                                        B4_t:
+                                                </Typography>
+                                                    <Typography variant="body2" color="textSecondary">
+                                                        B4_m:
+                                                </Typography>
+                                                </Grid>
+                                                <Grid item xs={6}>
+                                                    <Typography variant="body2">
+                                                        {child.B4_t || "0.0"}
+                                                    </Typography>
+                                                    <Typography variant="body2">
+                                                        {child.B4_m || "0.0"}
+                                                    </Typography>
+                                                </Grid>
+
+                                            </Grid>
+                                        </Grid>
+
+                                    </Grid>
+                                    <Grid item>
+                                        {/* Check if element has children to decide if should display button */}
+                                        {(getChildElements(child)?.length > 0) &&
+                                            <Tooltip title="See sub-elements">
+                                                <IconButton /* edge="end" */ aria-label="child elements" onClick={() => goToChildElement(child.idlevels)}>
+                                                    <NavigateNextIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        }
+                                    </Grid>
+                                </Grid>
                             </Paper>
                         )
                     }
