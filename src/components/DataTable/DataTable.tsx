@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useReducer, useMemo, useCallback, ReactText } from 'react';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
 import {
+    Column,
     SortingState,
     VirtualTableState,
     createRowCache,
@@ -13,13 +18,19 @@ import {
     Toolbar,
     SearchPanel,
     TableHeaderRow,
+    ColumnChooser,
+    TableColumnVisibility,
     VirtualTable,
     TableSelection,
+    TableFixedColumns,
 } from '@devexpress/dx-react-grid-material-ui';
-import ColumnData from './ColumnData';
-import { Column } from '@devexpress/dx-react-grid';
+import {
+    Template,
+    TemplatePlaceholder,
+} from '@devexpress/dx-react-core';
 import _ from 'lodash';
 
+import ColumnData from './ColumnData';
 import LoadingIndicator from '../LoadingIndicator';
 
 
@@ -204,23 +215,38 @@ function DataTable(props: any) {
     useEffect(() => {
         loadData();
     });
-    
+
     const [selectedRow, setSelectedRow] = useState<ReactText[]>([]);
 
-    function changeSelection(selection: ReactText[]) {     
-        const lastSelected = selection.find((selected) => selectedRow.indexOf(selected) === -1);
+    function changeSelection(selection: ReactText[]) {
+        if (!multipleSwitchChecked) {
+            const lastSelected = selection.find((selected) => selectedRow.indexOf(selected) === -1);
 
-        if (lastSelected !== undefined) {
-            setSelectedRow([lastSelected]);
+            if (lastSelected !== undefined) {
+                setSelectedRow([lastSelected]);
+            } else {
+                // NOTE: Uncomment the next line in order to allow clear selection by double-click
+                setSelectedRow([])
+            }
+
+            const rowId = selection[selection.length - 1];
+            console.log("Selected row: ", rowId)
+            props.onSelectRow(rowId);
         } else {
-            // NOTE: Uncomment the next line in order to allow clear selection by double-click
-            setSelectedRow([])
+            setSelectedRow(selection);
         }
-        const rowId = selection[selection.length-1];
-        console.log("Selected row: ", rowId)
-        props.onSelectRow(rowId);
     }
 
+
+    const [defaultHiddenColumnNames] = useState(ColumnData.defaultHiddenColumnNames);
+    const [tableColumnVisibilityColumnExtensions] = useState(ColumnData.tableColumnVisibilityColumnExtensions);
+    const [leftColumns] = useState([TableSelection.COLUMN_TYPE, 'building_name']);
+    const [multipleSwitchChecked, setMultipleSwitchChecked] = useState(false);
+
+    const handleMultipleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setMultipleSwitchChecked(event.target.checked);
+        console.log("Switch checked: ", event.target.checked);
+    }
 
     const {
         rows, skip, totalCount, loading, sorting, //filters,
@@ -257,11 +283,35 @@ function DataTable(props: any) {
                 <TableHeaderRow showSortingControls />
                 <TableSelection
                     selectByRowClick
-                    highlightRow
-                    showSelectionColumn={false}
+                    highlightRow={!multipleSwitchChecked}
+                    showSelectionColumn={multipleSwitchChecked}
+                />
+                <TableFixedColumns
+                    leftColumns={leftColumns}
+                />
+                <TableColumnVisibility
+                    defaultHiddenColumnNames={defaultHiddenColumnNames}
+                    columnExtensions={tableColumnVisibilityColumnExtensions}
                 />
                 <Toolbar />
+                <Template
+                    name="toolbarContent"
+                >
+                    <TemplatePlaceholder />
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={multipleSwitchChecked}
+                                onChange={handleMultipleSwitchChange}
+                                name="checkedB"
+                                color="primary"
+                            />
+                        }
+                        label="Select multiple rows"
+                    />
+                </Template>
                 <SearchPanel />
+                <ColumnChooser />
             </Grid>
             {loading && <LoadingIndicator />}
         </Paper>
