@@ -24,6 +24,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import { CardHeader } from "@material-ui/core";
 
+import BuildingElementItem from './BuildingElementItem';
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -170,64 +172,11 @@ const BuildingElementsView = (props: any) => {
                             <Skeleton height={60} /><Skeleton height={60} /><Skeleton height={60} />
                         </div> :
                         childElements.map(child =>
-                            <Paper variant="outlined" className={classes.buildingElementPaper}>
-                                <Grid container alignItems="center" >
-                                    <Grid item xs={10}>
-                                        <Typography variant="body1">
-                                            {child.name}
-                                        </Typography>
-                                        <Grid container>
-                                            <Grid container item xs={6}>
-                                                <Grid item xs={4}>
-                                                    <Typography variant="body2" color="textSecondary">
-                                                        A1-A3:
-                                                    </Typography>
-                                                    <Typography variant="body2" color="textSecondary">
-                                                        A4:
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item xs={6}>
-                                                    <Typography variant="body2">
-                                                        {child.A1A3 || "0.0"}
-                                                    </Typography>
-                                                    <Typography variant="body2">
-                                                    {child.A4 || "0.0"}
-                                                    </Typography>
-                                                </Grid>
-                                            </Grid>
-                                            <Grid container item xs={6}>
-                                                <Grid item xs={4}>
-                                                    <Typography variant="body2" color="textSecondary">
-                                                        B4_t:
-                                                    </Typography>
-                                                    <Typography variant="body2" color="textSecondary">
-                                                        B4_m:
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid item xs={6}>
-                                                    <Typography variant="body2">
-                                                        {child.B4_t || "0.0"}
-                                                    </Typography>
-                                                    <Typography variant="body2">
-                                                        {child.B4_m || "0.0"}
-                                                    </Typography>
-                                                </Grid>
-
-                                            </Grid>
-                                        </Grid>
-                                    </Grid>
-                                    <Grid item>
-                                        {/* Check if element has children to decide if should display button */}
-                                        {(getChildElements(child)?.length > 0 || getElementMaterials(child)?.length > 0) &&
-                                            <Tooltip title="See sub-elements">
-                                                <IconButton /* edge="end" */ color="default" aria-label="child elements" onClick={() => goToChildElement(child.idlevels)}>
-                                                    <NavigateNextIcon />
-                                                </IconButton>
-                                            </Tooltip>
-                                        }
-                                    </Grid>
-                                </Grid>
-                            </Paper>
+                            <BuildingElementItem 
+                                element={child}
+                                hasChildren={(getChildElements(child)?.length > 0 || getElementMaterials(child)?.length > 0)}
+                                onClickChildElementButton={goToChildElement}
+                            />
                         )
                     }
                 </Grid>
