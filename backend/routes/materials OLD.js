@@ -1,4 +1,4 @@
-// buildings.js - Buildings route module.
+// materials.js - Materials route module.
 
 var express = require('express');
 var router = express.Router();
@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
     const skip = req.query.skip;
     const take = req.query.take;
 
-    const query = `SELECT * FROM buildings${searchQuery}${sortQuery} LIMIT ${skip}, ${take}`;
+    const query = `SELECT * FROM materials${searchQuery}${sortQuery} LIMIT ${skip}, ${take}`;
     console.log("Query: " + query)
     pool.execute(query, (err, rows) => {
         if (err) {
@@ -44,7 +44,7 @@ router.get('/', (req, res) => {
         }
         else if (req.query.requireTotalCount == 'true') {
             // Append total row count to response object
-            const countQuery = `select count(*) from buildings${searchQuery}`;
+            const countQuery = `select count(*) from materials${searchQuery}`;
             pool.query(countQuery, (err, countObject) => {
                 if (err) {
                     res.send(err);
@@ -64,33 +64,9 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:buildingId', (req, res) => {
-    const query = 
-    `SELECT b.idbuildings, building_identifier, building_name, country, city, typology, construction_type, A1A3, A4, B4_m, B4_t
-    FROM buildings AS b
-    INNER JOIN location AS l
-    ON b.idlocation = l.idlocation
-    INNER JOIN typology AS t
-    ON b.idtypology = t.idtypology
-    INNER JOIN constructiontype AS c
-    ON b.idconstruction_type = c.idconstruction_type
-    INNER JOIN buildingelements as be
-    ON b.idbuildings = be.idbuildings
-    WHERE b.idbuildings = ${req.params.buildingId} AND be.idlevels = 0`;
-
-    console.log("Get building")
-    pool.query(query, (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(result);
-      }
-    });
-}); 
-
 /* 
 router.get('/count', (req, res) => {
-    const query = `SELECT count(*) FROM buildings`;
+    const query = `SELECT count(*) FROM materials`;
     console.log("Query: " + query)
     pool.query(query, (err, result) => {
       if (err) {

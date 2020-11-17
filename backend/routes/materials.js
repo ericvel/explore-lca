@@ -4,70 +4,21 @@ var express = require('express');
 var router = express.Router();
 const pool = require('../mysql')
 
-const formatSearchQuery = (searchQuery) => {
-    var formattedQuery = ``;
-    if (searchQuery != "[]" && searchQuery != '') {
-        const params = JSON.parse(searchQuery);
-        const searchTerm = params.searchTerm;
-        const searchableColumns = params.columns;
-        if (searchTerm != '' && searchableColumns != '') {
-            formattedQuery = ` WHERE concat(${searchableColumns}) like '%${searchTerm}%'`
-        }
-    }
-    return formattedQuery;
-}
+router.get('/:buildingId', (req, res) => {
+    const query = 
+    `SELECT m.idmaterials, source, name, sourceType, dataYear, FU, density, EEf_A1A3, m.comments, materialCat, mi.idbuilding_elements, idlevels, quantity, RSL_mi, RSL, mi.A1A3, mi.A4, mi.B4_m, mi.B4_t
+    FROM materials AS m
+    JOIN materialcat AS mc
+    ON m.idmaterialCat = mc.idmaterialCat
+    JOIN materialinventory AS mi
+    ON m.idmaterials = mi.idmaterials
+    JOIN buildingelements as be
+    ON mi.idbuilding_elements = be.idbuilding_elements
+    JOIN buildings as b
+    ON be.idbuildings = b.idbuildings
+    WHERE b.idbuildings = ${req.params.buildingId}`;
 
-const formatSortQuery = (sortQuery) => {
-    var formattedQuery = ``;
-    if (sortQuery != "[]" && sortQuery != '') {
-        const params = JSON.parse(sortQuery)[0];
-        const selector = params.selector;
-        formattedQuery = ` ORDER BY ${selector}`
-        if (params.desc == true) {
-            formattedQuery += ` DESC`
-        }
-    }
-    return formattedQuery;
-}
-
-router.get('/', (req, res) => {
-    const searchQuery = formatSearchQuery(req.query.search);
-    const sortQuery = formatSortQuery(req.query.sort);
-    const skip = req.query.skip;
-    const take = req.query.take;
-
-    const query = `SELECT * FROM materials${searchQuery}${sortQuery} LIMIT ${skip}, ${take}`;
-    console.log("Query: " + query)
-    pool.execute(query, (err, rows) => {
-        if (err) {
-            res.send(err);
-        }
-        else if (req.query.requireTotalCount == 'true') {
-            // Append total row count to response object
-            const countQuery = `select count(*) from materials${searchQuery}`;
-            pool.query(countQuery, (err, countObject) => {
-                if (err) {
-                    res.send(err);
-                } else {
-                    const count = countObject[0]['count(*)'];
-                    const jsonObj = {
-                        data: rows,
-                        totalCount: count
-                    }
-                    res.send(jsonObj);
-                }
-            });
-        } else {
-            // Only rows without total count
-            res.send(rows);
-        }
-    });
-});
-
-/* 
-router.get('/count', (req, res) => {
-    const query = `SELECT count(*) FROM materials`;
-    console.log("Query: " + query)
+    console.log("Get materials")
     pool.query(query, (err, result) => {
       if (err) {
         res.send(err);
@@ -75,6 +26,6 @@ router.get('/count', (req, res) => {
         res.send(result);
       }
     });
-  }); */
+});
 
 module.exports = router;

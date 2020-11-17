@@ -12,7 +12,7 @@ router.get('/:buildingId', (req, res) => {
     ON be.idlevels = l.idlevels
     WHERE idbuildings = ${req.params.buildingId}`;
 
-    console.log("Query: " + query)
+    console.log("Get building elements")
     pool.query(query, (err, result) => {
       if (err) {
         res.send(err);
