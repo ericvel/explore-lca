@@ -36,9 +36,10 @@ import LoadingIndicator from '../LoadingIndicator';
 
 const VIRTUAL_PAGE_SIZE = 100;
 const MAX_ROWS = 50000;
-var columns: Column[] = []
-var columnExtensions: Table.ColumnExtension[] = []
-var searchableColumns: String = ''
+const URL = '/buildings'
+// var columns: Column[] = []
+// var columnExtensions: Table.ColumnExtension[] = []
+// var searchableColumns: String = ''
 const getRowId = (row: any) => row[Object.keys(row)[0]];
 const Root = (props: any) => <Grid.Root {...props} style={{ height: '100%' }} />;
 
@@ -50,9 +51,9 @@ const initialState = {
     totalCount: 0,
     loading: false,
     lastQuery: '',
-    table: 'buildings',
     sorting: [],
     searchTerm: '',
+    searchableColumns: 'building_name,project',
     forceReload: false,
 };
 
@@ -86,15 +87,6 @@ function reducer(state: any, { type, payload }: any) {
                 ...state,
                 lastQuery: payload,
             };
-        case 'CHANGE_TABLE':
-            return {
-                ...state,
-                forceReload: true,
-                requestedSkip: 0,
-                rows: [],
-                sorting: [],
-                table: payload,
-            };
         case 'CHANGE_SORTING':
             return {
                 ...state,
@@ -115,16 +107,13 @@ function reducer(state: any, { type, payload }: any) {
     }
 }
 
-function setColumnData(tableName: string) {
-    columns = ColumnData.getColumns(tableName);
-    columnExtensions = ColumnData.getColumnExtensions(tableName);
-    searchableColumns = ColumnData.getSearchableColumns(tableName);
-}
-
-
-function DataTable(props: any) {
+function BuildingsTable(props: any) {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const [columns] = useState(ColumnData.buildingsColumns);
+    const [columnExtensions] = useState(ColumnData.buildingsColumnExtensions);    
+
     const cache = useMemo(() => createRowCache(VIRTUAL_PAGE_SIZE), [VIRTUAL_PAGE_SIZE]);
+
     const updateRows = (skip: number, count: number, newTotalCount: number) => {
         dispatch({
             type: 'UPDATE_ROWS',
@@ -135,13 +124,14 @@ function DataTable(props: any) {
             },
         });
     };
+
     const getRemoteRows = (requestedSkip: number, take: number) => {
         dispatch({ type: 'START_LOADING', payload: { requestedSkip, take } });
     };
 
     const buildQueryString = () => {
         const {
-            requestedSkip, take, table, searchTerm, filters, sorting,
+            requestedSkip, take, searchTerm, searchableColumns, filters, sorting,
         } = state;
         /* const filterStr = filters
             .map(({ columnName, value, operation }) => (
@@ -163,7 +153,7 @@ function DataTable(props: any) {
         //const filterQuery = filterStr ? `&filter=[${escape(filterStr)}]` : '';
         const sortQuery = sortingStr ? `&sort=${escape(`${sortingStr}`)}` : '';
 
-        return `/${table}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${searchQuery}${sortQuery}`;
+        return `${URL}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${searchQuery}${sortQuery}`;
         // return `${URL}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${filterQuery}${sortQuery}`;
     };
 
@@ -207,18 +197,13 @@ function DataTable(props: any) {
     const delayedCallback = useCallback(_.debounce(changeSearchTerm, 300), []);
 
     useEffect(() => {
-        console.log("UseEffect: Update columns")
-        setColumnData(props.tableName);
-        dispatch({ type: 'CHANGE_TABLE', payload: props.tableName });
-    }, [props.tableName])
-
-    useEffect(() => {
         loadData();
     });
 
     const [selectedRow, setSelectedRow] = useState<ReactText[]>([]);
 
     function changeSelection(selection: ReactText[]) {
+        // Select one row or multiple rows at a time
         if (!multipleSwitchChecked) {
             const lastSelected = selection.find((selected) => selectedRow.indexOf(selected) === -1);
 
@@ -236,7 +221,6 @@ function DataTable(props: any) {
             setSelectedRow(selection);
         }
     }
-
 
     const [defaultHiddenColumnNames] = useState(ColumnData.defaultHiddenColumnNames);
     const [tableColumnVisibilityColumnExtensions] = useState(ColumnData.tableColumnVisibilityColumnExtensions);
@@ -318,4 +302,4 @@ function DataTable(props: any) {
     );
 }
 
-export default DataTable;
+export default BuildingsTable;
