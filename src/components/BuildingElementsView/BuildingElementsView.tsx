@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -20,6 +21,7 @@ import IconButton from '@material-ui/core/IconButton';
 import HomeIcon from '@material-ui/icons/Home';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import { CardHeader } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -73,6 +75,7 @@ const BuildingElementsView = (props: any) => {
     const [buildingElements, setBuildingElements] = useState<BuildingElement[]>([]);
     const [selectedElement, setSelectedElement] = useState<BuildingElement>(initialSelectedElementState);
     const [elementRoute, setElementRoute] = useState<BuildingElement[]>([]);
+    const [materials, setMaterials] = useState<Material[]>([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -84,20 +87,28 @@ const BuildingElementsView = (props: any) => {
 
 
     const loadData = () => {
-        const query = `/building_elements/${props.buildingId}`;
+        const elementQuery = `/building_elements/${props.buildingId}`;
+        const materialQuery = `/materials/${props.buildingId}`;
+
         if (!loading) {
             setLoading(true);
-
-            fetch(query)
-                .then(response => response.json())
-                .then(data => {
-                    setBuildingElements(data);
-                    const rootElement = data.find((element: BuildingElement) => element.hierarchy === 0);
+            Promise.all([
+                fetch(elementQuery),
+                fetch(materialQuery)
+            ]).then(responses => Promise.all(responses.map(response => response.json())
+            )).then(data => {
+                ReactDOM.unstable_batchedUpdates(() => {
+                    setBuildingElements(data[0]);
+                    setMaterials(data[1]);
+                    const rootElement = data[0].find((element: BuildingElement) => element.hierarchy === 0);
                     if (rootElement !== undefined) {
                         setSelectedElement(rootElement);
+                        setElementRoute([rootElement]);
+                        console.log("Route: ", [rootElement])
                     }
                     setLoading(false);
-                }).catch(() => setLoading(false));
+                })
+            }).catch(() => setLoading(false));
         }
     };
 
@@ -105,6 +116,15 @@ const BuildingElementsView = (props: any) => {
         const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
         if (childElements !== undefined) {
             return childElements;
+        }
+
+        return [];
+    }
+
+    const getElementMaterials = (parentElement: BuildingElement) => {
+        const elementMaterials = materials.filter(material => material.idbuilding_elements === parentElement.idbuilding_elements);
+        if (elementMaterials !== undefined) {
+            return elementMaterials;
         }
 
         return [];
@@ -118,34 +138,8 @@ const BuildingElementsView = (props: any) => {
         }
     }
 
-    const resetBreadcrumbs = () => {
-        const rootElement = buildingElements.find((element: BuildingElement) => element.hierarchy === 0);
-        if (rootElement !== undefined) {
-            setSelectedElement(rootElement);
-            setElementRoute([]);
-        }
-    }
-
-    const handleBreadcrumbClick = (hierarchy: number) => {
-        // Don't do anything if click on last breadcrumb in route
-        if (selectedElement.hierarchy === hierarchy) {
-            return;
-        }
-        // Reset route if click on building breadcrumb
-        else if (hierarchy === 0) {
-            const rootElement = buildingElements.find((element: BuildingElement) => element.hierarchy === 0);
-            if (rootElement !== undefined) {
-                setSelectedElement(rootElement);
-                setElementRoute([]);
-                return;
-            }
-        }
-
-        var tempRoute = elementRoute;
-        for (let i = 0; i < elementRoute.length - hierarchy; i++) {
-            tempRoute.pop();
-            console.log("Poppin, new route: ", tempRoute);
-        }
+    const handleBreadcrumbClick = (index: number) => {
+        var tempRoute = elementRoute.slice(0, index + 1);
         setSelectedElement(tempRoute[tempRoute.length - 1])
         setElementRoute(tempRoute);
     };
@@ -160,22 +154,16 @@ const BuildingElementsView = (props: any) => {
                 <Grid item xs>
                     <Typography variant="h5" color="textSecondary" gutterBottom>Building elements</Typography>
                     <Breadcrumbs aria-label="breadcrumb" className={classes.breadCrumbs}>
-                        <StyledBreadcrumb
-                            label="Building"
-                            variant="outlined"
-                            icon={<HomeIcon fontSize="small" />}
-                            onClick={() => handleBreadcrumbClick(0)}
-                        />
-                        {elementRoute.map(element =>
+                        {elementRoute.map((element, index) =>
                             <StyledBreadcrumb
                                 label={element.name}
                                 variant="outlined"
-                                onClick={() => handleBreadcrumbClick(element.hierarchy)}
-                            //deleteIcon={<ExpandMoreIcon />}
-                            //onDelete={(() => { })}
+                                icon={element.idlevels === 0 ? <HomeIcon fontSize="small" /> : undefined }
+                                onClick={() => handleBreadcrumbClick(index)}
+                                //deleteIcon={<ExpandMoreIcon />}
+                                //onDelete={(() => { })}
                             />
                         )}
-
                     </Breadcrumbs>
                     {loading || props.parentIsLoading ?
                         <div>
@@ -227,11 +215,10 @@ const BuildingElementsView = (props: any) => {
 
                                             </Grid>
                                         </Grid>
-
                                     </Grid>
                                     <Grid item>
                                         {/* Check if element has children to decide if should display button */}
-                                        {(getChildElements(child)?.length > 0) &&
+                                        {(getChildElements(child)?.length > 0 || getElementMaterials(child)?.length > 0) &&
                                             <Tooltip title="See sub-elements">
                                                 <IconButton /* edge="end" */ color="default" aria-label="child elements" onClick={() => goToChildElement(child.idlevels)}>
                                                     <NavigateNextIcon />
