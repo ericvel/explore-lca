@@ -22,16 +22,16 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const BuildingElementItem = (props: any) => {    
+const BuildingElementItem = (props: any) => {
     const [buildingElement] = useState<BuildingElement>(props.element);
-    const [hasChildren] = useState<boolean>(props.hasChildren);
+    const [hasMaterials] = useState<boolean>(props.hasMaterials);
 
     const {
-        name, A1A3, A4, B4_m, B4_t, idlevels
+        name, A1A3, A4, B4_m, B4_t, idlevels, idbuilding_elements
     } = buildingElement;
 
     const classes = useStyles();
-
+    
     return (
         <div>
             <Paper variant="outlined" className={classes.buildingElementPaper}>
@@ -82,9 +82,15 @@ const BuildingElementItem = (props: any) => {
                     </Grid>
                     <Grid item>
                         {/* Check if element has children to decide if should display button */}
-                        {hasChildren &&
+                        {hasMaterials ?
+                            <Tooltip title="See materials">
+                                <IconButton /* edge="end" */ color="secondary" aria-label="element materials" onClick={() => props.onClickElementMaterialsButton(idbuilding_elements)}>
+                                    <NavigateNextIcon />
+                                </IconButton>
+                            </Tooltip>
+                            :
                             <Tooltip title="See sub-elements">
-                                <IconButton /* edge="end" */ color="default" aria-label="child elements" onClick={() => props.onClickChildElementButton(idlevels)}>
+                                <IconButton /* edge="end" */ color="primary" aria-label="child elements" onClick={() => props.onClickChildElementButton(idlevels)}>
                                     <NavigateNextIcon />
                                 </IconButton>
                             </Tooltip>

@@ -106,7 +106,6 @@ const BuildingElementsView = (props: any) => {
                     if (rootElement !== undefined) {
                         setSelectedElement(rootElement);
                         setElementRoute([rootElement]);
-                        console.log("Route: ", [rootElement])
                     }
                     setLoading(false);
                 })
@@ -116,6 +115,8 @@ const BuildingElementsView = (props: any) => {
 
     const getChildElements = (parentElement: BuildingElement) => {
         const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
+        // console.log("Parent element: " + parentElement.idlevels + " - " + parentElement.name)
+        // console.log("Child elements: ", childElements)
         if (childElements !== undefined) {
             return childElements;
         }
@@ -134,10 +135,15 @@ const BuildingElementsView = (props: any) => {
 
     const goToChildElement = (elementId: number) => {
         const childElement = buildingElements.find(element => element.idlevels === elementId);
+        // console.log("Clicked element id: ", elementId)
         if (childElement !== undefined) {
             setSelectedElement(childElement);
             setElementRoute([...elementRoute, childElement]);
         }
+    }
+
+    const goToElementMaterials = (elementId: number) => {
+        console.log("Element materials pls: ", elementId)
     }
 
     const handleBreadcrumbClick = (index: number) => {
@@ -171,11 +177,13 @@ const BuildingElementsView = (props: any) => {
                         <div>
                             <Skeleton height={60} /><Skeleton height={60} /><Skeleton height={60} />
                         </div> :
-                        childElements.map(child =>
-                            <BuildingElementItem 
+                        childElements.map((child, index) =>
+                            <BuildingElementItem
+                                key={child.idlevels || index}
                                 element={child}
-                                hasChildren={(getChildElements(child)?.length > 0 || getElementMaterials(child)?.length > 0)}
+                                hasMaterials={getElementMaterials(child)?.length > 0}
                                 onClickChildElementButton={goToChildElement}
+                                onClickElementMaterialsButton={goToElementMaterials}
                             />
                         )
                     }
