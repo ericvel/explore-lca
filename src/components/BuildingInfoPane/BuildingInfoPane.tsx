@@ -213,7 +213,7 @@ const BuildingInfoPane = (props: any) => {
                                         }}
                                         InputProps={{ disableUnderline: true }}
                                         fullWidth={true}
-                                        label="B4_m"
+                                        label="B4 (m)"
                                         name="b4m"
                                         margin="dense"
                                         defaultValue={B4_m || "0.0"}
@@ -225,7 +225,7 @@ const BuildingInfoPane = (props: any) => {
                                         }}
                                         InputProps={{ disableUnderline: true }}
                                         fullWidth={true}
-                                        label="B4_t"
+                                        label="B4 (t)"
                                         name="b4t"
                                         margin="dense"
                                         defaultValue={B4_t || "0.0"}

@@ -31,11 +31,11 @@ const BuildingElementItem = (props: any) => {
     } = buildingElement;
 
     const classes = useStyles();
-    
+
     return (
         <div>
             <Paper variant="outlined" className={classes.buildingElementPaper}>
-                <Grid container alignItems="center" >
+                <Grid container spacing={2} alignItems="center" justify="space-between">
                     <Grid item xs={10}>
                         <Typography variant="body1">
                             {name}
@@ -62,10 +62,10 @@ const BuildingElementItem = (props: any) => {
                             <Grid container item xs={6}>
                                 <Grid item xs={4}>
                                     <Typography variant="body2" color="textSecondary">
-                                        B4_t:
+                                        B4 (t):
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        B4_m:
+                                        B4 (m):
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -84,7 +84,7 @@ const BuildingElementItem = (props: any) => {
                         {/* Check if element has children to decide if should display button */}
                         {hasMaterials ?
                             <Tooltip title="See materials">
-                                <IconButton /* edge="end" */ color="secondary" aria-label="element materials" onClick={() => props.onClickElementMaterialsButton(idbuilding_elements)}>
+                                <IconButton /* edge="end" */ color="secondary" aria-label="element materials" onClick={() => props.onClickElementMaterialsButton(idlevels)}>
                                     <NavigateNextIcon />
                                 </IconButton>
                             </Tooltip>

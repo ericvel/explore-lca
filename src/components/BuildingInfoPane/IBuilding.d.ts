@@ -24,22 +24,34 @@ interface BuildingElement {
     idparent?: number;
 }
 
+interface MaterialItem {    
+    idbuilding_elements: number;
+    material: Material;
+    inventoryEntries: MaterialInventory[];
+}
+
 interface Material {
     idmaterials: number;
+    idbuilding_elements: number;
     source: string;
     name: string;
+    dataType: string;
     sourceType: string;
     dataYear?: string;
     FU: string;
     density: number?;
     EEf_A1A3: number;
+    RSL?: number;
     comments: string;
     materialCat: string;
+}
+
+interface MaterialInventory {
+    idmaterialInventory: number;
     idbuilding_elements: number;
-    idlevels: number;
-    quantity: number;
-    RSL_mi?: number;
-    RSL?: number;
+    idmaterials: number;
+    quantity: number;    
+    RSL_mi?: number;    
     A1A3?: number;
     A4?: number;
     B4_m?: number;

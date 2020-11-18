@@ -1,6 +1,6 @@
 .sliding-pane-overlay {
     background-color: transparent !important;
-    width: 30%;
+    width: 40%;
     left: auto;
     z-index: 500;
 }

@@ -25,6 +25,7 @@ import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRigh
 import { CardHeader } from "@material-ui/core";
 
 import BuildingElementItem from './BuildingElementItem';
+import MaterialItem from "./MaterialItem";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -78,6 +79,8 @@ const BuildingElementsView = (props: any) => {
     const [selectedElement, setSelectedElement] = useState<BuildingElement>(initialSelectedElementState);
     const [elementRoute, setElementRoute] = useState<BuildingElement[]>([]);
     const [materials, setMaterials] = useState<Material[]>([]);
+    const [materialInventory, setMaterialInventory] = useState<MaterialInventory[]>([]);
+    //const [materialItems, setMaterialItems] = useState<MaterialItem[]>([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -91,17 +94,20 @@ const BuildingElementsView = (props: any) => {
     const loadData = () => {
         const elementQuery = `/building_elements/${props.buildingId}`;
         const materialQuery = `/materials/${props.buildingId}`;
+        const inventoryQuery = `/materials/inventory/${props.buildingId}`;
 
         if (!loading) {
             setLoading(true);
             Promise.all([
                 fetch(elementQuery),
-                fetch(materialQuery)
+                fetch(materialQuery),
+                fetch(inventoryQuery)
             ]).then(responses => Promise.all(responses.map(response => response.json())
             )).then(data => {
                 ReactDOM.unstable_batchedUpdates(() => {
                     setBuildingElements(data[0]);
                     setMaterials(data[1]);
+                    setMaterialInventory(data[2]);
                     const rootElement = data[0].find((element: BuildingElement) => element.hierarchy === 0);
                     if (rootElement !== undefined) {
                         setSelectedElement(rootElement);
@@ -125,12 +131,28 @@ const BuildingElementsView = (props: any) => {
     }
 
     const getElementMaterials = (parentElement: BuildingElement) => {
-        const elementMaterials = materials.filter(material => material.idbuilding_elements === parentElement.idbuilding_elements);
+        const buildingElementId = parentElement.idbuilding_elements;
+        const elementMaterials = materials.filter(material => material.idbuilding_elements === buildingElementId);
+
+        var materialItems: MaterialItem[] = [];
+        elementMaterials.forEach(function(material) {
+            const inventoryEntries = materialInventory.filter(inventory => inventory.idmaterials === material.idmaterials && inventory.idbuilding_elements === buildingElementId);
+            const materialItem: MaterialItem = {
+                idbuilding_elements: buildingElementId,
+                material: material,
+                inventoryEntries: inventoryEntries
+            }
+            materialItems.push(materialItem)
+        });
+
+        console.log("Element materials: ", elementMaterials)
+        console.log("Material items: ", materialItems)
+        /* const elementInventoryEntries = materialInventory.filter(inventory => inventory.idbuilding_elements === buildingElementId);
         if (elementMaterials !== undefined) {
             return elementMaterials;
-        }
+        } */
 
-        return [];
+        return materialItems;
     }
 
     const goToChildElement = (elementId: number) => {
@@ -144,6 +166,12 @@ const BuildingElementsView = (props: any) => {
 
     const goToElementMaterials = (elementId: number) => {
         console.log("Element materials pls: ", elementId)
+        const childElement = buildingElements.find(element => element.idlevels === elementId);
+        // console.log("Clicked element id: ", elementId)
+        if (childElement !== undefined) {
+            setSelectedElement(childElement);
+            setElementRoute([...elementRoute, childElement]);
+        }
     }
 
     const handleBreadcrumbClick = (index: number) => {
@@ -153,6 +181,7 @@ const BuildingElementsView = (props: any) => {
     };
 
     const childElements = getChildElements(selectedElement);
+    // const elementMaterials = getElementMaterials(selectedElement);
 
     const classes = useStyles();
 
@@ -175,8 +204,10 @@ const BuildingElementsView = (props: any) => {
                     </Breadcrumbs>
                     {loading || props.parentIsLoading ?
                         <div>
-                            <Skeleton height={60} /><Skeleton height={60} /><Skeleton height={60} />
-                        </div> :
+                            <Skeleton height={100} /><Skeleton height={100} /><Skeleton height={100} />
+                        </div> 
+                        :
+                        childElements?.length > 0 ?
                         childElements.map((child, index) =>
                             <BuildingElementItem
                                 key={child.idlevels || index}
@@ -184,6 +215,13 @@ const BuildingElementsView = (props: any) => {
                                 hasMaterials={getElementMaterials(child)?.length > 0}
                                 onClickChildElementButton={goToChildElement}
                                 onClickElementMaterialsButton={goToElementMaterials}
+                            />
+                        )
+                        :                        
+                        getElementMaterials(selectedElement).map((materialItem, index) =>
+                            <MaterialItem
+                                key={index}
+                                materialItem={materialItem}
                             />
                         )
                     }

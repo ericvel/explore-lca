@@ -28,7 +28,7 @@ function App() {
         <Grid container spacing={3}>
           <Grid item xs>
             <Typography variant="h2" gutterBottom>
-              LCA Tool - GUI
+              bLCAd Tool - GUI
               </Typography>
           </Grid>
         </Grid>
