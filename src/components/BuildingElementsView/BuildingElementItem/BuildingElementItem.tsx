@@ -76,7 +76,6 @@ const BuildingElementItem = (props: any) => {
                                         {B4_m || "0.0"}
                                     </Typography>
                                 </Grid>
-
                             </Grid>
                         </Grid>
                     </Grid>

@@ -145,13 +145,6 @@ const BuildingElementsView = (props: any) => {
             materialItems.push(materialItem)
         });
 
-        console.log("Element materials: ", elementMaterials)
-        console.log("Material items: ", materialItems)
-        /* const elementInventoryEntries = materialInventory.filter(inventory => inventory.idbuilding_elements === buildingElementId);
-        if (elementMaterials !== undefined) {
-            return elementMaterials;
-        } */
-
         return materialItems;
     }
 
@@ -165,7 +158,6 @@ const BuildingElementsView = (props: any) => {
     }
 
     const goToElementMaterials = (elementId: number) => {
-        console.log("Element materials pls: ", elementId)
         const childElement = buildingElements.find(element => element.idlevels === elementId);
         // console.log("Clicked element id: ", elementId)
         if (childElement !== undefined) {
@@ -193,6 +185,7 @@ const BuildingElementsView = (props: any) => {
                     <Breadcrumbs aria-label="breadcrumb" className={classes.breadCrumbs}>
                         {elementRoute.map((element, index) =>
                             <StyledBreadcrumb
+                                key={index}
                                 label={element.name}
                                 variant="outlined"
                                 icon={element.idlevels === 0 ? <HomeIcon fontSize="small" /> : undefined }
