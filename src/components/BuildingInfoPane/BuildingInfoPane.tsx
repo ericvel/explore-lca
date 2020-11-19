@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import './BuildingInfoPane.css';
 import ReactDOM from "react-dom";
 import BuildingElementsView from '../BuildingElementsView';
+import BuildingMaterialsContainer from '../BuildingMaterialsContainer';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -236,8 +237,8 @@ const BuildingInfoPane = (props: any) => {
                     </Grid>
 
                     <Divider variant="middle" light={true} className={classes.divider} />
-
-                    <BuildingElementsView buildingId={props.selectedBuildingId} parentIsLoading={loading} />
+                    
+                    <BuildingMaterialsContainer buildingId={props.selectedBuildingId} parentIsLoading={loading} />
                 </div>
             </SlidingPane>
         </div>

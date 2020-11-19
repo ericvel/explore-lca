@@ -75,49 +75,57 @@ const initialSelectedElementState: BuildingElement = {
 };
 
 const BuildingElementsView = (props: any) => {
-    const [buildingElements, setBuildingElements] = useState<BuildingElement[]>([]);
+    const [buildingElements] = useState<BuildingElement[]>(props.buildingElements);
+    const [materials] = useState<Material[]>(props.materials);
+    const [materialInventory] = useState<MaterialInventory[]>(props.materialInventory);
+
     const [selectedElement, setSelectedElement] = useState<BuildingElement>(initialSelectedElementState);
     const [elementRoute, setElementRoute] = useState<BuildingElement[]>([]);
-    const [materials, setMaterials] = useState<Material[]>([]);
-    const [materialInventory, setMaterialInventory] = useState<MaterialInventory[]>([]);
-    //const [materialItems, setMaterialItems] = useState<MaterialItem[]>([]);
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    /* useEffect(() => {
         if (props.buildingId !== undefined) {
             setElementRoute([])
             loadData();
         }
     }, [props.buildingId]);
+ */
 
-
-    const loadData = () => {
-        const elementQuery = `/building_elements/${props.buildingId}`;
-        const materialQuery = `/materials/${props.buildingId}`;
-        const inventoryQuery = `/materials/inventory/${props.buildingId}`;
-
-        if (!loading) {
-            setLoading(true);
-            Promise.all([
-                fetch(elementQuery),
-                fetch(materialQuery),
-                fetch(inventoryQuery)
-            ]).then(responses => Promise.all(responses.map(response => response.json())
-            )).then(data => {
-                ReactDOM.unstable_batchedUpdates(() => {
-                    setBuildingElements(data[0]);
-                    setMaterials(data[1]);
-                    setMaterialInventory(data[2]);
-                    const rootElement = data[0].find((element: BuildingElement) => element.hierarchy === 0);
-                    if (rootElement !== undefined) {
-                        setSelectedElement(rootElement);
-                        setElementRoute([rootElement]);
-                    }
-                    setLoading(false);
-                })
-            }).catch(() => setLoading(false));
+    useEffect(() => {
+        const rootElement = buildingElements.find((element: BuildingElement) => element.hierarchy === 0);
+        if (rootElement !== undefined) {
+            setSelectedElement(rootElement);
+            setElementRoute([rootElement]);
         }
-    };
+    }, []);
+
+    /*  const loadData = () => {
+         const elementQuery = `/building_elements/${props.buildingId}`;
+         const materialQuery = `/materials/${props.buildingId}`;
+         const inventoryQuery = `/materials/inventory/${props.buildingId}`;
+ 
+         if (!loading) {
+             setLoading(true);
+             Promise.all([
+                 fetch(elementQuery),
+                 fetch(materialQuery),
+                 fetch(inventoryQuery)
+             ]).then(responses => Promise.all(responses.map(response => response.json())
+             )).then(data => {
+                 ReactDOM.unstable_batchedUpdates(() => {
+                     setBuildingElements(data[0]);
+                     setMaterials(data[1]);
+                     setMaterialInventory(data[2]);
+                     const rootElement = data[0].find((element: BuildingElement) => element.hierarchy === 0);
+                     if (rootElement !== undefined) {
+                         setSelectedElement(rootElement);
+                         setElementRoute([rootElement]);
+                     }
+                     setLoading(false);
+                 })
+             }).catch(() => setLoading(false));
+         }
+     }; */
 
     const getChildElements = (parentElement: BuildingElement) => {
         const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
@@ -135,7 +143,7 @@ const BuildingElementsView = (props: any) => {
         const elementMaterials = materials.filter(material => material.idbuilding_elements === buildingElementId);
 
         var materialItems: MaterialItem[] = [];
-        elementMaterials.forEach(function(material) {
+        elementMaterials.forEach(function (material) {
             const inventoryEntries = materialInventory.filter(inventory => inventory.idmaterials === material.idmaterials && inventory.idbuilding_elements === buildingElementId);
             const materialItem: MaterialItem = {
                 idbuilding_elements: buildingElementId,
@@ -181,26 +189,20 @@ const BuildingElementsView = (props: any) => {
         <div>
             <Grid container spacing={3} className="">
                 <Grid item xs>
-                    <Typography variant="h5" color="textSecondary" gutterBottom>Building elements</Typography>
                     <Breadcrumbs aria-label="breadcrumb" className={classes.breadCrumbs}>
                         {elementRoute.map((element, index) =>
                             <StyledBreadcrumb
                                 key={index}
                                 label={element.name}
                                 variant="outlined"
-                                icon={element.idlevels === 0 ? <HomeIcon fontSize="small" /> : undefined }
+                                icon={element.idlevels === 0 ? <HomeIcon fontSize="small" /> : undefined}
                                 onClick={() => handleBreadcrumbClick(index)}
-                                //deleteIcon={<ExpandMoreIcon />}
-                                //onDelete={(() => { })}
+                            //deleteIcon={<ExpandMoreIcon />}
+                            //onDelete={(() => { })}
                             />
                         )}
                     </Breadcrumbs>
-                    {loading || props.parentIsLoading ?
-                        <div>
-                            <Skeleton height={100} /><Skeleton height={100} /><Skeleton height={100} />
-                        </div> 
-                        :
-                        childElements?.length > 0 ?
+                    { childElements?.length > 0 ?
                         childElements.map((child, index) =>
                             <BuildingElementItem
                                 key={child.idlevels || index}
@@ -210,7 +212,7 @@ const BuildingElementsView = (props: any) => {
                                 onClickElementMaterialsButton={goToElementMaterials}
                             />
                         )
-                        :                        
+                        :
                         getElementMaterials(selectedElement).map((materialItem, index) =>
                             <MaterialItem
                                 key={index}
