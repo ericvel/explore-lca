@@ -8,7 +8,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import BuildingElementsView from '../BuildingElementsView';
+import BuildingElementsView from './BuildingElementsView';
+import MaterialsView from "./MaterialsView";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -16,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const BuildingMaterialsContainer = (props: any) => {
+const ElementsAndMaterialsContainer = (props: any) => {
     const [buildingElements, setBuildingElements] = useState<BuildingElement[]>([]);
     const [materials, setMaterials] = useState<Material[]>([]);
     const [materialInventory, setMaterialInventory] = useState<MaterialInventory[]>([]);
@@ -79,7 +80,7 @@ const BuildingMaterialsContainer = (props: any) => {
                 </div>
                 :
                 allMaterialsChecked ?
-                    <div>bruh</div>
+                    <MaterialsView materials={materials} materialInventory={materialInventory} />
                     :
                     <BuildingElementsView buildingElements={buildingElements} materials={materials} materialInventory={materialInventory} />
             }
@@ -87,4 +88,4 @@ const BuildingMaterialsContainer = (props: any) => {
     );
 };
 
-export default BuildingMaterialsContainer;
+export default ElementsAndMaterialsContainer;

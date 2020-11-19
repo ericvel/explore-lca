@@ -24,8 +24,8 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import { CardHeader } from "@material-ui/core";
 
-import BuildingElementItem from './BuildingElementItem';
-import MaterialItem from "./MaterialItem";
+import BuildingElementItem from '../BuildingElementItem';
+import MaterialItem from "../MaterialItem";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -146,7 +146,6 @@ const BuildingElementsView = (props: any) => {
         elementMaterials.forEach(function (material) {
             const inventoryEntries = materialInventory.filter(inventory => inventory.idmaterials === material.idmaterials && inventory.idbuilding_elements === buildingElementId);
             const materialItem: MaterialItem = {
-                idbuilding_elements: buildingElementId,
                 material: material,
                 inventoryEntries: inventoryEntries
             }

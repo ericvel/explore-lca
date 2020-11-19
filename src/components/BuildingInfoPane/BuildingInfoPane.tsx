@@ -13,8 +13,8 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import IconButton from '@material-ui/core/IconButton';
 import './BuildingInfoPane.css';
 import ReactDOM from "react-dom";
-import BuildingElementsView from '../BuildingElementsView';
-import BuildingMaterialsContainer from '../BuildingMaterialsContainer';
+import BuildingElementsView from '../ElementsAndMaterialsContainer/BuildingElementsView';
+import ElementsAndMaterialsContainer from '../ElementsAndMaterialsContainer';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -238,7 +238,7 @@ const BuildingInfoPane = (props: any) => {
 
                     <Divider variant="middle" light={true} className={classes.divider} />
                     
-                    <BuildingMaterialsContainer buildingId={props.selectedBuildingId} parentIsLoading={loading} />
+                    <ElementsAndMaterialsContainer buildingId={props.selectedBuildingId} parentIsLoading={loading} />
                 </div>
             </SlidingPane>
         </div>

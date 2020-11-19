@@ -25,7 +25,6 @@ interface BuildingElement {
 }
 
 interface MaterialItem {    
-    idbuilding_elements: number;
     material: Material;
     inventoryEntries: MaterialInventory[];
 }
