@@ -6,53 +6,45 @@ interface Building {
     city: string;
     typology: string;
     construction_type: string;
-    A1A3?: number;
-    A4?: number;
-    B4_m?: number;
-    B4_t?: number;
+    A1A3: number?;
+    A4: number?;
+    B4_m: number?;
+    B4_t: number?;
 }
 
 interface BuildingElement {
     idbuilding_elements: number;
     idlevels: number;
     name: string;
-    A1A3?: number;
-    A4?: number;
-    B4_m?: number;
-    B4_t?: number;
+    A1A3: number?;
+    A4: number?;
+    B4_m: number?;
+    B4_t: number?;
     hierarchy: number;
-    idparent?: number;
+    idparent: number?;
 }
 
-interface MaterialItem {    
-    material: Material;
-    inventoryEntries: MaterialInventory[];
-}
-
-interface Material {
+interface MaterialInventory {
+    idmaterialInventory: number;
     idmaterials: number;
-    idbuilding_elements: number;
-    source: string;
     name: string;
+    source: string;
     dataType: string;
     sourceType: string;
     dataYear?: string;
     FU: string;
     density: number?;
     EEf_A1A3: number;
-    RSL?: number;
-    comments: string;
+    RSL: number?;
+    comments: string?;
     materialCat: string;
-}
-
-interface MaterialInventory {
-    idmaterialInventory: number;
-    idbuilding_elements: number;
     idmaterials: number;
     quantity: number;    
-    RSL_mi?: number;    
-    A1A3?: number;
-    A4?: number;
-    B4_m?: number;
-    B4_t?: number;
+    RSL_mi: number?;    
+    A1A3: number?;
+    A4: number?;
+    B4_m: number?;
+    B4_t: number?;
+    idbuilding_elements: number;
+    buildingElementName: string;
 }

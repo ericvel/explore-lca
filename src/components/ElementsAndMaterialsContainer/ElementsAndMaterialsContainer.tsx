@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Skeleton from '@material-ui/lab/Skeleton';
@@ -19,7 +18,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ElementsAndMaterialsContainer = (props: any) => {
     const [buildingElements, setBuildingElements] = useState<BuildingElement[]>([]);
-    const [materials, setMaterials] = useState<Material[]>([]);
     const [materialInventory, setMaterialInventory] = useState<MaterialInventory[]>([]);
     const [loading, setLoading] = useState(false);
     const [allMaterialsChecked, setAllMaterialsChecked] = useState(false);
@@ -32,21 +30,18 @@ const ElementsAndMaterialsContainer = (props: any) => {
 
     const loadData = () => {
         const elementQuery = `/building_elements/${props.buildingId}`;
-        const materialQuery = `/materials/${props.buildingId}`;
-        const inventoryQuery = `/materials/inventory/${props.buildingId}`;
+        const inventoryQuery = `/material_inventory/${props.buildingId}`;
 
         if (!loading) {
             setLoading(true);
             Promise.all([
                 fetch(elementQuery),
-                fetch(materialQuery),
                 fetch(inventoryQuery)
             ]).then(responses => Promise.all(responses.map(response => response.json())
             )).then(data => {
                 ReactDOM.unstable_batchedUpdates(() => {
                     setBuildingElements(data[0]);
-                    setMaterials(data[1]);
-                    setMaterialInventory(data[2]);
+                    setMaterialInventory(data[1]);
                     setLoading(false);
                 })
             }).catch(() => setLoading(false));
@@ -80,9 +75,9 @@ const ElementsAndMaterialsContainer = (props: any) => {
                 </div>
                 :
                 allMaterialsChecked ?
-                    <MaterialsView materials={materials} materialInventory={materialInventory} />
+                    <MaterialsView materialInventory={materialInventory} />
                     :
-                    <BuildingElementsView buildingElements={buildingElements} materials={materials} materialInventory={materialInventory} />
+                    <BuildingElementsView buildingElements={buildingElements} materialInventory={materialInventory} />
             }
         </div>
     );

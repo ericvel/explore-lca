@@ -88,7 +88,11 @@ const initialBuildingState: Building = {
     country: "",
     city: "",
     typology: "",
-    construction_type: ""
+    construction_type: "",    
+    A1A3: null,
+    A4: null,
+    B4_m: null,
+    B4_t: null,
 };
 
 const BuildingInfoDrawer = (props: any) => {

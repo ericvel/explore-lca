@@ -86,19 +86,6 @@ router.get('/:buildingId', (req, res) => {
         res.send(result);
       }
     });
-}); 
-
-/* 
-router.get('/count', (req, res) => {
-    const query = `SELECT count(*) FROM buildings`;
-    console.log("Query: " + query)
-    pool.query(query, (err, result) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.send(result);
-      }
-    });
-  }); */
+});
 
 module.exports = router;

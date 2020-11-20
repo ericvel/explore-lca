@@ -37,9 +37,6 @@ import LoadingIndicator from '../LoadingIndicator';
 const VIRTUAL_PAGE_SIZE = 100;
 const MAX_ROWS = 50000;
 const URL = '/buildings'
-// var columns: Column[] = []
-// var columnExtensions: Table.ColumnExtension[] = []
-// var searchableColumns: String = ''
 const getRowId = (row: any) => row[Object.keys(row)[0]];
 const Root = (props: any) => <Grid.Root {...props} style={{ height: '100%' }} />;
 
@@ -154,7 +151,6 @@ function BuildingsTable(props: any) {
         const sortQuery = sortingStr ? `&sort=${escape(`${sortingStr}`)}` : '';
 
         return `${URL}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${searchQuery}${sortQuery}`;
-        // return `${URL}?requireTotalCount=true&skip=${requestedSkip}&take=${take}${filterQuery}${sortQuery}`;
     };
 
     const loadData = () => {

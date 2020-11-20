@@ -31,17 +31,17 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const MaterialItem = (props: any) => {
-    const [materialItem] = useState<MaterialItem>(props.materialItem);
+    // const [materialItem] = useState<MaterialItem>(props.materialItem);
     const [expanded, setExpanded] = useState(false);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
 
-    const {
+   /*  const {
         name, source, materialCat
     } = materialItem.material;
-
+ */
     const classes = useStyles();
 
     return (
@@ -50,7 +50,7 @@ const MaterialItem = (props: any) => {
                 <Grid container spacing={2} alignItems="center" justify="space-between">
                     <Grid item xs={10}>
                         <Typography variant="body1">
-                            {name}
+                            {/* name */}
                         </Typography>
                         <Grid container>
                             <Grid container item xs={6}>
@@ -71,7 +71,7 @@ const MaterialItem = (props: any) => {
                 </Grid>
                 <Collapse in={expanded} timeout="auto">
                     <Grid container>
-                        {materialItem.inventoryEntries.map((inventory, index) =>
+                        {/* {materialItem.inventoryEntries.map((inventory, index) =>
                             <div key={index}>
                                 <Divider variant="fullWidth" light={true} className={classes.divider} />
 
@@ -123,7 +123,7 @@ const MaterialItem = (props: any) => {
                                 </Grid>
                             </div>
 
-                        )}
+                        )} */}
                     </Grid>
                 </Collapse>
             </Paper>
