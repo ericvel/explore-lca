@@ -3,7 +3,6 @@ import { createStyles, Theme, withStyles, WithStyles, makeStyles } from '@materi
 import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -12,8 +11,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import Skeleton from '@material-ui/lab/Skeleton';
 import IconButton from '@material-ui/core/IconButton';
 import './BuildingInfoPane.css';
-import ReactDOM from "react-dom";
-import BuildingElementsView from '../ElementsAndMaterialsContainer/BuildingElementsView';
 import ElementsAndMaterialsContainer from '../ElementsAndMaterialsContainer';
 
 const useStyles = makeStyles((theme: Theme) =>

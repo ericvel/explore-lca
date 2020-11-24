@@ -211,9 +211,11 @@ function BuildingsTable(props: any) {
 
             const rowId = selection[selection.length - 1];
             console.log("Selected row: ", rowId)
-            props.onSelectRow(rowId);
+            props.onSelectSingleRow(rowId);
         } else {
             setSelectedRow(selection);
+            props.onSelectMultipleRows(selection);
+            console.log("Selected rows: ", selection)
         }
     }
 
@@ -224,6 +226,8 @@ function BuildingsTable(props: any) {
 
     const handleMultipleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMultipleSwitchChecked(event.target.checked);
+        setSelectedRow([]);
+        props.onSelectSingleRow(); // Closes BuildingInfoPane if open
         console.log("Switch checked: ", event.target.checked);
     }
 
