@@ -6,7 +6,7 @@ import Chip from '@material-ui/core/Chip';
 import HomeIcon from '@material-ui/icons/Home';
 
 import BuildingElementItem from '../BuildingElementItem';
-import MaterialsView from "../MaterialsView";
+import MaterialsTable from "../MaterialsTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -131,7 +131,7 @@ const BuildingElementsView = (props: any) => {
                             />
                         )
                         :
-                        <MaterialsView materialInventory={getElementMaterials(selectedElement)} />
+                        <MaterialsTable materialInventory={getElementMaterials(selectedElement)} />
                     }
                 </Grid>
             </Grid>

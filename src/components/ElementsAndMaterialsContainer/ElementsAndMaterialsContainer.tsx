@@ -8,7 +8,7 @@ import Switch from '@material-ui/core/Switch';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import BuildingElementsView from './BuildingElementsView';
-import MaterialsView from "./MaterialsView";
+import MaterialsTable from "./MaterialsTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -75,7 +75,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
                 </div>
                 :
                 allMaterialsChecked ?
-                    <MaterialsView materialInventory={materialInventory} />
+                    <MaterialsTable materialInventory={materialInventory} />
                     :
                     <BuildingElementsView buildingElements={buildingElements} materialInventory={materialInventory} />
             }

@@ -14,7 +14,6 @@ import {
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
-    Table,
     Toolbar,
     SearchPanel,
     TableHeaderRow,
@@ -106,8 +105,8 @@ function reducer(state: any, { type, payload }: any) {
 
 function BuildingsTable(props: any) {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const [columns] = useState(ColumnData.buildingsColumns);
-    const [columnExtensions] = useState(ColumnData.buildingsColumnExtensions);    
+    const [columns] = useState(ColumnData.columns);
+    const [columnExtensions] = useState(ColumnData.columnExtensions);    
 
     const cache = useMemo(() => createRowCache(VIRTUAL_PAGE_SIZE), [VIRTUAL_PAGE_SIZE]);
 

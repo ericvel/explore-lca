@@ -38,7 +38,6 @@ interface MaterialInventory {
     RSL: number?;
     comments: string?;
     materialCat: string;
-    idmaterials: number;
     quantity: number;    
     RSL_mi: number?;    
     A1A3: number?;
