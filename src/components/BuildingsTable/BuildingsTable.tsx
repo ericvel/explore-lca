@@ -228,6 +228,7 @@ function BuildingsTable(props: any) {
         setMultipleSwitchChecked(event.target.checked);
         setSelectedRow([]);
         props.onSelectSingleRow(); // Closes BuildingInfoPane if open
+        props.onSelectMultipleRows([]); // Disable compare button
         console.log("Switch checked: ", event.target.checked);
     }
 
