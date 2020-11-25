@@ -7,5 +7,4 @@
 
 .sliding-pane {
     transition: transform 0.3s;
-    /* width: 100%; */
 }

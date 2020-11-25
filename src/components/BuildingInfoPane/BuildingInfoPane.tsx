@@ -11,7 +11,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import Skeleton from '@material-ui/lab/Skeleton';
 import IconButton from '@material-ui/core/IconButton';
 import './BuildingInfoPane.css';
+
 import ElementsAndMaterialsContainer from '../ElementsAndMaterialsContainer';
+import GWPChart from '../GWPChart';
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -43,7 +46,7 @@ const initialBuildingState: Building = {
     country: "",
     city: "",
     typology: "",
-    construction_type: "",    
+    construction_type: "",
     A1A3: null,
     A4: null,
     B4_m: null,
@@ -82,6 +85,13 @@ const BuildingInfoPane = (props: any) => {
         building_identifier, building_name, country, city, typology, construction_type, A1A3, A4, B4_m, B4_t
     } = building;
 
+    const gwpChartData: IDataItem[] = [
+        { lcaPhase: 'A1-A3', gwp: Number(A1A3) || 0.0 },
+        { lcaPhase: 'A4', gwp: Number(A4) || 0.0 },
+        { lcaPhase: 'B4 (m)', gwp: Number(B4_m) || 0.0 },
+        { lcaPhase: 'B4 (t)', gwp: Number(B4_t) || 0.0 },
+    ];
+
     const classes = useStyles();
 
     return (
@@ -109,7 +119,7 @@ const BuildingInfoPane = (props: any) => {
                             <Typography variant="subtitle1" color="textSecondary" gutterBottom>{loading ? <Skeleton width={70} /> : building_identifier}</Typography>
                         </Grid>
                         <Grid item xs={1}>
-                            
+
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant="h5" color="textSecondary" gutterBottom>General info</Typography>
@@ -184,7 +194,8 @@ const BuildingInfoPane = (props: any) => {
                                 </div>
                                 :
                                 <div>
-                                    <TextField
+                                    <GWPChart chartData={gwpChartData} height={250} />
+                                    {/* <TextField
                                         inputProps={{
                                             readOnly: true,
                                             disabled: true
@@ -231,14 +242,14 @@ const BuildingInfoPane = (props: any) => {
                                         name="b4t"
                                         margin="dense"
                                         defaultValue={B4_t || "0.0"}
-                                    />
+                                    /> */}
                                 </div>
                             }
                         </Grid>
                     </Grid>
 
                     <Divider variant="middle" light={true} className={classes.divider} />
-                    
+
                     <ElementsAndMaterialsContainer buildingId={props.selectedBuildingId} parentIsLoading={loading} />
                 </div>
             </SlidingPane>

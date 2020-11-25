@@ -47,3 +47,8 @@ interface MaterialInventory {
     idbuilding_elements: number;
     buildingElementName: string;
 }
+
+interface IDataItem {
+    lcaPhase: string,
+    gwp: number,
+}

@@ -66,12 +66,14 @@ const DialogActions = withStyles((theme: Theme) => ({
 }))(MuiDialogActions);
 
 const CompareBuildingDialog = (props: any) => {
-    const [open] = useState(props.isOpen);
-    const [buildings] = useState<number[]>(props.buildings);
+    // const [open] = useState(props.isOpen);
+    // const [buildings] = useState<number[]>(props.buildings);
 
     const handleClose = () => {
         props.close();
     };
+
+    const buildings: number[] = props.buildings;
 
     return (
         <Dialog fullWidth maxWidth={false} open={props.isOpen} onClose={handleClose} >
@@ -79,7 +81,7 @@ const CompareBuildingDialog = (props: any) => {
                 Compare buildings
             </DialogTitle>
             <DialogContent dividers>
-                {props.buildings.map((buildingId: number, index: number) => 
+                {buildings.map((buildingId, index) =>
                     <Typography gutterBottom>
                         Building {index}: {buildingId}
                     </Typography>
