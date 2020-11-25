@@ -76,9 +76,9 @@ router.get('/:buildingId', (req, res) => {
     ON b.idconstruction_type = c.idconstruction_type
     INNER JOIN buildingelements as be
     ON b.idbuildings = be.idbuildings
-    WHERE b.idbuildings = ${req.params.buildingId} AND be.idlevels = 0`;
+    WHERE b.idbuildings IN (${req.params.buildingId}) AND be.idlevels = 0`;
 
-    console.log("Get building")
+    console.log("Get building(s)")
     pool.query(query, (err, result) => {
       if (err) {
         res.send(err);

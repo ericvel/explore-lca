@@ -69,11 +69,34 @@ const CompareBuildingDialog = (props: any) => {
     // const [open] = useState(props.isOpen);
     // const [buildings] = useState<number[]>(props.buildings);
 
+    const [loading, setLoading] = useState(false);
+    const [buildings, setBuildings] = useState<Building[]>([]);
+
+    useEffect(() => {
+        if (props.buildingIds !== undefined) {
+            loadData();
+        }
+    });
+
+    const loadData = () => {
+        const buildingIdString = props.buildingIds.join();
+        const buildingQuery = `/buildings/${buildingIdString}`;
+        if (!loading) {
+            setLoading(true);
+            fetch(buildingQuery)
+                .then(response => response.json())
+                .then(data => {
+                    setBuildings(data);
+                    setLoading(false);
+                }).catch(() => setLoading(false));
+        }
+    };
+
     const handleClose = () => {
         props.close();
     };
 
-    const buildings: number[] = props.buildings;
+    // const buildingIds: number[] = props.buildingIds;
 
     return (
         <Dialog fullWidth maxWidth={false} open={props.isOpen} onClose={handleClose} >
@@ -81,9 +104,9 @@ const CompareBuildingDialog = (props: any) => {
                 Compare buildings
             </DialogTitle>
             <DialogContent dividers>
-                {buildings.map((buildingId, index) =>
+                {buildings.map((building, index) =>
                     <Typography gutterBottom>
-                        Building {index}: {buildingId}
+                        Building {index}: {building.building_name}
                     </Typography>
                 )}
             </DialogContent>

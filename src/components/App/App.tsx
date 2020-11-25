@@ -72,7 +72,7 @@ function App() {
       </Grid>
 
       <BuildingInfoPane selectedBuildingId={selectedBuildingId} />
-      <CompareBuildingsDialog isOpen={compareDialogOpen} close={closeCompareDialog} buildings={selectedBuildings} />
+      <CompareBuildingsDialog isOpen={compareDialogOpen} close={closeCompareDialog} buildingIds={selectedBuildings} />
     </Container>
   );
 }
