@@ -6,11 +6,11 @@ const pool = require('../mysql')
 
 const formatSearchQuery = (searchQuery) => {
     var formattedQuery = ``;
-    if (searchQuery != "[]" && searchQuery != '') {
+    if (searchQuery !== "[]" && searchQuery !== '' && searchQuery !== undefined) {
         const params = JSON.parse(searchQuery);
         const searchTerm = params.searchTerm;
         const searchableColumns = params.columns;
-        if (searchTerm != '' && searchableColumns != '') {
+        if (searchTerm !== '' && searchableColumns !== '') {
             formattedQuery = ` WHERE concat(${searchableColumns}) like '%${searchTerm}%'`
         }
     }
@@ -19,7 +19,7 @@ const formatSearchQuery = (searchQuery) => {
 
 const formatSortQuery = (sortQuery) => {
     var formattedQuery = ``;
-    if (sortQuery != "[]" && sortQuery != '') {
+    if (sortQuery !== "[]" && sortQuery !== '' && sortQuery !== undefined) {
         const params = JSON.parse(sortQuery)[0];
         const selector = params.selector;
         formattedQuery = ` ORDER BY ${selector}`
@@ -64,7 +64,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:buildingId', (req, res) => {
+router.get('/select/:buildingId', (req, res) => {
     const query = 
     `SELECT b.idbuildings, building_identifier, building_name, country, city, typology, construction_type, A1A3, A4, B4_m, B4_t
     FROM buildings AS b

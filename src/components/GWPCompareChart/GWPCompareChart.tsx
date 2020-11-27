@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import {
     Chart,
     BarSeries,
+    Legend,
     Title,
     ArgumentAxis,
     ValueAxis,
@@ -13,11 +14,13 @@ import {
     HoverState,
     EventTracker,
     ValueScale,
-    Animation
+    Animation,
+    Stack
 } from '@devexpress/dx-react-chart';
 
 interface Props {
-    chartData: IDataItem[];
+    chartData: any[];//ICompareChartDataItem[];
+    buildingNames: any[];
     height: number;
 }
 
@@ -32,16 +35,19 @@ const Overlay = (props: any) => {
     return <Tooltip.Overlay {...props} className={classes.overlay} />;
 };
 
-const GWPChart = (props: Props) => {
+const GWPCompareChart = (props: Props) => {
 
     const chartData = props.chartData;
+    const buildingNames = props.buildingNames;
+
     const height = props.height;
 
     return (
         <Paper>
             <Chart
                 data={chartData}
-                height={height}
+                // width={800}
+                // height={height}
             >
                 <ValueScale name="gwp" />
                 <ArgumentAxis />
@@ -51,13 +57,17 @@ const GWPChart = (props: Props) => {
                     showLine={true}
                     showTicks={true}
                 />
-
-                <BarSeries
-                    name="GWP Values"
-                    valueField="gwp"
-                    argumentField="lcaPhase"
-                    scaleName="gwp"
-                />
+                {buildingNames.map((idNamePair, index) =>
+                    <BarSeries
+                        key={index}
+                        valueField={Object.keys(idNamePair)[0]}
+                        argumentField="lcaPhase"
+                        name={idNamePair[Object.keys(idNamePair)[0]]}
+                        scaleName="gwp"
+                    />
+                )}
+                <Stack />
+                <Legend />
                 <EventTracker />
                 <Tooltip overlayComponent={Overlay} />
                 <Animation duration={700} />
@@ -66,4 +76,31 @@ const GWPChart = (props: Props) => {
     );
 };
 
-export default GWPChart;
+export default GWPCompareChart;
+
+/*
+<BarSeries
+        valueField="a1a3"
+        argumentField="buildingName"
+        name="A1-A3"
+        scaleName="gwp"
+    />
+    <BarSeries
+        valueField="a4"
+        argumentField="buildingName"
+        name="A4"
+        scaleName="gwp"
+    />
+    <BarSeries
+        valueField="b4_m"
+        argumentField="buildingName"
+        name="B4 (m)"
+        scaleName="gwp"
+    />
+    <BarSeries
+        valueField="b4_t"
+        argumentField="buildingName"
+        name="B4 (t)"
+        scaleName="gwp"
+    />
+*/

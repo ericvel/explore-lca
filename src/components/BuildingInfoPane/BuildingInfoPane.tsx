@@ -13,7 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import './BuildingInfoPane.css';
 
 import ElementsAndMaterialsContainer from '../ElementsAndMaterialsContainer';
-import GWPChart from '../GWPChart';
+import GWPSingleChart from '../GWPSingleChart';
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -68,7 +68,7 @@ const BuildingInfoPane = (props: any) => {
     }, [props.selectedBuildingId]);
 
     const loadData = () => {
-        const buildingQuery = `/buildings/${props.selectedBuildingId}`;
+        const buildingQuery = `/buildings/select/${props.selectedBuildingId}`;
         if (!loading) {
             setLoading(true);
             fetch(buildingQuery)
@@ -85,7 +85,7 @@ const BuildingInfoPane = (props: any) => {
         building_identifier, building_name, country, city, typology, construction_type, A1A3, A4, B4_m, B4_t
     } = building;
 
-    const gwpChartData: IDataItem[] = [
+    const gwpChartData: ISingleChartDataItem[] = [
         { lcaPhase: 'A1-A3', gwp: Number(A1A3) || 0.0 },
         { lcaPhase: 'A4', gwp: Number(A4) || 0.0 },
         { lcaPhase: 'B4 (m)', gwp: Number(B4_m) || 0.0 },
@@ -194,7 +194,7 @@ const BuildingInfoPane = (props: any) => {
                                 </div>
                                 :
                                 <div>
-                                    <GWPChart chartData={gwpChartData} height={250} />
+                                    <GWPSingleChart chartData={gwpChartData} height={250} />
                                     {/* <TextField
                                         inputProps={{
                                             readOnly: true,

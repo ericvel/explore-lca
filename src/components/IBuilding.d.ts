@@ -38,8 +38,8 @@ interface MaterialInventory {
     RSL: number?;
     comments: string?;
     materialCat: string;
-    quantity: number;    
-    RSL_mi: number?;    
+    quantity: number;
+    RSL_mi: number?;
     A1A3: number?;
     A4: number?;
     B4_m: number?;
@@ -48,7 +48,28 @@ interface MaterialInventory {
     buildingElementName: string;
 }
 
-interface IDataItem {
+interface ISingleChartDataItem {
     lcaPhase: string,
     gwp: number,
+}
+
+/* interface ICompareChartDataItem {
+    buildingName: string;
+    a1a3: number;
+    a4: number;
+    b4_m: number;
+    b4_t: number;
+} */
+
+interface ITestChartData {
+    lcaPhase: string
+}
+
+interface IValue {
+    prop: string | number;
+}
+
+interface ICompareChartDataItem {
+    lcaPhase: string;
+    [key: string]: string | number;
 }
