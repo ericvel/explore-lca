@@ -26,7 +26,7 @@ interface Props {
 
 const useStyles = makeStyles({
     overlay: {
-        zIndex: 501
+        zIndex: 1300
     },
 });
 
