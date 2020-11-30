@@ -212,7 +212,8 @@ function BuildingsTable(props: any) {
 
             const rowId = selection[selection.length - 1];
             console.log("Selected row: ", rowId)
-            props.onSelectSingleRow(rowId);
+            const building: IBuilding = state.rows.find((building: IBuilding) => building.idbuildings === rowId);
+            props.onSelectSingleRow(building);
         } else {
             setSelectedRow(selection);
             props.onSelectMultipleRows(selection);

@@ -15,6 +15,10 @@ import './BuildingInfoPane.css';
 import ElementsAndMaterialsContainer from '../ElementsAndMaterialsContainer';
 import GWPSingleChart from '../GWPSingleChart';
 
+interface Props {
+    building: ISingleChartDataItem[];
+    height: number;
+}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const initialBuildingState: Building = {
+const initialBuildingState: IBuilding = {
     idbuildings: 0,
     building_identifier: 0,
     building_name: "",
@@ -56,16 +60,17 @@ const initialBuildingState: Building = {
 const BuildingInfoPane = (props: any) => {
     const [isPaneOpen, setIsPaneOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [building, setBuilding] = useState<Building>(initialBuildingState);
+    const [building, setBuilding] = useState<IBuilding>(initialBuildingState);
 
     useEffect(() => {
-        if (props.selectedBuildingId !== undefined) {
-            loadData();
+        if (props.selectedBuilding !== undefined) {
+            // loadData();
+            setBuilding(props.selectedBuilding);
             setIsPaneOpen(true);
         } else {
             setIsPaneOpen(false);
         }
-    }, [props.selectedBuildingId]);
+    }, [props.selectedBuilding]);
 
     const loadData = () => {
         const buildingQuery = `/buildings/select/${props.selectedBuildingId}`;
@@ -123,7 +128,61 @@ const BuildingInfoPane = (props: any) => {
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant="h5" color="textSecondary" gutterBottom>General info</Typography>
-                            {loading ?
+                            <div>
+                                    <TextField
+                                        key={country}
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="Country"
+                                        name="country"
+                                        margin="dense"
+                                        defaultValue={country || "nil"}
+                                    />
+                                    <TextField
+                                        key={city}
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="City"
+                                        name="city"
+                                        margin="dense"
+                                        defaultValue={city || "nil"}
+                                    />
+                                    <TextField
+                                        key={typology}
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="Typology"
+                                        name="typology"
+                                        margin="dense"
+                                        defaultValue={typology || "nil"}
+                                    />
+                                    <TextField
+                                        key={construction_type}
+                                        inputProps={{
+                                            readOnly: true,
+                                            disabled: true
+                                        }}
+                                        InputProps={{ disableUnderline: true }}
+                                        fullWidth={true}
+                                        label="Construction type"
+                                        name="construction_type"
+                                        margin="dense"
+                                        defaultValue={construction_type || "nil"}
+                                    />
+                                </div>
+                            {/* {loading ?
                                 <div>
                                     <Skeleton><TextField label="a" margin="dense" /></Skeleton>
                                     <Skeleton><TextField label="a" margin="dense" /></Skeleton>
@@ -181,7 +240,7 @@ const BuildingInfoPane = (props: any) => {
                                         defaultValue={construction_type || "nil"}
                                     />
                                 </div>
-                            }
+                            } */}
                         </Grid>
                         <Grid item xs>
                             <Typography variant="h5" color="textSecondary" gutterBottom>GWP</Typography>
@@ -250,7 +309,7 @@ const BuildingInfoPane = (props: any) => {
 
                     <Divider variant="middle" light={true} className={classes.divider} />
 
-                    <ElementsAndMaterialsContainer buildingId={props.selectedBuildingId} parentIsLoading={loading} />
+                    <ElementsAndMaterialsContainer buildingId={building.idbuildings} parentIsLoading={loading} />
                 </div>
             </SlidingPane>
         </div>

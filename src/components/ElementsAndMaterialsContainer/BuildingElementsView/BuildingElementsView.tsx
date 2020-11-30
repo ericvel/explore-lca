@@ -33,7 +33,7 @@ const StyledBreadcrumb = withStyles((theme: Theme) => ({
 }))(Chip) as typeof Chip; // TypeScript only: need a type cast here because https://github.com/Microsoft/TypeScript/issues/26591
 
 
-const initialSelectedElementState: BuildingElement = {
+const initialSelectedElementState: IBuildingElement = {
     idbuilding_elements: 0,
     idlevels: 0,
     name: "",
@@ -46,22 +46,22 @@ const initialSelectedElementState: BuildingElement = {
 };
 
 const BuildingElementsView = (props: any) => {
-    const [buildingElements] = useState<BuildingElement[]>(props.buildingElements);
-    const [materialInventory] = useState<MaterialInventory[]>(props.materialInventory);
+    const [buildingElements] = useState<IBuildingElement[]>(props.buildingElements);
+    const [materialInventory] = useState<IMaterialInventory[]>(props.materialInventory);
 
-    const [selectedElement, setSelectedElement] = useState<BuildingElement>(initialSelectedElementState);
-    const [elementRoute, setElementRoute] = useState<BuildingElement[]>([]);
+    const [selectedElement, setSelectedElement] = useState<IBuildingElement>(initialSelectedElementState);
+    const [elementRoute, setElementRoute] = useState<IBuildingElement[]>([]);
     
 
     useEffect(() => {
-        const rootElement = buildingElements.find((element: BuildingElement) => element.hierarchy === 0);
+        const rootElement = buildingElements.find((element: IBuildingElement) => element.hierarchy === 0);
         if (rootElement !== undefined) {
             setSelectedElement(rootElement);
             setElementRoute([rootElement]);
         }
     }, []);
 
-    const getChildElements = (parentElement: BuildingElement) => {
+    const getChildElements = (parentElement: IBuildingElement) => {
         const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
         if (childElements !== undefined) {
             return childElements;
@@ -70,7 +70,7 @@ const BuildingElementsView = (props: any) => {
         return [];
     }
 
-    const getElementMaterials = (parentElement: BuildingElement) => {
+    const getElementMaterials = (parentElement: IBuildingElement) => {
         const elementMaterials = materialInventory.filter(material => material.idbuilding_elements === parentElement.idbuilding_elements);
         if (elementMaterials !== undefined) {
             return elementMaterials;

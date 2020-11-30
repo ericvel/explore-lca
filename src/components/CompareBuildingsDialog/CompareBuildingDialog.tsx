@@ -79,7 +79,7 @@ const DialogActions = withStyles((theme: Theme) => ({
 
 const CompareBuildingDialog = (props: any) => {
     const [loading, setLoading] = useState(false);
-    const [buildings, setBuildings] = useState<Building[]>([]);
+    const [buildings, setBuildings] = useState<IBuilding[]>([]);
     const [checkedLCAPhases, setcheckedLCAPhases] = useState({
         a1a3: true,
         a4: true,

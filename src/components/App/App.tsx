@@ -16,6 +16,7 @@ import CompareBuildingsDialog from '../CompareBuildingsDialog';
 function App() {
   // const [tableName, setTableName] = useState('buildings');
   const [selectedBuildingId, setSelectedBuildingId] = useState<number>();
+  const [selectedSingleBuilding, setSelectedSingleBuilding] = useState<IBuilding>();
   const [selectedBuildings, setSelectedBuildings] = useState<number[]>([]);
   const [compareDialogOpen, setCompareDialogOpen] = useState(false);
 
@@ -23,8 +24,8 @@ function App() {
      setTableName(tableName);
    } */
 
-  function handleSelectSingleRow(rowId: number) {
-    setSelectedBuildingId(rowId);
+  function handleSelectSingleRow(building: IBuilding) {
+    setSelectedSingleBuilding(building);
   }
 
   function handleSelectMultipleRows(rowIds: number[]) {
@@ -71,7 +72,7 @@ function App() {
         </Grid>
       </Grid>
 
-      <BuildingInfoPane selectedBuildingId={selectedBuildingId} />
+      <BuildingInfoPane selectedBuilding={selectedSingleBuilding} />
       <CompareBuildingsDialog isOpen={compareDialogOpen} close={closeCompareDialog} buildingIds={selectedBuildings} />
     </Container>
   );

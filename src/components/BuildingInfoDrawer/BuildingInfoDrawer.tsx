@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const initialBuildingState: Building = {
+const initialBuildingState: IBuilding = {
     idbuildings: 0,
     building_identifier: 0,
     building_name: "",
@@ -98,7 +98,7 @@ const initialBuildingState: Building = {
 const BuildingInfoDrawer = (props: any) => {
     // const [isPaneOpen, setIsPaneOpen] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [building, setBuilding] = useState<Building>(initialBuildingState);
+    const [building, setBuilding] = useState<IBuilding>(initialBuildingState);
 
     useEffect(() => {
         if (props.selectedBuildingId !== undefined) {

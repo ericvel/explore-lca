@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const BuildingElementItem = (props: any) => {
-    const [buildingElement] = useState<BuildingElement>(props.element);
+    const [buildingElement] = useState<IBuildingElement>(props.element);
     const [hasMaterials] = useState<boolean>(props.hasMaterials);
 
     const {

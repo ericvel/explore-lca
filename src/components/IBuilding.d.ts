@@ -1,4 +1,4 @@
-interface Building {
+interface IBuilding {
     idbuildings: number;
     building_identifier: number;
     building_name: string;
@@ -12,7 +12,7 @@ interface Building {
     B4_t: number?;
 }
 
-interface BuildingElement {
+interface IBuildingElement {
     idbuilding_elements: number;
     idlevels: number;
     name: string;
@@ -24,7 +24,7 @@ interface BuildingElement {
     idparent: number?;
 }
 
-interface MaterialInventory {
+interface IMaterialInventory {
     idmaterialInventory: number;
     idmaterials: number;
     name: string;

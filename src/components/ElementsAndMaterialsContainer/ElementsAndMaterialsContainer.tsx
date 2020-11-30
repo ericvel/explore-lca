@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const ElementsAndMaterialsContainer = (props: any) => {
-    const [buildingElements, setBuildingElements] = useState<BuildingElement[]>([]);
-    const [materialInventory, setMaterialInventory] = useState<MaterialInventory[]>([]);
+    const [buildingElements, setBuildingElements] = useState<IBuildingElement[]>([]);
+    const [materialInventory, setMaterialInventory] = useState<IMaterialInventory[]>([]);
     const [loading, setLoading] = useState(false);
     const [allMaterialsChecked, setAllMaterialsChecked] = useState(false);
 

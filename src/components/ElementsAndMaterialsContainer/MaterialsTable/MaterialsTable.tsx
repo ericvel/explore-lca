@@ -24,7 +24,7 @@ import ColumnData from "./ColumnData";
 // const getRowId = (row: any) => row.idmaterialInventory;
 
 const MaterialsTable = (props: any) => {
-    const [materialInventory] = useState<MaterialInventory[]>(props.materialInventory);
+    const [materialInventory] = useState<IMaterialInventory[]>(props.materialInventory);
     const [columns] = useState(ColumnData.columns);
     const [columnExtensions] = useState(ColumnData.columnExtensions);
     const [defaultHiddenColumnNames] = useState(ColumnData.defaultHiddenColumnNames);
