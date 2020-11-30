@@ -180,6 +180,7 @@ function BuildingsTable(props: any) {
     };
 
     const changeSorting = (value: any) => {
+        console.log("Rows: ", state.rows)
         dispatch({ type: 'CHANGE_SORTING', payload: value });
     };
 
