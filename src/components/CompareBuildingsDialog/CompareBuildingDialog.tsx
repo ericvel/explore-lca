@@ -17,6 +17,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
+import Skeleton from '@material-ui/lab/Skeleton';
 import { TransitionProps } from '@material-ui/core/transitions';
 
 import GWPCompareChart from '../GWPCompareChart';
@@ -157,7 +158,7 @@ const CompareBuildingDialog = (props: any) => {
                 <Grid container>
                     <Grid item xs={6}>
                         {loading ?
-                            <p>Loading...</p>
+                            <Skeleton variant="rect" /* width={?} */ height={500} />
                             :
                             <GWPCompareChart chartData={gwpChartData} buildingNames={buildingNames} height={500} />
                         }
