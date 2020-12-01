@@ -32,6 +32,10 @@ import _ from 'lodash';
 import ColumnData from './ColumnData';
 import LoadingIndicator from '../LoadingIndicator';
 
+interface Props {
+    onSelectSingleBuilding(building?: IBuilding): void;
+    onSelectMultipleBuildings(buildings: IBuilding[]): void;
+}
 
 const VIRTUAL_PAGE_SIZE = 100;
 const MAX_ROWS = 50000;
@@ -103,7 +107,7 @@ function reducer(state: any, { type, payload }: any) {
     }
 }
 
-function BuildingsTable(props: any) {
+function BuildingsTable(props: Props) {
     const [state, dispatch] = useReducer(reducer, initialState);
     const [columns] = useState(ColumnData.columns);
     const [columnExtensions] = useState(ColumnData.columnExtensions);    
@@ -206,18 +210,18 @@ function BuildingsTable(props: any) {
             if (lastSelected !== undefined) {
                 setSelectedRow([lastSelected]);
             } else {
-                // NOTE: Uncomment the next line in order to allow clear selection by double-click
+                // Clear selection by double-click on same row
                 setSelectedRow([])
             }
 
             const rowId = selection[selection.length - 1];
             console.log("Selected row: ", rowId)
             const building: IBuilding = state.rows.find((building: IBuilding) => building.idbuildings === rowId);
-            props.onSelectSingleRow(building);
+            props.onSelectSingleBuilding(building);
         } else {
             setSelectedRow(selection);
-            props.onSelectMultipleRows(selection);
-            console.log("Selected rows: ", selection)
+            const buildings: IBuilding[] = state.rows.filter((building: IBuilding) => selection.includes(building.idbuildings));
+            props.onSelectMultipleBuildings(buildings);
         }
     }
 
@@ -229,8 +233,8 @@ function BuildingsTable(props: any) {
     const handleMultipleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setMultipleSwitchChecked(event.target.checked);
         setSelectedRow([]);
-        props.onSelectSingleRow(); // Closes BuildingInfoPane if open
-        props.onSelectMultipleRows([]); // Disable compare button
+        props.onSelectSingleBuilding(); // Closes BuildingInfoPane if open
+        props.onSelectMultipleBuildings([]); // Disable compare button
         console.log("Switch checked: ", event.target.checked);
     }
 

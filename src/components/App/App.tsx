@@ -17,28 +17,28 @@ function App() {
   // const [tableName, setTableName] = useState('buildings');
   const [selectedBuildingId, setSelectedBuildingId] = useState<number>();
   const [selectedSingleBuilding, setSelectedSingleBuilding] = useState<IBuilding>();
-  const [selectedBuildings, setSelectedBuildings] = useState<number[]>([]);
+  const [selectedMultipleBuildings, setSelectedMultipleBuildings] = useState<IBuilding[]>([]);
   const [compareDialogOpen, setCompareDialogOpen] = useState(false);
 
   /*  function handleTableChange(tableName: string) {
      setTableName(tableName);
    } */
 
-  function handleSelectSingleRow(building: IBuilding) {
+  function handleSelectSingleBuilding(building: IBuilding) {
     setSelectedSingleBuilding(building);
   }
 
-  function handleSelectMultipleRows(rowIds: number[]) {
-    setSelectedBuildings(rowIds);
+  function handleSelectMultipleBuildings(buildings: IBuilding[]) {
+    setSelectedMultipleBuildings(buildings);
   }
 
   function handleCompareButtonClick() {
-    console.log("Compare button clicked")
-    console.log("Selected Buildings: ", selectedBuildings)
+
+    console.log("Selected Buildings: ", selectedMultipleBuildings)
     setCompareDialogOpen(true);
   }
 
-  function closeCompareDialog() {
+  function handleCloseCompareDialog() {
     setCompareDialogOpen(false);
   }
 
@@ -55,7 +55,7 @@ function App() {
       </Box>
       <Grid container spacing={3}>
         <Grid item xs={12} md={10}>
-          <BuildingsTable onSelectSingleRow={handleSelectSingleRow} onSelectMultipleRows={handleSelectMultipleRows} />
+          <BuildingsTable onSelectSingleBuilding={handleSelectSingleBuilding} onSelectMultipleBuildings={handleSelectMultipleBuildings} />
         </Grid>
         <Grid item xs>
           {/* <TableSelect tableName={tableName} onChange={handleTableChange} /> */}
@@ -68,12 +68,12 @@ function App() {
           <Typography variant="body1" gutterBottom>
             You must select <b>at least two buildings</b>.
           </Typography>
-          <Button variant="contained" onClick={handleCompareButtonClick} disabled={selectedBuildings.length < 2} >Compare buildings</Button>
+          <Button variant="contained" onClick={handleCompareButtonClick} disabled={selectedMultipleBuildings.length < 2} >Compare buildings</Button>
         </Grid>
       </Grid>
 
       <BuildingInfoPane selectedBuilding={selectedSingleBuilding} />
-      <CompareBuildingsDialog isOpen={compareDialogOpen} close={closeCompareDialog} buildingIds={selectedBuildings} />
+      <CompareBuildingsDialog isOpen={compareDialogOpen} onClose={handleCloseCompareDialog} buildings={selectedMultipleBuildings} />
     </Container>
   );
 }

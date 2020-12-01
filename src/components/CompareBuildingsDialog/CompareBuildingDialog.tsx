@@ -22,6 +22,12 @@ import { TransitionProps } from '@material-ui/core/transitions';
 
 import GWPCompareChart from '../GWPCompareChart';
 
+interface Props {
+    isOpen: boolean;
+    onClose(): void;
+    buildings: IBuilding[]; 
+}
+
 const styles = (theme: Theme) =>
     createStyles({
         root: {
@@ -78,7 +84,7 @@ const DialogActions = withStyles((theme: Theme) => ({
     },
 }))(MuiDialogActions);
 
-const CompareBuildingDialog = (props: any) => {
+const CompareBuildingDialog = (props: Props) => {
     const [loading, setLoading] = useState(false);
     const [buildings, setBuildings] = useState<IBuilding[]>([]);
     const [checkedLCAPhases, setcheckedLCAPhases] = useState({
@@ -93,13 +99,14 @@ const CompareBuildingDialog = (props: any) => {
     };
 
     useEffect(() => {
-        if (props.buildingIds !== undefined && props.buildingIds.length > 0) {
-            loadData();
+        if (props.buildings !== undefined && props.buildings.length > 0) {
+            // loadData();
+            setBuildings(props.buildings);
         }
     }, [props.isOpen]);
 
     const loadData = () => {
-        const buildingIdString = props.buildingIds.join();
+        const buildingIdString = props.buildings.join();
         const buildingQuery = `/buildings/select/${buildingIdString}`;
         if (!loading) {
             setLoading(true);
@@ -113,7 +120,7 @@ const CompareBuildingDialog = (props: any) => {
     };
 
     const handleClose = () => {
-        props.close();
+        props.onClose();
     };
 
     const { a1a3, a4, b4_m, b4_t } = checkedLCAPhases;
