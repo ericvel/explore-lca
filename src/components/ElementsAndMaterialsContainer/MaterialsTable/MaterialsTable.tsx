@@ -15,6 +15,7 @@ import {
     SearchPanel,
     ColumnChooser,
     TableColumnVisibility,
+    TableFixedColumns
 } from '@devexpress/dx-react-grid-material-ui';
 import _ from 'lodash';
 
@@ -29,6 +30,7 @@ const MaterialsTable = (props: any) => {
     const [columnExtensions] = useState(ColumnData.columnExtensions);
     const [defaultHiddenColumnNames] = useState(ColumnData.defaultHiddenColumnNames);
     const [tableColumnVisibilityColumnExtensions] = useState(ColumnData.tableColumnVisibilityColumnExtensions);
+    const [leftColumns] = useState(['name']);
     const [gwpColumns] = useState(['A1A3', 'A4', 'B4_t', 'B4_m'])
 
     const GWPFormatter = ({value}: any) => value && value > 0.0 ? parseFloat(value).toFixed(3) : 0.0.toFixed(1);
@@ -63,7 +65,10 @@ const MaterialsTable = (props: any) => {
                 <SortingState />
                 <IntegratedSorting />
                 <VirtualTable columnExtensions={columnExtensions} />
-                <TableHeaderRow showSortingControls />
+                <TableHeaderRow showSortingControls />                
+                <TableFixedColumns
+                    leftColumns={leftColumns}
+                />
                 <TableColumnVisibility
                     defaultHiddenColumnNames={defaultHiddenColumnNames}
                     columnExtensions={tableColumnVisibilityColumnExtensions}

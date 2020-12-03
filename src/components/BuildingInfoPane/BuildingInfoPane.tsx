@@ -47,10 +47,12 @@ const initialBuildingState: IBuilding = {
     idbuildings: 0,
     building_identifier: 0,
     building_name: "",
+    project: "",
     country: "",
     city: "",
     typology: "",
     construction_type: "",
+    floor_area: 0,
     A1A3: null,
     A4: null,
     B4_m: null,
@@ -87,7 +89,7 @@ const BuildingInfoPane = (props: any) => {
 
 
     const {
-        building_identifier, building_name, country, city, typology, construction_type, A1A3, A4, B4_m, B4_t
+        building_identifier, building_name, project, typology, construction_type, floor_area, A1A3, A4, B4_m, B4_t
     } = building;
 
     const gwpChartData: ISingleChartDataItem[] = [
@@ -129,118 +131,59 @@ const BuildingInfoPane = (props: any) => {
                         <Grid item xs={6}>
                             <Typography variant="h5" color="textSecondary" gutterBottom>General info</Typography>
                             <div>
-                                    <TextField
-                                        key={country}
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="Country"
-                                        name="country"
-                                        margin="dense"
-                                        defaultValue={country || "nil"}
-                                    />
-                                    <TextField
-                                        key={city}
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="City"
-                                        name="city"
-                                        margin="dense"
-                                        defaultValue={city || "nil"}
-                                    />
-                                    <TextField
-                                        key={typology}
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="Typology"
-                                        name="typology"
-                                        margin="dense"
-                                        defaultValue={typology || "nil"}
-                                    />
-                                    <TextField
-                                        key={construction_type}
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="Construction type"
-                                        name="construction_type"
-                                        margin="dense"
-                                        defaultValue={construction_type || "nil"}
-                                    />
-                                </div>
-                            {/* {loading ?
-                                <div>
-                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
-                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
-                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
-                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
-                                </div>
-                                :
-                                <div>
-                                    <TextField
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="Country"
-                                        name="country"
-                                        margin="dense"
-                                        defaultValue={country || "nil"}
-                                    />
-                                    <TextField
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="City"
-                                        name="city"
-                                        margin="dense"
-                                        defaultValue={city || "nil"}
-                                    />
-                                    <TextField
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="Typology"
-                                        name="typology"
-                                        margin="dense"
-                                        defaultValue={typology || "nil"}
-                                    />
-                                    <TextField
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="Construction type"
-                                        name="construction_type"
-                                        margin="dense"
-                                        defaultValue={construction_type || "nil"}
-                                    />
-                                </div>
-                            } */}
+                                <TextField
+                                    key={project}
+                                    inputProps={{
+                                        readOnly: true,
+                                        disabled: true
+                                    }}
+                                    InputProps={{ disableUnderline: true }}
+                                    fullWidth={true}
+                                    label="Project"
+                                    name="project"
+                                    margin="dense"
+                                    defaultValue={project}
+                                />
+                                <TextField
+                                    key={typology}
+                                    inputProps={{
+                                        readOnly: true,
+                                        disabled: true
+                                    }}
+                                    InputProps={{ disableUnderline: true }}
+                                    fullWidth={true}
+                                    label="Typology"
+                                    name="typology"
+                                    margin="dense"
+                                    defaultValue={typology}
+                                />
+                                <TextField
+                                    key={construction_type}
+                                    inputProps={{
+                                        readOnly: true,
+                                        disabled: true
+                                    }}
+                                    InputProps={{ disableUnderline: true }}
+                                    fullWidth={true}
+                                    label="Construction type"
+                                    name="construction_type"
+                                    margin="dense"
+                                    defaultValue={construction_type}
+                                />
+                                <TextField
+                                    key={floor_area}
+                                    inputProps={{
+                                        readOnly: true,
+                                        disabled: true
+                                    }}
+                                    InputProps={{ disableUnderline: true }}
+                                    fullWidth={true}
+                                    label="Floor area"
+                                    name="floor_area"
+                                    margin="dense"
+                                    defaultValue={floor_area + " m\xB2" || "nil"}
+                                />
+                            </div>
                         </Grid>
                         <Grid item xs>
                             <Typography variant="h5" color="textSecondary" gutterBottom>GWP</Typography>
@@ -254,54 +197,6 @@ const BuildingInfoPane = (props: any) => {
                                 :
                                 <div>
                                     <GWPSingleChart chartData={gwpChartData} height={250} />
-                                    {/* <TextField
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="A1-A3"
-                                        name="a1a3"
-                                        margin="dense"
-                                        defaultValue={A1A3 || "0.0"}
-                                    />
-                                    <TextField
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="A4"
-                                        name="a4"
-                                        margin="dense"
-                                        defaultValue={A4 || "0.0"}
-                                    />
-                                    <TextField
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="B4 (m)"
-                                        name="b4m"
-                                        margin="dense"
-                                        defaultValue={B4_m || "0.0"}
-                                    />
-                                    <TextField
-                                        inputProps={{
-                                            readOnly: true,
-                                            disabled: true
-                                        }}
-                                        InputProps={{ disableUnderline: true }}
-                                        fullWidth={true}
-                                        label="B4 (t)"
-                                        name="b4t"
-                                        margin="dense"
-                                        defaultValue={B4_t || "0.0"}
-                                    /> */}
                                 </div>
                             }
                         </Grid>

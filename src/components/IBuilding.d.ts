@@ -2,14 +2,37 @@ interface IBuilding {
     idbuildings: number;
     building_identifier: number;
     building_name: string;
+    project: string;
     country: string;
     city: string;
     typology: string;
     construction_type: string;
+    floor_area: number;
     A1A3: number?;
     A4: number?;
     B4_m: number?;
     B4_t: number?;
+    /* built_status
+    energy_ambition_level
+    calculation_method
+    main_data_source
+    study_type
+    study_year
+    lifetime
+    floor_area
+    A1A3
+    A4
+    B4_m
+    B4_t
+    GWP_B6
+    GWP_B7
+    heated_volume
+    area_footprint
+    area_roof
+    area_wall
+    area_windowAndDoor
+    heatloss_number
+    comments */
 }
 
 interface IBuildingElement {
