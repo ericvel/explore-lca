@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useReducer, useMemo, useCallback, ReactText } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import allActions from '../../redux/actions';
+import { IRootState } from '../../redux/reducers';
+
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -108,14 +112,16 @@ function reducer(state: any, { type, payload }: any) {
 }
 
 function BuildingsTable(props: Props) {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const dispatch = useDispatch();
+
+    const [reactState, reactDispatch] = useReducer(reducer, initialState);
     const [columns] = useState(ColumnData.columns);
-    const [columnExtensions] = useState(ColumnData.columnExtensions);    
+    const [columnExtensions] = useState(ColumnData.columnExtensions);
 
     const cache = useMemo(() => createRowCache(VIRTUAL_PAGE_SIZE), [VIRTUAL_PAGE_SIZE]);
 
     const updateRows = (skip: number, count: number, newTotalCount: number) => {
-        dispatch({
+        reactDispatch({
             type: 'UPDATE_ROWS',
             payload: {
                 skip: Math.min(skip, newTotalCount),
@@ -126,13 +132,13 @@ function BuildingsTable(props: Props) {
     };
 
     const getRemoteRows = (requestedSkip: number, take: number) => {
-        dispatch({ type: 'START_LOADING', payload: { requestedSkip, take } });
+        reactDispatch({ type: 'START_LOADING', payload: { requestedSkip, take } });
     };
 
     const buildQueryString = () => {
         const {
             requestedSkip, take, searchTerm, searchableColumns, filters, sorting,
-        } = state;
+        } = reactState;
         /* const filterStr = filters
             .map(({ columnName, value, operation }) => (
                 `["${columnName}","${operation}","${value}"]`
@@ -159,7 +165,7 @@ function BuildingsTable(props: Props) {
     const loadData = () => {
         const {
             requestedSkip, take, lastQuery, loading, forceReload, totalCount,
-        } = state;
+        } = reactState;
         const query = buildQueryString();
         if ((query !== lastQuery || forceReload) && !loading) {
             if (forceReload) {
@@ -170,27 +176,27 @@ function BuildingsTable(props: Props) {
                 updateRows(requestedSkip, take, totalCount);
             } else {
                 console.log("Query: " + query)
-                dispatch({ type: 'FETCH_INIT' });
+                reactDispatch({ type: 'FETCH_INIT' });
                 fetch(query)
                     .then(response => response.json())
                     .then(({ data, totalCount: newTotalCount }) => {
                         cache.setRows(requestedSkip, data);
                         updateRows(requestedSkip, take, newTotalCount);
                     })
-                    .catch(() => dispatch({ type: 'REQUEST_ERROR' }));
+                    .catch(() => reactDispatch({ type: 'REQUEST_ERROR' }));
             }
-            dispatch({ type: 'UPDATE_QUERY', payload: query });
+            reactDispatch({ type: 'UPDATE_QUERY', payload: query });
         }
     };
 
     const changeSorting = (value: any) => {
-        console.log("Rows: ", state.rows)
-        dispatch({ type: 'CHANGE_SORTING', payload: value });
+        console.log("Rows: ", reactState.rows)
+        reactDispatch({ type: 'CHANGE_SORTING', payload: value });
     };
 
     const changeSearchTerm = (value: any) => {
         console.log("Changed search term: ", value)
-        dispatch({ type: 'CHANGE_SEARCH_TERM', payload: value });
+        reactDispatch({ type: 'CHANGE_SEARCH_TERM', payload: value });
     };
 
     // Delays query so it is not fired on every keystroke
@@ -209,38 +215,46 @@ function BuildingsTable(props: Props) {
 
             if (lastSelected !== undefined) {
                 setSelectedRow([lastSelected]);
+
+                const rowId = selection[selection.length - 1];
+                console.log("Selected row: ", rowId)
+                const building: IBuilding = reactState.rows.find((building: IBuilding) => building.idbuildings === rowId);
+                dispatch(allActions.buildingActions.selectBuildings([building]));
             } else {
                 // Clear selection by double-click on same row
-                setSelectedRow([])
+                setSelectedRow([]);
+                dispatch(allActions.buildingActions.deselectAllBuildings());
             }
 
-            const rowId = selection[selection.length - 1];
-            console.log("Selected row: ", rowId)
-            const building: IBuilding = state.rows.find((building: IBuilding) => building.idbuildings === rowId);
-            props.onSelectSingleBuilding(building);
+
+            // props.onSelectSingleBuilding(building);            
         } else {
             setSelectedRow(selection);
-            const buildings: IBuilding[] = state.rows.filter((building: IBuilding) => selection.includes(building.idbuildings));
-            props.onSelectMultipleBuildings(buildings);
+            const buildings: IBuilding[] = reactState.rows.filter((building: IBuilding) => selection.includes(building.idbuildings));
+            // props.onSelectMultipleBuildings(buildings);
+            dispatch(allActions.buildingActions.selectBuildings(buildings));
         }
     }
 
     const [defaultHiddenColumnNames] = useState(ColumnData.defaultHiddenColumnNames);
     const [tableColumnVisibilityColumnExtensions] = useState(ColumnData.tableColumnVisibilityColumnExtensions);
     const [leftColumns] = useState([TableSelection.COLUMN_TYPE, 'building_name']);
-    const [multipleSwitchChecked, setMultipleSwitchChecked] = useState(false);
+    // const [multipleSwitchChecked, setMultipleSwitchChecked] = useState(false);
+    const multipleSwitchChecked = useSelector((state: IRootState) => state.selectMultipleBuildingsFlag);
 
     const handleMultipleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setMultipleSwitchChecked(event.target.checked);
+        // setMultipleSwitchChecked(event.target.checked);
+        dispatch(allActions.flagActions.toggleSelectMultipleSwitch());
+        dispatch(allActions.buildingActions.deselectAllBuildings());
         setSelectedRow([]);
-        props.onSelectSingleBuilding(); // Closes BuildingInfoPane if open
-        props.onSelectMultipleBuildings([]); // Disable compare button
+        // props.onSelectSingleBuilding(); // Closes BuildingInfoPane if open
+        // props.onSelectMultipleBuildings([]); // Disable compare button
         console.log("Switch checked: ", event.target.checked);
     }
 
     const {
         rows, skip, totalCount, loading, sorting, //filters,
-    } = state;
+    } = reactState;
 
     return (
         <Paper style={{ height: '600px' }}>

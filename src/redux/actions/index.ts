@@ -1,7 +1,9 @@
 import buildingActions from './buildingActions';
+import flagActions from './flagActions';
 
 const allActions = {
-    buildingActions
+    buildingActions,
+    flagActions
 }
 
 export default allActions;

@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import allActions from '../../redux/actions';
+import { IRootState } from '../../redux/reducers';
+
 import { createStyles, Theme, withStyles, WithStyles, makeStyles } from '@material-ui/core/styles';
 import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
@@ -60,21 +64,26 @@ const initialBuildingState: IBuilding = {
 };
 
 const BuildingInfoPane = (props: any) => {
+    const dispatch = useDispatch();
+
+    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+    const multipleSwitchChecked = useSelector((state: IRootState) => state.selectMultipleBuildingsFlag);
+
     const [isPaneOpen, setIsPaneOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [building, setBuilding] = useState<IBuilding>(initialBuildingState);
 
     useEffect(() => {
-        if (props.selectedBuilding !== undefined) {
+        if (!multipleSwitchChecked && selectedBuildings.length > 0) {
             // loadData();
-            setBuilding(props.selectedBuilding);
+            setBuilding(selectedBuildings[0]);
             setIsPaneOpen(true);
         } else {
             setIsPaneOpen(false);
         }
-    }, [props.selectedBuilding]);
+    }, [selectedBuildings]);
 
-    const loadData = () => {
+   /*  const loadData = () => {
         const buildingQuery = `/buildings/select/${props.selectedBuildingId}`;
         if (!loading) {
             setLoading(true);
@@ -86,7 +95,7 @@ const BuildingInfoPane = (props: any) => {
                 }).catch(() => setLoading(false));
         }
     };
-
+ */
 
     const {
         building_identifier, building_name, project, typology, construction_type, floor_area, A1A3, A4, B4_m, B4_t
@@ -111,11 +120,12 @@ const BuildingInfoPane = (props: any) => {
                 hideHeader={true}
                 onRequestClose={() => {
                     // triggered on "<" on left top click or on outside click
-                    setIsPaneOpen(false);
+                    // setIsPaneOpen(false);
+                    dispatch(allActions.buildingActions.deselectAllBuildings());
                 }}
             >
                 <div>
-                    <IconButton aria-label="close" className={classes.closeButton} onClick={() => { setIsPaneOpen(false) }}>
+                    <IconButton aria-label="close" className={classes.closeButton} onClick={() => { dispatch(allActions.buildingActions.deselectAllBuildings()); }}>
                         <CloseIcon />
                     </IconButton>
                 </div>

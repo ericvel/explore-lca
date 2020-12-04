@@ -1,14 +1,13 @@
-import { BuildingActionTypes, SELECT_BUILDINGS } from '../types';
+import { BuildingActionTypes, SELECT_BUILDINGS, DESELECT_ALL_BUILDINGS } from '../actions/types';
 
-const buildings = (state = [], action: BuildingActionTypes) => {
+const buildings = (state: IBuilding[] = [], action: BuildingActionTypes) => {
     switch (action.type) {
         case SELECT_BUILDINGS:
-            return {
-                ...state,
-                buildings: action.payload
-            }
+            return action.payload;
+        case DESELECT_ALL_BUILDINGS:
+            return [];
         default:
-            return state
+            return state;
     }
 }
 

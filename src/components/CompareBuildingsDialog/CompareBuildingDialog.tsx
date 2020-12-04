@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import allActions from '../../redux/actions';
+import { IRootState } from '../../redux/reducers';
+
 import { Theme, createStyles, makeStyles, withStyles, WithStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -25,7 +29,7 @@ import GWPCompareChart from '../GWPCompareChart';
 interface Props {
     isOpen: boolean;
     onClose(): void;
-    buildings: IBuilding[]; 
+    // buildings: IBuilding[]; 
 }
 
 const styles = (theme: Theme) =>
@@ -84,9 +88,11 @@ const DialogActions = withStyles((theme: Theme) => ({
     },
 }))(MuiDialogActions);
 
-const CompareBuildingDialog = (props: Props) => {
+const CompareBuildingDialog = (props: Props) => {    
+    const buildings = useSelector((state: IRootState) => state.buildings);
+
     const [loading, setLoading] = useState(false);
-    const [buildings, setBuildings] = useState<IBuilding[]>([]);
+    // const [buildings, setBuildings] = useState<IBuilding[]>([]);
     const [checkedLCAPhases, setcheckedLCAPhases] = useState({
         a1a3: true,
         a4: true,
@@ -98,14 +104,14 @@ const CompareBuildingDialog = (props: Props) => {
         setcheckedLCAPhases({ ...checkedLCAPhases, [event.target.name]: event.target.checked });
     };
 
-    useEffect(() => {
+    /* useEffect(() => {
         if (props.buildings !== undefined && props.buildings.length > 0) {
             // loadData();
             setBuildings(props.buildings);
         }
     }, [props.isOpen]);
-
-    const loadData = () => {
+ */
+  /*   const loadData = () => {
         const buildingIdString = props.buildings.join();
         const buildingQuery = `/buildings/select/${buildingIdString}`;
         if (!loading) {
@@ -117,7 +123,7 @@ const CompareBuildingDialog = (props: Props) => {
                     setLoading(false);
                 }).catch(() => setLoading(false));
         }
-    };
+    }; */
 
     const handleClose = () => {
         props.onClose();

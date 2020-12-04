@@ -1,4 +1,7 @@
 import React, { useEffect, useState, ReactText } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import allActions from '../../redux/actions';
+import { IRootState } from '../../redux/reducers';
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -15,6 +18,8 @@ import NavBar from '../NavBar';
 import CompareBuildingsDialog from '../CompareBuildingsDialog';
 
 function App() {
+  const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+
   // const [tableName, setTableName] = useState('buildings');
   const [selectedBuildingId, setSelectedBuildingId] = useState<number>();
   const [selectedSingleBuilding, setSelectedSingleBuilding] = useState<IBuilding>();
@@ -69,12 +74,12 @@ function App() {
           <Typography variant="body1" gutterBottom>
             You must select <b>at least two buildings</b>.
           </Typography>
-          <Button variant="contained" onClick={handleCompareButtonClick} disabled={selectedMultipleBuildings.length < 2} >Compare buildings</Button>
+          <Button variant="contained" onClick={handleCompareButtonClick} disabled={selectedBuildings.length < 2} >Compare buildings</Button>
         </Grid>
       </Grid>
 
-      <BuildingInfoPane selectedBuilding={selectedSingleBuilding} />
-      <CompareBuildingsDialog isOpen={compareDialogOpen} onClose={handleCloseCompareDialog} buildings={selectedMultipleBuildings} />
+      <BuildingInfoPane /* selectedBuilding={selectedBuildings[0]} */ />
+      <CompareBuildingsDialog isOpen={compareDialogOpen} onClose={handleCloseCompareDialog} /* buildings={selectedBuildings} */ />
     </Container>
   );
 }

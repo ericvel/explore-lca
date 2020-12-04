@@ -1,4 +1,4 @@
-import { SELECT_BUILDINGS, BuildingActionTypes } from '../types'
+import { SELECT_BUILDINGS, DESELECT_ALL_BUILDINGS, BuildingActionTypes } from './types'
 
 const selectBuildings = (buildings: IBuilding[]): BuildingActionTypes => {
     return {
@@ -7,6 +7,13 @@ const selectBuildings = (buildings: IBuilding[]): BuildingActionTypes => {
     }
 }
 
+const deselectAllBuildings = (): BuildingActionTypes => {
+    return {
+        type: DESELECT_ALL_BUILDINGS
+    }
+}
+
 export default {
-    selectBuildings
+    selectBuildings,
+    deselectAllBuildings
 }
