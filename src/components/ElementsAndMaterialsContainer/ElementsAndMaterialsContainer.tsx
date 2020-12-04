@@ -71,7 +71,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
             </Grid>
             {loading || props.parentIsLoading ?
                 <div>
-                    <Skeleton height={100} /><Skeleton height={100} /><Skeleton height={100} />
+                    <Skeleton height={120} /><Skeleton height={120} /><Skeleton height={120} />
                 </div>
                 :
                 allMaterialsChecked ?
