@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import {
@@ -21,17 +24,22 @@ import _ from 'lodash';
 
 import ColumnData from "./ColumnData";
 
+interface Props {
+    elementInventory: IMaterialInventory[] | false;
+}
 
 // const getRowId = (row: any) => row.idmaterialInventory;
 
-const MaterialsTable = (props: any) => {
-    const [materialInventory] = useState<IMaterialInventory[]>(props.materialInventory);
+const MaterialsTable = (props: Props) => {    
+    const materialInventory = useSelector((state: IRootState) => state.materialInventory);
+
     const [columns] = useState(ColumnData.columns);
     const [columnExtensions] = useState(ColumnData.columnExtensions);
     const [defaultHiddenColumnNames] = useState(ColumnData.defaultHiddenColumnNames);
     const [tableColumnVisibilityColumnExtensions] = useState(ColumnData.tableColumnVisibilityColumnExtensions);
     const [leftColumns] = useState(['name']);
     const [gwpColumns] = useState(['A1A3', 'A4', 'B4_t', 'B4_m'])
+
 
     const GWPFormatter = ({value}: any) => value && value > 0.0 ? parseFloat(value).toFixed(3) : 0.0.toFixed(1);
 
@@ -48,12 +56,14 @@ const MaterialsTable = (props: any) => {
 
     // Delays query so it is not fired on every keystroke
     const delayedCallback = useCallback(_.debounce(changeSearchTerm, 300), []);
-
+    
+    // Displays only inventory for selected building element if one is selected
+    const rows = props.elementInventory || materialInventory;
 
     return (
         <Paper>
             <Grid
-                rows={materialInventory}
+                rows={rows}
                 columns={columns}
             >
                 <GWPTypeProvider

@@ -67,7 +67,7 @@ const BuildingInfoPane = (props: any) => {
     const dispatch = useDispatch();
 
     const selectedBuildings = useSelector((state: IRootState) => state.buildings);
-    const multipleSwitchChecked = useSelector((state: IRootState) => state.selectMultipleBuildingsFlag);
+    const multipleSwitchChecked = useSelector((state: IRootState) => state.canSelectMultipleBuildings);
 
     const [isPaneOpen, setIsPaneOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -75,27 +75,12 @@ const BuildingInfoPane = (props: any) => {
 
     useEffect(() => {
         if (!multipleSwitchChecked && selectedBuildings.length > 0) {
-            // loadData();
             setBuilding(selectedBuildings[0]);
             setIsPaneOpen(true);
         } else {
             setIsPaneOpen(false);
         }
     }, [selectedBuildings]);
-
-   /*  const loadData = () => {
-        const buildingQuery = `/buildings/select/${props.selectedBuildingId}`;
-        if (!loading) {
-            setLoading(true);
-            fetch(buildingQuery)
-                .then(response => response.json())
-                .then(data => {
-                    setBuilding(data[0]);
-                    setLoading(false);
-                }).catch(() => setLoading(false));
-        }
-    };
- */
 
     const {
         building_identifier, building_name, project, typology, construction_type, floor_area, A1A3, A4, B4_m, B4_t

@@ -1,12 +1,19 @@
-import { ToggleSelectMultipleSwitchAction, TOGGLE_SELECT_MULTIPLE_SWITCH } from '../actions/types';
+import { ToggleCanSelectMultipleAction, ToggleCompareDialogOpen, TOGGLE_CAN_SELECT_MULTIPLE, TOGGLE_COMPARE_DIALOG_OPEN } from '../actions/types';
 
-const selectMultipleBuildingsFlag = (state = false, action: ToggleSelectMultipleSwitchAction) => {
+export const canSelectMultipleBuildings = (state = false, action: ToggleCanSelectMultipleAction) => {
     switch (action.type) {
-        case TOGGLE_SELECT_MULTIPLE_SWITCH:
+        case TOGGLE_CAN_SELECT_MULTIPLE:
             return !state
         default:
             return state
     }
 }
 
-export default selectMultipleBuildingsFlag;
+export const isCompareDialogOpen = (state = false, action: ToggleCompareDialogOpen) => {
+    switch (action.type) {
+        case TOGGLE_COMPARE_DIALOG_OPEN:
+            return !state
+        default:
+            return state
+    }
+}

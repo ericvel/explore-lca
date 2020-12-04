@@ -9,43 +9,16 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-//import './App.css';
-import TableSelect from '../TableSelect';
 import BuildingsTable from '../BuildingsTable';
 import BuildingInfoPane from '../BuildingInfoPane';
-import BuildingInfoDrawer from '../BuildingInfoDrawer';
-import NavBar from '../NavBar';
 import CompareBuildingsDialog from '../CompareBuildingsDialog';
 
 function App() {
+  const dispatch = useDispatch();
   const selectedBuildings = useSelector((state: IRootState) => state.buildings);
-
-  // const [tableName, setTableName] = useState('buildings');
-  const [selectedBuildingId, setSelectedBuildingId] = useState<number>();
-  const [selectedSingleBuilding, setSelectedSingleBuilding] = useState<IBuilding>();
-  const [selectedMultipleBuildings, setSelectedMultipleBuildings] = useState<IBuilding[]>([]);
-  const [compareDialogOpen, setCompareDialogOpen] = useState(false);
-
-  /*  function handleTableChange(tableName: string) {
-     setTableName(tableName);
-   } */
-
-  function handleSelectSingleBuilding(building: IBuilding) {
-    setSelectedSingleBuilding(building);
-  }
-
-  function handleSelectMultipleBuildings(buildings: IBuilding[]) {
-    setSelectedMultipleBuildings(buildings);
-  }
-
+  
   function handleCompareButtonClick() {
-
-    console.log("Selected Buildings: ", selectedMultipleBuildings)
-    setCompareDialogOpen(true);
-  }
-
-  function handleCloseCompareDialog() {
-    setCompareDialogOpen(false);
+    dispatch(allActions.flagActions.toggleCompareDialogOpen());
   }
 
   return (
@@ -61,10 +34,9 @@ function App() {
       </Box>
       <Grid container spacing={3}>
         <Grid item xs={12} md={10}>
-          <BuildingsTable onSelectSingleBuilding={handleSelectSingleBuilding} onSelectMultipleBuildings={handleSelectMultipleBuildings} />
+          <BuildingsTable />
         </Grid>
         <Grid item xs>
-          {/* <TableSelect tableName={tableName} onChange={handleTableChange} /> */}
           <Typography variant="body1" gutterBottom>
             Click on a row to see more details about the building, including its <b>building elements</b> and <b>materials</b>.
           </Typography>
@@ -78,8 +50,8 @@ function App() {
         </Grid>
       </Grid>
 
-      <BuildingInfoPane /* selectedBuilding={selectedBuildings[0]} */ />
-      <CompareBuildingsDialog isOpen={compareDialogOpen} onClose={handleCloseCompareDialog} /* buildings={selectedBuildings} */ />
+      <BuildingInfoPane />
+      <CompareBuildingsDialog />
     </Container>
   );
 }

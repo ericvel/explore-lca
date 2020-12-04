@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import allActions from '../../redux/actions';
+
 import ReactDOM from "react-dom";
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -16,21 +20,24 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const ElementsAndMaterialsContainer = (props: any) => {
-    const [buildingElements, setBuildingElements] = useState<IBuildingElement[]>([]);
-    const [materialInventory, setMaterialInventory] = useState<IMaterialInventory[]>([]);
+const ElementsAndMaterialsContainer = (props: any) => {    
+    const dispatch = useDispatch();
+    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+
     const [loading, setLoading] = useState(false);
     const [allMaterialsChecked, setAllMaterialsChecked] = useState(false);
 
     useEffect(() => {
-        if (props.buildingId !== undefined) {
+        if (selectedBuildings.length > 0) {
             loadData();
         }
-    }, [props.buildingId]);
+    }, [selectedBuildings]);
 
     const loadData = () => {
-        const elementQuery = `/building_elements/${props.buildingId}`;
-        const inventoryQuery = `/material_inventory/${props.buildingId}`;
+        const buildingId = selectedBuildings[0].idbuildings;
+
+        const elementQuery = `/building_elements/${buildingId}`;
+        const inventoryQuery = `/material_inventory/${buildingId}`;
 
         if (!loading) {
             setLoading(true);
@@ -40,8 +47,8 @@ const ElementsAndMaterialsContainer = (props: any) => {
             ]).then(responses => Promise.all(responses.map(response => response.json())
             )).then(data => {
                 ReactDOM.unstable_batchedUpdates(() => {
-                    setBuildingElements(data[0]);
-                    setMaterialInventory(data[1]);
+                    dispatch(allActions.elementAndMaterialActions.setBuildingElements(data[0]));
+                    dispatch(allActions.elementAndMaterialActions.setMaterialInventory(data[1]));
                     setLoading(false);
                 })
             }).catch(() => setLoading(false));
@@ -75,9 +82,9 @@ const ElementsAndMaterialsContainer = (props: any) => {
                 </div>
                 :
                 allMaterialsChecked ?
-                    <MaterialsTable materialInventory={materialInventory} />
+                    <MaterialsTable elementInventory={false} /* materialInventory={materialInventory} */ />
                     :
-                    <BuildingElementsView buildingElements={buildingElements} materialInventory={materialInventory} />
+                    <BuildingElementsView /* buildingElements={buildingElements} materialInventory={materialInventory} */ />
             }
         </div>
     );

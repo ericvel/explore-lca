@@ -36,11 +36,6 @@ import _ from 'lodash';
 import ColumnData from './ColumnData';
 import LoadingIndicator from '../LoadingIndicator';
 
-interface Props {
-    onSelectSingleBuilding(building?: IBuilding): void;
-    onSelectMultipleBuildings(buildings: IBuilding[]): void;
-}
-
 const VIRTUAL_PAGE_SIZE = 100;
 const MAX_ROWS = 50000;
 const URL = '/buildings'
@@ -111,7 +106,7 @@ function reducer(state: any, { type, payload }: any) {
     }
 }
 
-function BuildingsTable(props: Props) {
+function BuildingsTable() {
     const dispatch = useDispatch();
 
     const [reactState, reactDispatch] = useReducer(reducer, initialState);
@@ -225,13 +220,10 @@ function BuildingsTable(props: Props) {
                 setSelectedRow([]);
                 dispatch(allActions.buildingActions.deselectAllBuildings());
             }
-
-
-            // props.onSelectSingleBuilding(building);            
+      
         } else {
             setSelectedRow(selection);
             const buildings: IBuilding[] = reactState.rows.filter((building: IBuilding) => selection.includes(building.idbuildings));
-            // props.onSelectMultipleBuildings(buildings);
             dispatch(allActions.buildingActions.selectBuildings(buildings));
         }
     }
@@ -239,17 +231,13 @@ function BuildingsTable(props: Props) {
     const [defaultHiddenColumnNames] = useState(ColumnData.defaultHiddenColumnNames);
     const [tableColumnVisibilityColumnExtensions] = useState(ColumnData.tableColumnVisibilityColumnExtensions);
     const [leftColumns] = useState([TableSelection.COLUMN_TYPE, 'building_name']);
-    // const [multipleSwitchChecked, setMultipleSwitchChecked] = useState(false);
-    const multipleSwitchChecked = useSelector((state: IRootState) => state.selectMultipleBuildingsFlag);
+    const multipleSwitchChecked = useSelector((state: IRootState) => state.canSelectMultipleBuildings);
 
     const handleMultipleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // setMultipleSwitchChecked(event.target.checked);
-        dispatch(allActions.flagActions.toggleSelectMultipleSwitch());
+        dispatch(allActions.flagActions.toggleCanSelectMultiple());
         dispatch(allActions.buildingActions.deselectAllBuildings());
         setSelectedRow([]);
-        // props.onSelectSingleBuilding(); // Closes BuildingInfoPane if open
-        // props.onSelectMultipleBuildings([]); // Disable compare button
-        console.log("Switch checked: ", event.target.checked);
     }
 
     const {

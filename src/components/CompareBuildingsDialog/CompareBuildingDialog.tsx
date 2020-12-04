@@ -26,12 +26,6 @@ import { TransitionProps } from '@material-ui/core/transitions';
 
 import GWPCompareChart from '../GWPCompareChart';
 
-interface Props {
-    isOpen: boolean;
-    onClose(): void;
-    // buildings: IBuilding[]; 
-}
-
 const styles = (theme: Theme) =>
     createStyles({
         root: {
@@ -88,8 +82,10 @@ const DialogActions = withStyles((theme: Theme) => ({
     },
 }))(MuiDialogActions);
 
-const CompareBuildingDialog = (props: Props) => {    
+const CompareBuildingDialog = () => {        
+    const dispatch = useDispatch();
     const buildings = useSelector((state: IRootState) => state.buildings);
+    const isCompareDialogOpen = useSelector((state: IRootState) => state.isCompareDialogOpen);
 
     const [loading, setLoading] = useState(false);
     // const [buildings, setBuildings] = useState<IBuilding[]>([]);
@@ -126,7 +122,7 @@ const CompareBuildingDialog = (props: Props) => {
     }; */
 
     const handleClose = () => {
-        props.onClose();
+        dispatch(allActions.flagActions.toggleCompareDialogOpen());
     };
 
     const { a1a3, a4, b4_m, b4_t } = checkedLCAPhases;
@@ -163,7 +159,7 @@ const CompareBuildingDialog = (props: Props) => {
     const classes = useStyles();
 
     return (
-        <Dialog fullWidth maxWidth={false} open={props.isOpen} onClose={handleClose} >
+        <Dialog fullWidth maxWidth={false} open={isCompareDialogOpen} onClose={handleClose} >
             <DialogTitle id="customized-dialog-title" onClose={handleClose}>
                 Compare buildings
             </DialogTitle>

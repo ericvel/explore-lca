@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
@@ -45,10 +48,10 @@ const initialSelectedElementState: IBuildingElement = {
     idparent: null
 };
 
-const BuildingElementsView = (props: any) => {
-    const [buildingElements] = useState<IBuildingElement[]>(props.buildingElements);
-    const [materialInventory] = useState<IMaterialInventory[]>(props.materialInventory);
-
+const BuildingElementsView = (props: any) => {    
+    const buildingElements = useSelector((state: IRootState) => state.buildingElements);    
+    const materialInventory = useSelector((state: IRootState) => state.materialInventory);
+    
     const [selectedElement, setSelectedElement] = useState<IBuildingElement>(initialSelectedElementState);
     const [elementRoute, setElementRoute] = useState<IBuildingElement[]>([]);
     
@@ -131,7 +134,7 @@ const BuildingElementsView = (props: any) => {
                             />
                         )
                         :
-                        <MaterialsTable materialInventory={getElementMaterials(selectedElement)} />
+                        <MaterialsTable elementInventory={getElementMaterials(selectedElement)} />
                     }
                 </Grid>
             </Grid>

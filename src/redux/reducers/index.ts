@@ -1,10 +1,14 @@
 import {combineReducers} from 'redux';
 import buildings from './buildings';
-import selectMultipleBuildingsFlag from './flags';
+import { canSelectMultipleBuildings, isCompareDialogOpen } from './flags';
+import { buildingElements, materialInventory } from './elementsAndMaterials';
 
 const rootReducer = combineReducers({
     buildings,
-    selectMultipleBuildingsFlag
+    canSelectMultipleBuildings,
+    isCompareDialogOpen,
+    buildingElements,
+    materialInventory
 });
 
 export default rootReducer;
