@@ -299,7 +299,7 @@ function BuildingsTable() {
                                 color="primary"
                             />
                         }
-                        label="Select multiple rows"
+                        label="Select multiple"
                     />
                 </Template>
                 <SearchPanel />

@@ -16,6 +16,7 @@ import BuildingsTable from '../BuildingsTable';
 import BuildingDetails from '../BuildingDetails';
 import BuildingInfoPane from '../BuildingInfoPane';
 import CompareBuildingsDialog from '../CompareBuildingsDialog';
+import HelpButton from '../HelpButton';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,9 +55,7 @@ function App() {
             </Grid>
   
             <Grid item >
-              <IconButton aria-label="help" >
-                <HelpOutlineIcon fontSize="large" />
-              </IconButton>
+              <HelpButton alertContentId="main" iconSize="large" />
             </Grid>
           </Grid>
 
@@ -65,15 +64,6 @@ function App() {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="body1" gutterBottom>
-              Click on a row to see more details about the building, including its <b>building elements</b> and <b>materials</b>.
-            </Typography>
-            <Typography variant="body1" >
-              Select multiple rows to compare buildings and calculate average values.
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              You must select <b>at least two buildings</b>.
-            </Typography>
             <Button variant="contained" onClick={handleCompareButtonClick} disabled={selectedBuildings.length < 2} >Compare buildings</Button>
           </Grid>
         </Grid>
