@@ -1,32 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import allActions from '../../redux/actions';
 import { IRootState } from '../../redux/reducers';
+import allActions from '../../redux/actions';
 
 import { createStyles, Theme, withStyles, WithStyles, makeStyles } from '@material-ui/core/styles';
-import SlidingPane from "react-sliding-pane";
-import "react-sliding-pane/dist/react-sliding-pane.css";
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Drawer from '@material-ui/core/Drawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import FormLabel from '@material-ui/core/FormLabel';
 import TextField from '@material-ui/core/TextField';
-import CloseIcon from '@material-ui/icons/Close';
 import Skeleton from '@material-ui/lab/Skeleton';
-import IconButton from '@material-ui/core/IconButton';
-import './BuildingInfoPane.css';
 
 import ElementsAndMaterialsContainer from '../ElementsAndMaterialsContainer';
 import GWPSingleChart from '../GWPSingleChart';
 
+const drawerWidth = "45vw";
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        closeButton: {
-            position: 'absolute',
-            right: theme.spacing(2),
-            top: theme.spacing(2),
-            color: theme.palette.grey[500],
-        },
         buildingSection: {
             marginBottom: theme.spacing(2)
         },
@@ -38,7 +31,24 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         buildingInfoLabels: {
             fontWeight: "bold"
-        }
+        },
+        noSelectionContainer: {
+            height: '100vh'
+        },
+        drawer: {
+            width: drawerWidth,
+            flexShrink: 0,
+        },
+        drawerPaper: {
+            // padding: theme.spacing(2),
+            // marginBottom: theme.spacing(2),
+            width: drawerWidth,
+        },
+        drawerContent: {
+            // margin: theme.spacing(1),
+            padding: theme.spacing(2),
+            // height: '600px'
+        },
     }),
 );
 
@@ -58,22 +68,15 @@ const initialBuildingState: IBuilding = {
     B4_t: null,
 };
 
-const BuildingInfoPane = (props: any) => {
+const BuildingDetails = (props: any) => {
     const dispatch = useDispatch();
 
     const selectedBuildings = useSelector((state: IRootState) => state.buildings);
-    const multipleSwitchChecked = useSelector((state: IRootState) => state.canSelectMultipleBuildings);
-
-    const [isPaneOpen, setIsPaneOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [building, setBuilding] = useState<IBuilding>(initialBuildingState);
 
     useEffect(() => {
-        if (!multipleSwitchChecked && selectedBuildings.length > 0) {
+        if (selectedBuildings.length > 0) {
             setBuilding(selectedBuildings[0]);
-            setIsPaneOpen(true);
-        } else {
-            setIsPaneOpen(false);
         }
     }, [selectedBuildings]);
 
@@ -91,38 +94,27 @@ const BuildingInfoPane = (props: any) => {
     const classes = useStyles();
 
     return (
-        <div>
-            <SlidingPane
-                className="sliding-pane close-button"
-                overlayClassName="sliding-pane-overlay"
-                isOpen={isPaneOpen}
-                width="100%"
-                hideHeader={true}
-                onRequestClose={() => {
-                    // triggered on "<" on left top click or on outside click
-                    // setIsPaneOpen(false);
-                    dispatch(allActions.buildingActions.deselectAllBuildings());
-                }}
-            >
-                <div>
-                    <IconButton aria-label="close" className={classes.closeButton} onClick={() => { dispatch(allActions.buildingActions.deselectAllBuildings()); }}>
-                        <CloseIcon />
-                    </IconButton>
-                </div>
-                <div>
+        <Drawer
+            className={classes.drawer}
+            variant="permanent"
+            classes={{
+                paper: classes.drawerPaper,
+            }}
+            anchor="right"
+        >
+            {selectedBuildings.length > 0 ?
+                <div className={classes.drawerContent}>
                     <Grid container spacing={3} className={classes.buildingSection}>
                         <Grid item xs={11}>
-                            <Typography variant="h4" color="textPrimary" >{loading ? <Skeleton /> : building_name}</Typography>
-                            <Typography variant="subtitle1" color="textSecondary" gutterBottom>{loading ? <Skeleton width={70} /> : building_identifier}</Typography>
-                        </Grid>
-                        <Grid item xs={1}>
-
+                            <Typography variant="h4" color="textPrimary" >{building_name}</Typography>
+                            <Typography variant="subtitle1" color="textSecondary" gutterBottom>{building_identifier}</Typography>
                         </Grid>
                         <Grid item xs={6}>
                             <Typography variant="h5" color="textSecondary" gutterBottom>General info</Typography>
                             <div>
+                                {console.log("Project: ", project)}
                                 <TextField
-                                    key={project}
+                                    key={project || "project"}
                                     inputProps={{
                                         readOnly: true,
                                         disabled: true
@@ -132,10 +124,10 @@ const BuildingInfoPane = (props: any) => {
                                     label="Project"
                                     name="project"
                                     margin="dense"
-                                    defaultValue={project}
+                                    defaultValue={project || "nil"}
                                 />
                                 <TextField
-                                    key={typology}
+                                    key={typology || "typology"}
                                     inputProps={{
                                         readOnly: true,
                                         disabled: true
@@ -145,10 +137,10 @@ const BuildingInfoPane = (props: any) => {
                                     label="Typology"
                                     name="typology"
                                     margin="dense"
-                                    defaultValue={typology}
+                                    defaultValue={typology || "nil"}
                                 />
                                 <TextField
-                                    key={construction_type}
+                                    key={construction_type || "c_type"}
                                     inputProps={{
                                         readOnly: true,
                                         disabled: true
@@ -158,10 +150,10 @@ const BuildingInfoPane = (props: any) => {
                                     label="Construction type"
                                     name="construction_type"
                                     margin="dense"
-                                    defaultValue={construction_type}
+                                    defaultValue={construction_type || "nil"}
                                 />
                                 <TextField
-                                    key={floor_area}
+                                    key={floor_area || "f_area"}
                                     inputProps={{
                                         readOnly: true,
                                         disabled: true
@@ -177,28 +169,28 @@ const BuildingInfoPane = (props: any) => {
                         </Grid>
                         <Grid item xs>
                             <Typography variant="h5" color="textSecondary" gutterBottom>GWP</Typography>
-                            {loading ?
-                                <div>
-                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
-                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
-                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
-                                    <Skeleton><TextField label="a" margin="dense" /></Skeleton>
-                                </div>
-                                :
-                                <div>
-                                    <GWPSingleChart chartData={gwpChartData} height={250} />
-                                </div>
-                            }
+                            <GWPSingleChart chartData={gwpChartData} height={250} />
                         </Grid>
                     </Grid>
 
-                    <Divider variant="middle" light={true} className={classes.divider} />
-
-                    <ElementsAndMaterialsContainer buildingId={building.idbuildings} parentIsLoading={loading} />
+                    <Grid container spacing={3}>
+                        <Grid item xs>
+                            <Divider variant="middle" light={true} className={classes.divider} />
+                            <ElementsAndMaterialsContainer buildingId={building.idbuildings} />
+                        </Grid>
+                    </Grid>
                 </div>
-            </SlidingPane>
-        </div>
+                :
+                <Grid container justify="center" alignItems="center" className={classes.noSelectionContainer}>
+                    <Grid item xs={12}>
+                        <Typography variant="h5" color="textSecondary" align="center">
+                            Select a building
+                            </Typography>
+                    </Grid>
+                </Grid>
+            }
+        </Drawer>
     );
 };
 
-export default BuildingInfoPane;
+export default BuildingDetails;

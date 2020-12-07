@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import allActions from '../../redux/actions';
+
 import { Theme, createStyles, makeStyles, withStyles, WithStyles, emphasize } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import {
@@ -23,7 +27,7 @@ interface Props {
 
 const useStyles = makeStyles({
     overlay: {
-        zIndex: 501
+        zIndex: 1201
     },
 });
 
@@ -33,6 +37,14 @@ const Overlay = (props: any) => {
 };
 
 const GWPSingleChart = (props: Props) => {
+    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+    
+    const gwpChartData: ISingleChartDataItem[] = [
+        { lcaPhase: 'A1-A3', gwp: Number(selectedBuildings[0].A1A3) || 0.0 },
+        { lcaPhase: 'A4', gwp: Number(selectedBuildings[0].A4) || 0.0 },
+        { lcaPhase: 'B4 (m)', gwp: Number(selectedBuildings[0].B4_m) || 0.0 },
+        { lcaPhase: 'B4 (t)', gwp: Number(selectedBuildings[0].B4_t) || 0.0 },
+    ];
 
     const chartData = props.chartData;
     const height = props.height;
@@ -40,8 +52,9 @@ const GWPSingleChart = (props: Props) => {
     return (
         <Paper>
             <Chart
-                data={chartData}
+                data={gwpChartData}
                 height={height}
+                key={selectedBuildings[0].idbuildings}
             >
                 <ValueScale name="gwp" />
                 <ArgumentAxis />
