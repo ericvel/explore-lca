@@ -100,27 +100,6 @@ const CompareBuildingDialog = () => {
         setcheckedLCAPhases({ ...checkedLCAPhases, [event.target.name]: event.target.checked });
     };
 
-    /* useEffect(() => {
-        if (props.buildings !== undefined && props.buildings.length > 0) {
-            // loadData();
-            setBuildings(props.buildings);
-        }
-    }, [props.isOpen]);
- */
-  /*   const loadData = () => {
-        const buildingIdString = props.buildings.join();
-        const buildingQuery = `/buildings/select/${buildingIdString}`;
-        if (!loading) {
-            setLoading(true);
-            fetch(buildingQuery)
-                .then(response => response.json())
-                .then(data => {
-                    setBuildings(data);
-                    setLoading(false);
-                }).catch(() => setLoading(false));
-        }
-    }; */
-
     const handleClose = () => {
         dispatch(allActions.flagActions.toggleCompareDialogOpen());
     };
@@ -166,11 +145,12 @@ const CompareBuildingDialog = () => {
             <DialogContent dividers>
                 <Grid container>
                     <Grid item xs={6}>
-                        {loading ?
-                            <Skeleton variant="rect" /* width={?} */ height={500} />
+                        <GWPCompareChart checkedLCAPhases={checkedLCAPhases} height={500} />
+                        {/* {loading ?
+                            <Skeleton variant="rect" height={500} />
                             :
-                            <GWPCompareChart chartData={gwpChartData} buildingNames={buildingNames} height={500} />
-                        }
+                            <GWPCompareChart checkedLCAPhases={checkedLCAPhases} height={500} />
+                        } */}
                     </Grid>
                     <Grid item xs={6}>
                         <FormControl component="fieldset" className={classes.formControl}>

@@ -5,13 +5,17 @@ import allActions from '../../../redux/actions';
 
 import { createStyles, Theme, withStyles, WithStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
-import Skeleton from '@material-ui/lab/Skeleton';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import ElementsAndMaterialsContainer from '../../ElementsAndMaterialsContainer';
-import GWPSingleChart from '../../GWPSingleChart';
+import GWPCompareChart from '../../GWPCompareChart';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,61 +28,65 @@ const useStyles = makeStyles((theme: Theme) =>
         elementSection: {
             marginTop: theme.spacing(2)
         },
-        buildingInfoLabels: {
-            fontWeight: "bold"
-        },
         content: {
-            // margin: theme.spacing(1),
             padding: theme.spacing(2),
-            // height: '600px'
+        },
+        formControl: {
+            margin: theme.spacing(3),
         },
     }),
 );
 
-const initialBuildingState: IBuilding = {
-    idbuildings: 0,
-    building_identifier: 0,
-    building_name: "",
-    project: "",
-    country: "",
-    city: "",
-    typology: "",
-    construction_type: "",
-    floor_area: 0,
-    A1A3: null,
-    A4: null,
-    B4_m: null,
-    B4_t: null,
-};
-
-const MultipleBuildingsView = (props: any) => {
+const MultipleBuildingsView = () => {
     const dispatch = useDispatch();
 
     const selectedBuildings = useSelector((state: IRootState) => state.buildings);
-    const [building, setBuilding] = useState<IBuilding>(initialBuildingState);
+    const [checkedLCAPhases, setcheckedLCAPhases] = useState({
+        a1a3: true,
+        a4: true,
+        b4_m: true,
+        b4_t: true,
+    });
 
-    useEffect(() => {
-        if (selectedBuildings.length > 0) {
-            setBuilding(selectedBuildings[0]);
-        }
-    }, [selectedBuildings]);
+    const handleCheckedLCAPhaseChange = (event: any) => {
+        setcheckedLCAPhases({ ...checkedLCAPhases, [event.target.name]: event.target.checked });
+    };
 
-    const {
-        building_identifier, building_name, project, typology, construction_type, floor_area, A1A3, A4, B4_m, B4_t
-    } = building;
-
-    const gwpChartData: ISingleChartDataItem[] = [
-        { lcaPhase: 'A1-A3', gwp: Number(A1A3) || 0.0 },
-        { lcaPhase: 'A4', gwp: Number(A4) || 0.0 },
-        { lcaPhase: 'B4 (m)', gwp: Number(B4_m) || 0.0 },
-        { lcaPhase: 'B4 (t)', gwp: Number(B4_t) || 0.0 },
-    ];
+    const { a1a3, a4, b4_m, b4_t } = checkedLCAPhases;
 
     const classes = useStyles();
 
     return (
         <div className={classes.content}>
-            MULTIPLE BUILDIIIIINGS
+            <Grid container>
+                <Grid item xs={12}>
+                    <GWPCompareChart checkedLCAPhases={checkedLCAPhases} height={500} />
+                </Grid>
+                <Grid item xs={6}>
+                    <FormControl component="fieldset" className={classes.formControl}>
+                        <FormLabel component="legend">LCA Phases</FormLabel>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={<Checkbox checked={a1a3} onChange={handleCheckedLCAPhaseChange} name="a1a3" />}
+                                label="A1-A3"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={a4} onChange={handleCheckedLCAPhaseChange} name="a4" />}
+                                label="A4"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={b4_m} onChange={handleCheckedLCAPhaseChange} name="b4_m" />}
+                                label="B4 (m)"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={b4_t} onChange={handleCheckedLCAPhaseChange} name="b4_t" />}
+                                label="B4 (t)"
+                            />
+                        </FormGroup>
+                        {/* <FormHelperText>Helper text</FormHelperText> */}
+                    </FormControl>
+                </Grid>
+            </Grid>
         </div>
     );
 };

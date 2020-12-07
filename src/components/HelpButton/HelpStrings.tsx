@@ -19,7 +19,7 @@ class HelpStrings {
                     Click on a row to see more details about the building, including its <b>building elements</b> and <b>materials</b>.
                 </li>
                 <li>
-                Select multiple rows to compare buildings and calculate average values.  You must select <b>at least two buildings</b>.
+                    Select multiple rows to compare buildings and calculate average values.
                 </li>
             </ul>
         </div>
