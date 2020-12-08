@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import allActions from '../../redux/actions';
 import { IRootState } from '../../redux/reducers';
 
+import 'devextreme/dist/css/dx.common.css';
+import 'dx.material.blue.light.css';
+
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
