@@ -5,6 +5,13 @@ import allActions from '../../redux/actions';
 
 import { Theme, createStyles, makeStyles, withStyles, WithStyles, emphasize } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+
 import {
     Chart,
     BarSeries,
@@ -19,27 +26,30 @@ import {
     EventTracker,
     ValueScale,
     Animation,
-    Stack
+    Stack,
+    SeriesRef
 } from '@devexpress/dx-react-chart';
-import { createReadStream } from "fs";
+import * as d3Format from 'd3-format';
 
 interface Props {
-    /* chartData: any[];//ICompareChartDataItem[];
-    buildingNames: any[]; */
     height: number;
-    checkedLCAPhases: {
-        a1a3: boolean;
-        a4: boolean;
-        b4_m: boolean;
-        b4_t: boolean;
-    };
 }
 
-const useStyles = makeStyles({
-    overlay: {
-        zIndex: 1201
-    },
-});
+interface IBarSeries {
+    name: string;
+    key: string;
+}
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        overlay: {
+            zIndex: 1201
+        },
+        formControl: {
+            margin: theme.spacing(3),
+        },
+    }),
+);
 
 const Overlay = (props: any) => {
     const classes = useStyles();
@@ -49,10 +59,22 @@ const Overlay = (props: any) => {
 const GWPCompareChart = (props: Props) => {
     const selectedBuildings = useSelector((state: IRootState) => state.buildings);
     const [chartData, setChartData] = useState<any[]>([]);
-    const [buildingNames, setBuildingNames] = useState<any[]>([]);
-    const [series, setSeries] = useState<JSX.Element[]>();
+    const [barSeries, setBarSeries] = useState<IBarSeries[]>([]);
     const [dataKey, setDataKey] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [tooltipTarget, setTooltipTarget] = useState<SeriesRef>();
+
+    const [checkedLCAPhases, setcheckedLCAPhases] = useState({
+        a1a3: true,
+        a4: true,
+        b4_m: true,
+        b4_t: true,
+    });
+
+    const handleCheckedLCAPhaseChange = (event: any) => {
+        setcheckedLCAPhases({ ...checkedLCAPhases, [event.target.name]: event.target.checked });
+    };
+
+    const { a1a3, a4, b4_m, b4_t } = checkedLCAPhases;
 
     useEffect(() => {
         var currentKey = "";
@@ -62,14 +84,12 @@ const GWPCompareChart = (props: Props) => {
         });
 
         setDataKey(currentKey);
-        
+
         createChartData();
-        
-    }, [selectedBuildings, props.checkedLCAPhases]);
+
+    }, [selectedBuildings, checkedLCAPhases]);
 
     const createChartData = () => {
-        const { a1a3, a4, b4_m, b4_t } = props.checkedLCAPhases;
-
         var chartData: any[] = [];
         var buildingNames: any[] = [];
 
@@ -99,45 +119,113 @@ const GWPCompareChart = (props: Props) => {
         });
 
         setChartData(chartData);
-        setBuildingNames(buildingNames);
+        setBarSeries(buildingNames);
     }
 
+    const changeTooltip = (targetItem: SeriesRef) => setTooltipTarget(targetItem);
+
+    const tooltipContentTitleStyle = {
+        fontWeight: 'bold',
+        paddingBottom: 0,
+    };
+    const tooltipContentBodyStyle = {
+        paddingTop: 0,
+    };
+    const formatTooltip = d3Format.format(',.2r');
+    const TooltipContent = (props: any) => {
+        const { targetItem, text, ...restProps } = props;
+        const selectedSeries = barSeries.find(series => series.name === targetItem.series);
+        console.log("Tooltip targetItem: ", targetItem);
+        return (
+            <div>
+                <div>
+                    <Tooltip.Content
+                        {...restProps}
+                        style={tooltipContentTitleStyle}
+                        text={targetItem.series}
+                    />
+                </div>
+                <div>
+                    <Tooltip.Content
+                        {...restProps}
+                        style={tooltipContentBodyStyle}
+                        text={(chartData[targetItem.point][selectedSeries?.key || -1])}
+                    />
+                </div>
+            </div>
+        );
+    };
+
+
     const height = props.height;
+
+    const classes = useStyles();
 
 
     return (
         <div key={dataKey}>
             <Paper>
-                <Chart
-                    data={chartData}
-                    // width={800}
-                    height={height}
-                >
-                    <ValueScale name="gwp" />
-                    <ArgumentAxis />
-                    <ValueAxis
-                        scaleName="gwp"
-                        showGrid={false}
-                        showLine={true}
-                        showTicks={true}
-                    />
-                    {buildingNames.map(({
-                        name, key
-                    }) =>
-                        <BarSeries
-                            key={key}
-                            name={name}
-                            valueField={key}
-                            argumentField='lcaPhase'
-                            scaleName='gwp'
-                        />
-                    )}
-                    <Stack />
-                    <Legend />
-                    <EventTracker />
-                    <Tooltip overlayComponent={Overlay} />
-                    <Animation duration={700} />
-                </Chart>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Chart
+                            data={chartData}
+                            height={height}
+                        >
+                            <ValueScale name="gwp" />
+                            <ArgumentAxis />
+                            <ValueAxis
+                                scaleName="gwp"
+                                showGrid={false}
+                                showLine={true}
+                                showTicks={true}
+                            />
+                            {barSeries.map(({
+                                name, key
+                            }) =>
+                                <BarSeries
+                                    key={key}
+                                    name={name}
+                                    valueField={key}
+                                    argumentField='lcaPhase'
+                                    scaleName='gwp'
+                                />
+                            )}
+                            <Stack />
+                            <Legend />
+                            <EventTracker />
+                            <Tooltip 
+                                targetItem={tooltipTarget}
+                                onTargetItemChange={changeTooltip}
+                                overlayComponent={Overlay}
+                                contentComponent={TooltipContent}
+                            />
+                            <Animation duration={600} />
+                        </Chart>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl component="fieldset" className={classes.formControl}>
+                            <FormLabel component="legend">LCA Phases</FormLabel>
+                            <FormGroup row>
+                                <FormControlLabel
+                                    control={<Checkbox checked={a1a3} onChange={handleCheckedLCAPhaseChange} name="a1a3" />}
+                                    label="A1-A3"
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={a4} onChange={handleCheckedLCAPhaseChange} name="a4" />}
+                                    label="A4"
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={b4_m} onChange={handleCheckedLCAPhaseChange} name="b4_m" />}
+                                    label="B4 (m)"
+                                />
+                                <FormControlLabel
+                                    control={<Checkbox checked={b4_t} onChange={handleCheckedLCAPhaseChange} name="b4_t" />}
+                                    label="B4 (t)"
+                                />
+                            </FormGroup>
+                        </FormControl>
+                    </Grid>
+                </Grid>
             </Paper>
         </div>
     );
