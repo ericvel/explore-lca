@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ReactText } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import allActions from '../../redux/actions';
 import { IRootState } from '../../redux/reducers';
@@ -6,16 +6,11 @@ import { IRootState } from '../../redux/reducers';
 import { Theme, createStyles, makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline';
 
 import BuildingsTable from '../BuildingsTable';
 import BuildingDetails from '../BuildingDetails';
-import BuildingInfoPane from '../BuildingInfoPane';
-import CompareBuildingsDialog from '../CompareBuildingsDialog';
+import CompareBuildingsDialog from '../UnusedComponents/CompareBuildingsDialog';
 import HelpButton from '../HelpButton';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,13 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function App() {
-  const dispatch = useDispatch();
-  const selectedBuildings = useSelector((state: IRootState) => state.buildings);
-
-  function handleCompareButtonClick() {
-    dispatch(allActions.flagActions.toggleCompareDialogOpen());
-  }
-
   const classes = useStyles();
 
   return (
@@ -62,15 +50,10 @@ function App() {
           <Grid item xs={12}>
             <BuildingsTable />
           </Grid>
-
-          <Grid item xs={12}>
-            <Button variant="contained" onClick={handleCompareButtonClick} disabled={selectedBuildings.length < 2} >Compare buildings</Button>
-          </Grid>
         </Grid>
       </Grid>
 
       <BuildingDetails />
-      {/* <BuildingInfoPane /> */}
       <CompareBuildingsDialog />
     </Container>
   );

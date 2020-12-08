@@ -5,16 +5,7 @@ import allActions from '../../../redux/actions';
 
 import { createStyles, Theme, withStyles, WithStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
 
-import ElementsAndMaterialsContainer from '../../ElementsAndMaterialsContainer';
 import GWPCompareChart from '../../GWPCompareChart';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const MultipleBuildingsView = () => {
     const dispatch = useDispatch();
 
-    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+    const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
     const classes = useStyles();
 
     return (

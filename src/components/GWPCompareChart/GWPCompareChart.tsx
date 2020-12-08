@@ -57,7 +57,7 @@ const Overlay = (props: any) => {
 };
 
 const GWPCompareChart = (props: Props) => {
-    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+    const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
     const [chartData, setChartData] = useState<any[]>([]);
     const [barSeries, setBarSeries] = useState<IBarSeries[]>([]);
     const [dataKey, setDataKey] = useState("");
@@ -134,7 +134,7 @@ const GWPCompareChart = (props: Props) => {
     const formatTooltip = d3Format.format(',.2r');
     const TooltipContent = (props: any) => {
         const { targetItem, text, ...restProps } = props;
-        const selectedSeries = barSeries.find(series => series.name === targetItem.series);
+        const targetSeries = barSeries.find(series => series.name === targetItem.series);
         console.log("Tooltip targetItem: ", targetItem);
         return (
             <div>
@@ -149,7 +149,7 @@ const GWPCompareChart = (props: Props) => {
                     <Tooltip.Content
                         {...restProps}
                         style={tooltipContentBodyStyle}
-                        text={(chartData[targetItem.point][selectedSeries?.key || -1])}
+                        text={chartData[targetItem.point][targetSeries?.key || -1]}
                     />
                 </div>
             </div>

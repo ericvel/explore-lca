@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const BuildingDetails = () => {
     const dispatch = useDispatch();
 
-    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+    const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
     const canSelectMultipleBuildings = useSelector((state: IRootState) => state.canSelectMultipleBuildings);
 
     const classes = useStyles();

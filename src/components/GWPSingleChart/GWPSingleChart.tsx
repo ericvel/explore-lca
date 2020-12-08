@@ -37,7 +37,7 @@ const Overlay = (props: any) => {
 };
 
 const GWPSingleChart = (props: Props) => {
-    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+    const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
     
     const gwpChartData: ISingleChartDataItem[] = [
         { lcaPhase: 'A1-A3', gwp: Number(selectedBuildings[0].A1A3) || 0.0 },

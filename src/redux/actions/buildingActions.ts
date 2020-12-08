@@ -1,19 +1,27 @@
-import { SELECT_BUILDINGS, DESELECT_ALL_BUILDINGS, BuildingActionTypes } from './types'
+import { SET_BUILDINGS, BuildingActionTypes, SELECT_BUILDINGS, DESELECT_ALL_BUILDINGS, SelectedBuildingActionTypes } from './types'
 
-const selectBuildings = (buildings: IBuilding[]): BuildingActionTypes => {
+const setBuildings = (buildings: IBuilding[]): BuildingActionTypes => {
+    return {
+        type: SET_BUILDINGS,
+        payload: buildings
+    }
+}
+
+const selectBuildings = (buildings: IBuilding[]): SelectedBuildingActionTypes => {
     return {
         type: SELECT_BUILDINGS,
         payload: buildings
     }
 }
 
-const deselectAllBuildings = (): BuildingActionTypes => {
+const deselectAllBuildings = (): SelectedBuildingActionTypes => {
     return {
         type: DESELECT_ALL_BUILDINGS
     }
 }
 
 export default {
+    setBuildings,
     selectBuildings,
     deselectAllBuildings
 }

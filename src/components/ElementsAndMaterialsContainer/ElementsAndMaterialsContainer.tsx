@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ElementsAndMaterialsContainer = (props: any) => {    
     const dispatch = useDispatch();
-    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+    const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
 
     const [loading, setLoading] = useState(false);
     const [allMaterialsChecked, setAllMaterialsChecked] = useState(false);

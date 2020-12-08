@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import allActions from '../../redux/actions';
-import { IRootState } from '../../redux/reducers';
+import allActions from '../../../redux/actions';
+import { IRootState } from '../../../redux/reducers';
 
 import { Theme, createStyles, makeStyles, withStyles, WithStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -24,7 +24,7 @@ import Slide from '@material-ui/core/Slide';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { TransitionProps } from '@material-ui/core/transitions';
 
-import GWPCompareChart from '../GWPCompareChart';
+import GWPCompareChart from '../../GWPCompareChart';
 
 const styles = (theme: Theme) =>
     createStyles({
@@ -84,7 +84,7 @@ const DialogActions = withStyles((theme: Theme) => ({
 
 const CompareBuildingDialog = () => {        
     const dispatch = useDispatch();
-    const buildings = useSelector((state: IRootState) => state.buildings);
+    const buildings = useSelector((state: IRootState) => state.selectedBuildings);
     const isCompareDialogOpen = useSelector((state: IRootState) => state.isCompareDialogOpen);
 
     const [loading, setLoading] = useState(false);

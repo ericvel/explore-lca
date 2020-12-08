@@ -1,3 +1,5 @@
+export const SET_BUILDINGS = 'SET_BUILDINGS';
+
 export const SELECT_BUILDINGS = 'SELECT_BUILDINGS';
 export const DESELECT_ALL_BUILDINGS = 'DESELECT_ALL_BUILDINGS';
 
@@ -7,6 +9,10 @@ export const TOGGLE_COMPARE_DIALOG_OPEN = 'TOGGLE_COMPARE_DIALOG_OPEN';
 export const SET_BUILDING_ELEMENTS = 'SET_BUILDING_ELEMENTS';
 export const SET_MATERIAL_INVENTORY = 'SET_MATERIAL_INVENTORY';
 
+interface SetBuildingsAction {
+    type: typeof SET_BUILDINGS;
+    payload: IBuilding[];
+}
 
 interface SelectBuildingsAction {
     type: typeof SELECT_BUILDINGS;
@@ -35,7 +41,8 @@ export type ToggleCompareDialogOpen = {
     type: typeof TOGGLE_COMPARE_DIALOG_OPEN;
 }
 
-export type BuildingActionTypes = SelectBuildingsAction | DeselectAllBuildingsAction;
+export type BuildingActionTypes = SetBuildingsAction;
+export type SelectedBuildingActionTypes = SelectBuildingsAction | DeselectAllBuildingsAction;
 export type BuildingElementActionTypes = SetBuildingElementsAction;
 export type MaterialInventoryActionTypes = SetMaterialInventoryAction;
 // export type { ToggleSelectMultipleSwitchAction };

@@ -1,4 +1,4 @@
-.loading-shading-mui {
+/* .loading-shading-mui {
     position: absolute;
     top: 0;
     left: 0;
@@ -6,12 +6,12 @@
     height: 100%;
   
     background: rgba(255, 255, 255, .3);
-  }
+  } */
   
   .loading-icon-mui {
     position: absolute;
-    font-size: 20px;
-    top: calc(45% - 10px);
-    left: calc(50% - 10px);
+    font-size: 40px;
+    top: calc(55% - 10px);
+    left: calc(25% - 10px);
   }
   

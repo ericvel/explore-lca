@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import allActions from '../../redux/actions';
-import { IRootState } from '../../redux/reducers';
+import allActions from '../../../redux/actions';
+import { IRootState } from '../../../redux/reducers';
 
 import { createStyles, Theme, withStyles, WithStyles, makeStyles } from '@material-ui/core/styles';
 import SlidingPane from "react-sliding-pane";
-import "react-sliding-pane/dist/react-sliding-pane.css";
+import "../UnusedComponents/BuildingInfoDrawer/node_modules/react-sliding-pane/dist/react-sliding-pane.css";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -16,8 +16,8 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import IconButton from '@material-ui/core/IconButton';
 import './BuildingInfoPane.css';
 
-import ElementsAndMaterialsContainer from '../ElementsAndMaterialsContainer';
-import GWPSingleChart from '../GWPSingleChart';
+import ElementsAndMaterialsContainer from '../../ElementsAndMaterialsContainer';
+import GWPSingleChart from '../../GWPSingleChart';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -61,7 +61,7 @@ const initialBuildingState: IBuilding = {
 const BuildingInfoPane = (props: any) => {
     const dispatch = useDispatch();
 
-    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+    const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
     const multipleSwitchChecked = useSelector((state: IRootState) => state.canSelectMultipleBuildings);
 
     const [isPaneOpen, setIsPaneOpen] = useState(false);

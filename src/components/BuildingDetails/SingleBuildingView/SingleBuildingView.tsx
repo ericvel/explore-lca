@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
-import Skeleton from '@material-ui/lab/Skeleton';
 
 import ElementsAndMaterialsContainer from '../../ElementsAndMaterialsContainer';
 import GWPSingleChart from '../../GWPSingleChart';
@@ -54,14 +53,8 @@ const initialBuildingState: IBuilding = {
 const SingleBuildingView = (props: any) => {
     const dispatch = useDispatch();
 
-    const selectedBuildings = useSelector((state: IRootState) => state.buildings);
+    const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
     const [building, setBuilding] = useState<IBuilding>(initialBuildingState);
-
-    /* useEffect(() => {
-        if (selectedBuildings.length > 0) {
-            setBuilding(selectedBuildings[0]);
-        }
-    }, [selectedBuildings]); */
 
     const {
         building_identifier, building_name, project, typology, construction_type, floor_area, A1A3, A4, B4_m, B4_t
