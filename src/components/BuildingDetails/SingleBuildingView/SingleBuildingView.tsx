@@ -135,7 +135,7 @@ const SingleBuildingView = (props: any) => {
                     </div>
                 </Grid>
                 <Grid item xs>
-                    <Typography variant="h5" color="textSecondary" gutterBottom>GWP</Typography>
+                    <Typography variant="h5" color="textSecondary" gutterBottom>Embodied emissions</Typography>
                     <GWPSingleChart chartData={gwpChartData} height={250} />
                 </Grid>
             </Grid>
