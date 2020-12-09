@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const initialBuildingState: IBuilding = {
     idbuildings: 0,
-    building_identifier: 0,
+    building_identifier: "",
     building_name: "",
     project: "",
     country: "",

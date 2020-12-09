@@ -145,7 +145,7 @@ const CompareBuildingDialog = () => {
             <DialogContent dividers>
                 <Grid container>
                     <Grid item xs={6}>
-                        <GWPCompareChart height={500} />
+                        <GWPCompareChart />
                         {/* {loading ?
                             <Skeleton variant="rect" height={500} />
                             :

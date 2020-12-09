@@ -38,7 +38,7 @@ const MultipleBuildingsView = () => {
         <div className={classes.content}>
             <Grid container>
                 <Grid item xs={12}>
-                    <GWPCompareChart height={400} />
+                    <GWPCompareChart />
                 </Grid>
             </Grid>
         </div>

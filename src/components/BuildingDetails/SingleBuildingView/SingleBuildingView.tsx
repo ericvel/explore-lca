@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const initialBuildingState: IBuilding = {
     idbuildings: 0,
-    building_identifier: 0,
+    building_identifier: "",
     building_name: "",
     project: "",
     country: "",
@@ -134,7 +134,7 @@ const SingleBuildingView = (props: any) => {
                         />
                     </div>
                 </Grid>
-                <Grid item xs>
+                <Grid item xs={6}>
                     <Typography variant="h5" color="textSecondary" gutterBottom>Embodied emissions</Typography>
                     <GWPSingleChart chartData={gwpChartData} height={250} />
                 </Grid>

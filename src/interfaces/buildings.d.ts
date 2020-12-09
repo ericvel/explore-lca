@@ -1,6 +1,6 @@
 interface IBuilding {
     idbuildings: number;
-    building_identifier: number;
+    building_identifier: string;
     building_name: string;
     project: string;
     country: string;
@@ -76,13 +76,14 @@ interface ISingleChartDataItem {
     gwp: number,
 }
 
-/* interface ICompareChartDataItem {
-    buildingName: string;
+interface ICompareChartDataItem {
+    name: string;
+    identifier: string;
     a1a3: number;
     a4: number;
-    b4_m: number;
-    b4_t: number;
-} */
+    b4m: number;
+    b4t: number;
+}
 
 interface ITestChartData {
     lcaPhase: string
@@ -90,9 +91,4 @@ interface ITestChartData {
 
 interface IValue {
     prop: string | number;
-}
-
-interface ICompareChartDataItem {
-    lcaPhase: string;
-    [key: string]: string | number;
 }
