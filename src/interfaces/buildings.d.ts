@@ -85,6 +85,15 @@ interface ICompareChartDataItem {
     b4t: number;
 }
 
+interface IElementChartDataItem {
+    name: string;
+    id: number;
+    a1a3: number;
+    a4: number;
+    b4m: number;
+    b4t: number;
+}
+
 interface ITestChartData {
     lcaPhase: string
 }

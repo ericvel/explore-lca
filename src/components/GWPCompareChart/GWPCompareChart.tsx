@@ -14,24 +14,14 @@ import {
     Legend,
     ValueAxis,
     Title,
-    Export,
-    Tooltip
+    Tooltip,
+    Size
 } from 'devextreme-react/chart';
-import { getPalette } from 'devextreme/viz/palette';
-
-interface Props {
-    height: number;
-}
-
-interface IBarSeries {
-    name: string;
-    key: string;
-}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         chart: {
-            height: 600,
+            // height: 600,
             padding: theme.spacing(2)
         }
     }),
@@ -42,11 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const GWPCompareChart = () => {
     const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
     const [chartData, setChartData] = useState<ICompareChartDataItem[]>([]);
-    // const [barSeries, setBarSeries] = useState<IBarSeries[]>([]);
-    // const [dataKey, setDataKey] = useState("");
-    // const [tooltipTarget, setTooltipTarget] = useState<SeriesRef>();
-
-
 
     useEffect(() => {
         const chartData: ICompareChartDataItem[] = [];
@@ -58,7 +43,7 @@ const GWPCompareChart = () => {
                 a1a3: Number(building.A1A3) || 0.0,
                 a4: Number(building.A4) || 0.0,
                 b4m: Number(building.B4_m) || 0.0,
-                b4t: Number(building.B4_t)|| 0.0,
+                b4t: Number(building.B4_t) || 0.0,
             }
 
             chartData.push(dataEntry);
@@ -69,7 +54,7 @@ const GWPCompareChart = () => {
 
     const customizeTooltip = (arg: any) => {
         return {
-            text: `${arg.seriesName}: ${arg.valueText}`
+            text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`
         };
     }
 
@@ -81,9 +66,12 @@ const GWPCompareChart = () => {
             title="Embodied emissions"
             dataSource={chartData}
             palette="Material"
-            
+
         >
-            <CommonSeriesSettings argumentField="name" type="stackedBar" />
+            <Size
+                height={600}
+            />
+            <CommonSeriesSettings argumentField="name" type="stackedBar" barWidth={70} />
             <Series
                 valueField="a1a3"
                 name="A1-A3"

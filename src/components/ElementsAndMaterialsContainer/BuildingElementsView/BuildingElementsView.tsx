@@ -7,6 +7,18 @@ import Grid from '@material-ui/core/Grid';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Chip from '@material-ui/core/Chip';
 import HomeIcon from '@material-ui/icons/Home';
+import Paper from '@material-ui/core/Paper';
+
+import {
+    Chart,
+    Series,
+    CommonSeriesSettings,
+    Legend,
+    ValueAxis,
+    Title,
+    Tooltip,
+    Size
+} from 'devextreme-react/chart';
 
 import BuildingElementItem from '../BuildingElementItem';
 import MaterialsTable from "../MaterialsTable";
@@ -16,6 +28,10 @@ const useStyles = makeStyles((theme: Theme) =>
         breadCrumbs: {
             marginBottom: theme.spacing(2)
         },
+        chart: {
+            // height: 600,
+            padding: theme.spacing(2)
+        }
     }),
 );
 
@@ -48,13 +64,34 @@ const initialSelectedElementState: IBuildingElement = {
     idparent: null
 };
 
-const BuildingElementsView = (props: any) => {    
-    const buildingElements = useSelector((state: IRootState) => state.buildingElements);    
+const BuildingElementsView = (props: any) => {
+    const buildingElements = useSelector((state: IRootState) => state.buildingElements);
     const materialInventory = useSelector((state: IRootState) => state.materialInventory);
-    
+
     const [selectedElement, setSelectedElement] = useState<IBuildingElement>(initialSelectedElementState);
     const [elementRoute, setElementRoute] = useState<IBuildingElement[]>([]);
-    
+
+    const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
+
+    useEffect(() => {
+        const childElements = getChildElements(selectedElement);
+        const chartData: IElementChartDataItem[] = [];
+
+        childElements.forEach(element => {
+            const dataEntry: IElementChartDataItem = {
+                name: element.name,
+                id: element.idbuilding_elements,
+                a1a3: Number(element.A1A3) || 0.0,
+                a4: Number(element.A4) || 0.0,
+                b4m: Number(element.B4_m) || 0.0,
+                b4t: Number(element.B4_t) || 0.0,
+            }
+
+            chartData.push(dataEntry);
+        });
+
+        setChartData(chartData);
+    }, [selectedElement]);
 
     useEffect(() => {
         const rootElement = buildingElements.find((element: IBuildingElement) => element.hierarchy === 0);
@@ -104,6 +141,12 @@ const BuildingElementsView = (props: any) => {
         setElementRoute(tempRoute);
     };
 
+    const customizeTooltip = (arg: any) => {
+        return {
+            text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`
+        };
+    }
+
     const childElements = getChildElements(selectedElement);
 
     const classes = useStyles();
@@ -123,16 +166,69 @@ const BuildingElementsView = (props: any) => {
                             />
                         )}
                     </Breadcrumbs>
-                    { childElements?.length > 0 ?
-                        childElements.map((child, index) =>
-                            <BuildingElementItem
-                                key={child.idlevels || index}
-                                element={child}
-                                hasMaterials={getElementMaterials(child)?.length > 0}
-                                onClickChildElementButton={goToChildElement}
-                                onClickElementMaterialsButton={goToElementMaterials}
-                            />
-                        )
+                    {childElements?.length > 0 ?
+                        <div>
+                            {childElements.map((child, index) =>
+                                <BuildingElementItem
+                                    key={child.idlevels || index}
+                                    element={child}
+                                    hasMaterials={getElementMaterials(child)?.length > 0}
+                                    onClickChildElementButton={goToChildElement}
+                                    onClickElementMaterialsButton={goToElementMaterials}
+                                />
+                            )}
+                            <Paper>
+                                <Chart
+                                    className={classes.chart}
+                                    title="Embodied emissions"
+                                    dataSource={chartData}
+                                    palette="Material"
+                                    rotated={true}
+                                >
+                                    <Size
+                                        height={600}
+                                    />
+                                    <CommonSeriesSettings argumentField="name" type="stackedBar" barWidth={60} />
+                                    <Series
+                                        valueField="a1a3"
+                                        name="A1-A3"
+                                    />
+                                    <Series
+                                        valueField="a4"
+                                        name="A4"
+                                    />
+                                    <Series
+                                        valueField="b4m"
+                                        name="B4 (m)"
+                                    />
+                                    <Series
+                                        valueField="b4t"
+                                        name="B4 (t)"
+                                    />
+                                    <ValueAxis>
+                                        <Title
+                                            text={"kgCO2e/m\xB2"}
+                                            font={{
+                                                size: 14
+                                            }}
+                                        />
+                                    </ValueAxis>
+                                    <Legend
+                                        verticalAlignment="bottom"
+                                        horizontalAlignment="center"
+                                        itemTextPosition="top"
+                                    />
+                                    <Tooltip
+                                        enabled={true}
+                                        location="edge"
+                                        customizeTooltip={customizeTooltip}
+                                        zIndex={1200}
+                                        arrowLength={6}
+                                        format="fixedPoint"
+                                    />
+                                </Chart>
+                            </Paper>
+                        </div>
                         :
                         <MaterialsTable elementInventory={getElementMaterials(selectedElement)} />
                     }
