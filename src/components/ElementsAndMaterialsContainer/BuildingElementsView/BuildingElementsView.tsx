@@ -22,6 +22,7 @@ import {
 
 import BuildingElementItem from '../BuildingElementItem';
 import MaterialsTable from "../MaterialsTable";
+import GWPElementMaterialChart from '../../GWPElementMaterialChart';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -141,12 +142,6 @@ const BuildingElementsView = (props: any) => {
         setElementRoute(tempRoute);
     };
 
-    const customizeTooltip = (arg: any) => {
-        return {
-            text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`
-        };
-    }
-
     const childElements = getChildElements(selectedElement);
 
     const classes = useStyles();
@@ -178,55 +173,7 @@ const BuildingElementsView = (props: any) => {
                                 />
                             )}
                             <Paper>
-                                <Chart
-                                    className={classes.chart}
-                                    title="Embodied emissions"
-                                    dataSource={chartData}
-                                    palette="Material"
-                                    rotated={true}
-                                >
-                                    <Size
-                                        height={600}
-                                    />
-                                    <CommonSeriesSettings argumentField="name" type="stackedBar" barWidth={60} />
-                                    <Series
-                                        valueField="a1a3"
-                                        name="A1-A3"
-                                    />
-                                    <Series
-                                        valueField="a4"
-                                        name="A4"
-                                    />
-                                    <Series
-                                        valueField="b4m"
-                                        name="B4 (m)"
-                                    />
-                                    <Series
-                                        valueField="b4t"
-                                        name="B4 (t)"
-                                    />
-                                    <ValueAxis>
-                                        <Title
-                                            text={"kgCO2e/m\xB2"}
-                                            font={{
-                                                size: 14
-                                            }}
-                                        />
-                                    </ValueAxis>
-                                    <Legend
-                                        verticalAlignment="bottom"
-                                        horizontalAlignment="center"
-                                        itemTextPosition="top"
-                                    />
-                                    <Tooltip
-                                        enabled={true}
-                                        location="edge"
-                                        customizeTooltip={customizeTooltip}
-                                        zIndex={1200}
-                                        arrowLength={6}
-                                        format="fixedPoint"
-                                    />
-                                </Chart>
+                                <GWPElementMaterialChart chartData={chartData} />
                             </Paper>
                         </div>
                         :
