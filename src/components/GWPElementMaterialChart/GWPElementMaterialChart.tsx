@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         chart: {
             padding: theme.spacing(2)
+        },
+        argumentAxisLabel: {
+            fill: "#767676",
         }
     }),
 );
@@ -39,21 +42,36 @@ const GWPElementMaterialChart = (props: Props) => {
     // const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
     const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
 
-    useEffect(() => {      
+    useEffect(() => {
         setChartData(props.chartData);
     }, [props.chartData]);
 
-    const customizeArgumentAxisLabel = (props: any) => {
-        console.log("Props: ", props)
-        return (
-            <Label text="yoyoy"  />
-        );
+    /*   const customizeArgumentAxisLabel = (props: any) => {
+          console.log("Props: ", props)
+          return (
+              <Label text="yoyoy"  />
+          );
+      }
+   */
+    const customizeArgumentAxisLabel = (label: { valueText: React.ReactNode; }) => {
+        return <p>{label.valueText}</p>;
     }
 
     const customizeTooltip = (arg: any) => {
         return {
             text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`
         };
+    }
+
+    const LabelTemplate = (data: { valueText: React.ReactNode; }) => {
+        // const classes = useStyles();
+
+        return (
+            <svg overflow="visible">
+                {/* <image filter="url(#DevExpress_shadow_filter)" y="0" width="60" height="40" href={getFilePath(data.valueText)}></image> */}
+                <text className={classes.argumentAxisLabel} x="30" y="59" textAnchor="middle">{data.valueText}</text>
+            </svg>
+        );
     }
 
     const height = 200 + (chartData.length * 70);
@@ -100,7 +118,8 @@ const GWPElementMaterialChart = (props: Props) => {
                 <Label
                     // rotationAngle={45}
                     overlappingBehavior="none"
-                    // component={customizeArgumentAxisLabel}
+                    text="test"
+                    // render={LabelTemplate}
                 />
             </ArgumentAxis>
             <Legend
