@@ -3,11 +3,13 @@ export const SET_BUILDINGS = 'SET_BUILDINGS';
 export const SELECT_BUILDINGS = 'SELECT_BUILDINGS';
 export const DESELECT_ALL_BUILDINGS = 'DESELECT_ALL_BUILDINGS';
 
-export const TOGGLE_CAN_SELECT_MULTIPLE = 'TOGGLE_CAN_SELECT_MULTIPLE';
-export const TOGGLE_COMPARE_DIALOG_OPEN = 'TOGGLE_COMPARE_DIALOG_OPEN';
-
 export const SET_BUILDING_ELEMENTS = 'SET_BUILDING_ELEMENTS';
 export const SET_MATERIAL_INVENTORY = 'SET_MATERIAL_INVENTORY';
+export const SELECT_BUILDING_ELEMENT = 'SELECT_BUILDING_ELEMENT';
+export const SET_BUILDING_ELEMENT_ROUTE = 'SET_BUILDING_ELEMENT_ROUTE';
+
+export const TOGGLE_CAN_SELECT_MULTIPLE = 'TOGGLE_CAN_SELECT_MULTIPLE';
+export const TOGGLE_COMPARE_DIALOG_OPEN = 'TOGGLE_COMPARE_DIALOG_OPEN';
 
 interface SetBuildingsAction {
     type: typeof SET_BUILDINGS;
@@ -33,6 +35,16 @@ interface SetMaterialInventoryAction {
     payload: IMaterialInventory[];
 }
 
+export interface SelectBuildingElementAction {
+    type: typeof SELECT_BUILDING_ELEMENT;
+    payload: IBuildingElement;
+}
+
+export interface SetBuildingElementRouteAction {
+    type: typeof SET_BUILDING_ELEMENT_ROUTE;
+    payload: IBuildingElement[];
+}
+
 export type ToggleCanSelectMultipleAction = {
     type: typeof TOGGLE_CAN_SELECT_MULTIPLE;
 }
@@ -45,4 +57,5 @@ export type BuildingActionTypes = SetBuildingsAction;
 export type SelectedBuildingActionTypes = SelectBuildingsAction | DeselectAllBuildingsAction;
 export type BuildingElementActionTypes = SetBuildingElementsAction;
 export type MaterialInventoryActionTypes = SetMaterialInventoryAction;
+// export type SelectedBuildingElementActionTypes = SelectBuildingElementAction;
 // export type { ToggleSelectMultipleSwitchAction };

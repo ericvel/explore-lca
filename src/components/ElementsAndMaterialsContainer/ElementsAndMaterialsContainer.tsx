@@ -82,9 +82,9 @@ const ElementsAndMaterialsContainer = (props: any) => {
                 </div>
                 :
                 allMaterialsChecked ?
-                    <MaterialsTable elementInventory={false} /* materialInventory={materialInventory} */ />
+                    <MaterialsTable elementInventory={false} />
                     :
-                    <BuildingElementsView /* buildingElements={buildingElements} materialInventory={materialInventory} */ />
+                    <BuildingElementsView />
             }
         </div>
     );

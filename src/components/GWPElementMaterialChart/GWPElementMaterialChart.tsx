@@ -43,7 +43,7 @@ const GWPElementMaterialChart = (props: Props) => {
     const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
 
     useEffect(() => {
-        setChartData(props.chartData);
+        setChartData(props.chartData.reverse());
     }, [props.chartData]);
 
     /*   const customizeArgumentAxisLabel = (props: any) => {
@@ -74,14 +74,14 @@ const GWPElementMaterialChart = (props: Props) => {
         );
     }
 
-    const height = 200 + (chartData.length * 70);
+    const height = 200 + (chartData.length * 50);
 
     const classes = useStyles();
 
     return (
         <Chart
             className={classes.chart}
-            title="Embodied emissions"
+            // title="Embodied emissions"
             dataSource={chartData}
             palette="Material"
             rotated={true}
@@ -89,7 +89,13 @@ const GWPElementMaterialChart = (props: Props) => {
             <Size
                 height={height}
             />
-            <CommonSeriesSettings argumentField="name" type="stackedBar" barWidth={50} />
+            <CommonSeriesSettings
+                argumentField="name"
+                type="stackedBar"
+                barWidth={40}
+            >
+                {/* <Label visible></Label> */}
+            </CommonSeriesSettings>
             <Series
                 valueField="a1a3"
                 name="A1-A3"
@@ -116,10 +122,10 @@ const GWPElementMaterialChart = (props: Props) => {
             </ValueAxis>
             <ArgumentAxis>
                 <Label
-                    // rotationAngle={45}
+                    rotationAngle={45}
                     overlappingBehavior="none"
-                    text="test"
-                    // render={LabelTemplate}
+                    displayMode="rotate"
+                // render={LabelTemplate}
                 />
             </ArgumentAxis>
             <Legend

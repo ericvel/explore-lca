@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
+import allActions from '../../../redux/actions';
 
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -8,6 +9,7 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Chip from '@material-ui/core/Chip';
 import HomeIcon from '@material-ui/icons/Home';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
 import {
     Chart,
@@ -22,6 +24,7 @@ import {
 
 import BuildingElementItem from '../BuildingElementItem';
 import MaterialsTable from "../MaterialsTable";
+import ElementsTable from "./ElementsTable";
 import GWPElementMaterialChart from '../../GWPElementMaterialChart';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -53,29 +56,19 @@ const StyledBreadcrumb = withStyles((theme: Theme) => ({
 }))(Chip) as typeof Chip; // TypeScript only: need a type cast here because https://github.com/Microsoft/TypeScript/issues/26591
 
 
-const initialSelectedElementState: IBuildingElement = {
-    idbuilding_elements: 0,
-    idlevels: 0,
-    name: "",
-    hierarchy: 0,
-    A1A3: null,
-    A4: null,
-    B4_m: null,
-    B4_t: null,
-    idparent: null
-};
-
 const BuildingElementsView = (props: any) => {
+    const dispatch = useDispatch();
     const buildingElements = useSelector((state: IRootState) => state.buildingElements);
     const materialInventory = useSelector((state: IRootState) => state.materialInventory);
+    const selectedBuildingElement = useSelector((state: IRootState) => state.selectedBuildingElement);
+    const elementRoute = useSelector((state: IRootState) => state.buildingElementRoute);
 
-    const [selectedElement, setSelectedElement] = useState<IBuildingElement>(initialSelectedElementState);
-    const [elementRoute, setElementRoute] = useState<IBuildingElement[]>([]);
+    // const [elementRoute, setElementRoute] = useState<IBuildingElement[]>([]);
 
     const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
 
     useEffect(() => {
-        const childElements = getChildElements(selectedElement);
+        const childElements = getChildElements(selectedBuildingElement);
         const chartData: IElementChartDataItem[] = [];
 
         childElements.forEach(element => {
@@ -92,13 +85,13 @@ const BuildingElementsView = (props: any) => {
         });
 
         setChartData(chartData);
-    }, [selectedElement]);
+    }, [selectedBuildingElement]);
 
     useEffect(() => {
         const rootElement = buildingElements.find((element: IBuildingElement) => element.hierarchy === 0);
         if (rootElement !== undefined) {
-            setSelectedElement(rootElement);
-            setElementRoute([rootElement]);
+            dispatch(allActions.elementAndMaterialActions.selectBuildingElementAction(rootElement));
+            dispatch(allActions.elementAndMaterialActions.setBuildingElementRouteAction([rootElement]));
         }
     }, []);
 
@@ -123,26 +116,26 @@ const BuildingElementsView = (props: any) => {
     const goToChildElement = (elementId: number) => {
         const childElement = buildingElements.find(element => element.idlevels === elementId);
         if (childElement !== undefined) {
-            setSelectedElement(childElement);
-            setElementRoute([...elementRoute, childElement]);
+            dispatch(allActions.elementAndMaterialActions.selectBuildingElementAction(childElement));
+            dispatch(allActions.elementAndMaterialActions.setBuildingElementRouteAction([...elementRoute, childElement]));
         }
     }
 
     const goToElementMaterials = (elementId: number) => {
         const childElement = buildingElements.find(element => element.idlevels === elementId);
         if (childElement !== undefined) {
-            setSelectedElement(childElement);
-            setElementRoute([...elementRoute, childElement]);
+            dispatch(allActions.elementAndMaterialActions.selectBuildingElementAction(childElement));            
+            dispatch(allActions.elementAndMaterialActions.setBuildingElementRouteAction([...elementRoute, childElement]));
         }
     }
 
     const handleBreadcrumbClick = (index: number) => {
         var tempRoute = elementRoute.slice(0, index + 1);
-        setSelectedElement(tempRoute[tempRoute.length - 1])
-        setElementRoute(tempRoute);
+        dispatch(allActions.elementAndMaterialActions.selectBuildingElementAction(tempRoute[tempRoute.length - 1]));
+        dispatch(allActions.elementAndMaterialActions.setBuildingElementRouteAction(tempRoute));
     };
 
-    const childElements = getChildElements(selectedElement);
+    const childElements = getChildElements(selectedBuildingElement);
 
     const classes = useStyles();
 
@@ -162,22 +155,29 @@ const BuildingElementsView = (props: any) => {
                         )}
                     </Breadcrumbs>
                     {childElements?.length > 0 ?
-                        <div>
-                            {childElements.map((child, index) =>
-                                <BuildingElementItem
-                                    key={child.idlevels || index}
-                                    element={child}
-                                    hasMaterials={getElementMaterials(child)?.length > 0}
-                                    onClickChildElementButton={goToChildElement}
-                                    onClickElementMaterialsButton={goToElementMaterials}
-                                />
-                            )}
-                            <Paper>
-                                <GWPElementMaterialChart chartData={chartData} />
-                            </Paper>
-                        </div>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <Paper>
+                                    <ElementsTable />
+                                </Paper>
+                                {/* {childElements.map((child, index) =>
+                                    <BuildingElementItem
+                                        key={child.idlevels || index}
+                                        element={child}
+                                        hasMaterials={getElementMaterials(child)?.length > 0}
+                                        onClickChildElementButton={goToChildElement}
+                                        onClickElementMaterialsButton={goToElementMaterials}
+                                    />
+                                )} */}
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Paper>
+                                    <GWPElementMaterialChart chartData={chartData} />
+                                </Paper>
+                            </Grid>
+                        </Grid>
                         :
-                        <MaterialsTable elementInventory={getElementMaterials(selectedElement)} />
+                        <MaterialsTable elementInventory={getElementMaterials(selectedBuildingElement)} />
                     }
                 </Grid>
             </Grid>
