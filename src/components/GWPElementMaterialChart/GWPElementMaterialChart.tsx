@@ -33,45 +33,66 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    chartData: IElementChartDataItem[];
+    // chartData: IElementChartDataItem[];
 }
 
 
 
 const GWPElementMaterialChart = (props: Props) => {
-    // const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
+    const buildingElements = useSelector((state: IRootState) => state.buildingElements);
+    const selectedBuildingElement = useSelector((state: IRootState) => state.selectedBuildingElement);
+
     const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
 
     useEffect(() => {
-        setChartData(props.chartData.reverse());
-    }, [props.chartData]);
+        const childElements = getChildElements(selectedBuildingElement);
+        const chartData: IElementChartDataItem[] = [];
 
-    /*   const customizeArgumentAxisLabel = (props: any) => {
-          console.log("Props: ", props)
-          return (
-              <Label text="yoyoy"  />
-          );
-      }
-   */
-    const customizeArgumentAxisLabel = (label: { valueText: React.ReactNode; }) => {
-        return <p>{label.valueText}</p>;
+        childElements.forEach(element => {
+            const dataEntry: IElementChartDataItem = {
+                name: element.name,
+                id: element.idbuilding_elements,
+                a1a3: Number(element.A1A3) || 0.0,
+                a4: Number(element.A4) || 0.0,
+                b4m: Number(element.B4_m) || 0.0,
+                b4t: Number(element.B4_t) || 0.0,
+            }
+
+            chartData.push(dataEntry);
+        });
+
+        setChartData(chartData.reverse());
+    }, [selectedBuildingElement]);
+
+    const getChildElements = (parentElement: IBuildingElement) => {
+        const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
+        if (childElements !== undefined) {
+            return childElements;
+        }
+
+        return [];
+    }
+
+    // Wraps label over two lines if longer than 15 characters
+    const customizeArgumentAxisLabel = (data: any) => {
+        if (data.value.length > 15) {
+            const wordArray = data.value.split(" ");
+            if (wordArray.length > 2) {
+                const firstLine = wordArray.slice(0, 2).join(" ");
+                const secondLine = wordArray.slice(2).join(" ");
+                return firstLine + "\n" + secondLine;
+            } else {
+                return wordArray.join("\n");
+            }
+        }
+
+        return data.value;
     }
 
     const customizeTooltip = (arg: any) => {
         return {
             text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`
         };
-    }
-
-    const LabelTemplate = (data: { valueText: React.ReactNode; }) => {
-        // const classes = useStyles();
-
-        return (
-            <svg overflow="visible">
-                {/* <image filter="url(#DevExpress_shadow_filter)" y="0" width="60" height="40" href={getFilePath(data.valueText)}></image> */}
-                <text className={classes.argumentAxisLabel} x="30" y="59" textAnchor="middle">{data.valueText}</text>
-            </svg>
-        );
     }
 
     const height = 200 + (chartData.length * 50);
@@ -85,6 +106,7 @@ const GWPElementMaterialChart = (props: Props) => {
             dataSource={chartData}
             palette="Material"
             rotated={true}
+            onArgumentAxisClick={(props: any) => console.log(props)}
         >
             <Size
                 height={height}
@@ -122,10 +144,7 @@ const GWPElementMaterialChart = (props: Props) => {
             </ValueAxis>
             <ArgumentAxis>
                 <Label
-                    rotationAngle={45}
-                    overlappingBehavior="none"
-                    displayMode="rotate"
-                // render={LabelTemplate}
+                    customizeText={customizeArgumentAxisLabel}
                 />
             </ArgumentAxis>
             <Legend

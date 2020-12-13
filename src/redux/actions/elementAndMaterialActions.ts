@@ -1,6 +1,6 @@
 import { 
-    SET_BUILDING_ELEMENTS, SET_MATERIAL_INVENTORY, SELECT_BUILDING_ELEMENT, SET_BUILDING_ELEMENT_ROUTE,
-    BuildingElementActionTypes, MaterialInventoryActionTypes, SelectBuildingElementAction, SetBuildingElementRouteAction 
+    SET_BUILDING_ELEMENTS, SET_MATERIAL_INVENTORY, SELECT_BUILDING_ELEMENT, SET_BUILDING_ELEMENT_ROUTE, ADD_TO_ELEMENT_ROUTE,
+    BuildingElementActionTypes, MaterialInventoryActionTypes, SelectBuildingElementAction, ElementRouteActionTypes 
 } from './types'
 
 const setBuildingElements = (buildingElements: IBuildingElement[]): BuildingElementActionTypes => {
@@ -16,14 +16,21 @@ const setMaterialInventory = (materialInventory: IMaterialInventory[]): Material
         payload: materialInventory
     }
 }
-const selectBuildingElementAction = (buildingElement: IBuildingElement): SelectBuildingElementAction => {
+const selectBuildingElement = (buildingElement: IBuildingElement): SelectBuildingElementAction => {
     return {
         type: SELECT_BUILDING_ELEMENT,
         payload: buildingElement
     }
 }
 
-const setBuildingElementRouteAction = (route: IBuildingElement[]): SetBuildingElementRouteAction => {
+const addToElementRoute = (route: IBuildingElement): ElementRouteActionTypes => {
+    return {
+        type: ADD_TO_ELEMENT_ROUTE,
+        payload: route
+    }
+}
+
+const setElementRoute = (route: IBuildingElement[]): ElementRouteActionTypes => {
     return {
         type: SET_BUILDING_ELEMENT_ROUTE,
         payload: route
@@ -33,6 +40,7 @@ const setBuildingElementRouteAction = (route: IBuildingElement[]): SetBuildingEl
 export default {
     setBuildingElements,
     setMaterialInventory,
-    selectBuildingElementAction,
-    setBuildingElementRouteAction
+    selectBuildingElement,
+    addToElementRoute,
+    setElementRoute
 }

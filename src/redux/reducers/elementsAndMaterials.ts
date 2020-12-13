@@ -1,6 +1,6 @@
 import { 
-    BuildingElementActionTypes, MaterialInventoryActionTypes, SelectBuildingElementAction, SetBuildingElementRouteAction,
-    SET_BUILDING_ELEMENTS, SET_MATERIAL_INVENTORY, SELECT_BUILDING_ELEMENT, SET_BUILDING_ELEMENT_ROUTE
+    BuildingElementActionTypes, MaterialInventoryActionTypes, SelectBuildingElementAction, ElementRouteActionTypes,
+    SET_BUILDING_ELEMENTS, SET_MATERIAL_INVENTORY, SELECT_BUILDING_ELEMENT, ADD_TO_ELEMENT_ROUTE, SET_BUILDING_ELEMENT_ROUTE
 } from '../actions/types';
 
 export const buildingElements = (state: IBuildingElement[] = [], action: BuildingElementActionTypes) => {
@@ -42,8 +42,10 @@ export const selectedBuildingElement = (state: IBuildingElement = initialSelecte
     }
 }
 
-export const buildingElementRoute = (state: IBuildingElement[] = [], action: SetBuildingElementRouteAction) => {
+export const buildingElementRoute = (state: IBuildingElement[] = [], action: ElementRouteActionTypes) => {
     switch (action.type) {
+        case ADD_TO_ELEMENT_ROUTE:
+            return [...state, action.payload]
         case SET_BUILDING_ELEMENT_ROUTE:
             return action.payload;
         default:

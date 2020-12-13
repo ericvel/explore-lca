@@ -1,24 +1,30 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, ReactText } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '../../../../redux/reducers';
+import allActions from '../../../../redux/actions';
 
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
+
 import {
     SortingState,
     IntegratedSorting,
     SearchState,
+    SelectionState,
     DataTypeProvider,
 } from '@devexpress/dx-react-grid';
 import {
     Grid,
     TableHeaderRow,
+    Table,
     VirtualTable,
     Toolbar,
     SearchPanel,
     ColumnChooser,
     TableColumnVisibility,
-    TableFixedColumns
+    TableFixedColumns,
+    TableSelection,
 } from '@devexpress/dx-react-grid-material-ui';
 import _ from 'lodash';
 
@@ -28,18 +34,29 @@ interface Props {
     // elementInventory: IMaterialInventory[] | false;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        customRow: {
+            '&:hover': {
+                backgroundColor: '#F5F5F5',
+                cursor: 'pointer'
+            }
+        },
+    }),
+);
+
 // const getRowId = (row: any) => row.idmaterialInventory;
 
-const ElementsTable = (props: Props) => {    
+const ElementsTable = (props: Props) => {
+    const dispatch = useDispatch();
+
     const buildingElements = useSelector((state: IRootState) => state.buildingElements);
     const selectedBuildingElement = useSelector((state: IRootState) => state.selectedBuildingElement);
 
     const [columns] = useState(ColumnData.columns);
     const [columnExtensions] = useState(ColumnData.columnExtensions);
-    const [defaultHiddenColumnNames] = useState(ColumnData.defaultHiddenColumnNames);
-    const [tableColumnVisibilityColumnExtensions] = useState(ColumnData.tableColumnVisibilityColumnExtensions);
-    const [leftColumns] = useState(['name']);
     const [gwpColumns] = useState(['A1A3', 'A4', 'B4_t', 'B4_m'])
+    const [tooltipColumns] = useState(['name']);
 
     const getChildElements = (parentElement: IBuildingElement) => {
         const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
@@ -50,7 +67,40 @@ const ElementsTable = (props: Props) => {
         return [];
     }
 
-    const GWPFormatter = ({value}: any) => value && value > 0.0 ? parseFloat(value).toFixed(3) : 0.0.toFixed(1);
+    const CustomTableRow = (props: any) => (
+        <VirtualTable.Row
+            className={useStyles().customRow}
+            onClick={() => handleRowClick(props.row)}
+            {...props}
+        />
+    );
+
+    const TooltipFormatter = ({ value }: any) => (
+        <Tooltip title={(
+            <span>
+                Go to sub-elements
+            </span>
+        )}
+        >
+            <span>
+                {value}
+            </span>
+        </Tooltip>
+    );
+
+    const CellTooltip = (props: any) => (
+        <DataTypeProvider
+            formatterComponent={TooltipFormatter}
+            {...props}
+        />
+    );
+
+    const handleRowClick = (row: IBuildingElement) => {
+        dispatch(allActions.elementAndMaterialActions.selectBuildingElement(row));
+        dispatch(allActions.elementAndMaterialActions.addToElementRoute(row));
+    }
+
+    const GWPFormatter = ({ value }: any) => value && value > 0.0 ? parseFloat(value).toFixed(3) : 0.0.toFixed(1);
 
     const GWPTypeProvider = (props: any) => (
         <DataTypeProvider
@@ -59,44 +109,30 @@ const ElementsTable = (props: Props) => {
         />
     );
 
-    const changeSearchTerm = (value: any) => {
-        console.log("Changed search term: ", value)
-    };
-
-    // Delays query so it is not fired on every keystroke
-    const delayedCallback = useCallback(_.debounce(changeSearchTerm, 300), []);
-    
-    // Displays only inventory for selected building element if one is selected
     const rows = getChildElements(selectedBuildingElement);
 
+    const height = 232 + (rows.length * 50);
+
     return (
-        <Paper>
-            <Grid
-                rows={rows}
-                columns={columns}
-            >
-                <GWPTypeProvider
-                    for={gwpColumns}
-                />
-                <SearchState
-                    onValueChange={delayedCallback}
-                />
-                <SortingState />
-                <IntegratedSorting />
-                <VirtualTable columnExtensions={columnExtensions} />
-                <TableHeaderRow showSortingControls />                
-                <TableFixedColumns
-                    leftColumns={leftColumns}
-                />
-                <TableColumnVisibility
-                    defaultHiddenColumnNames={defaultHiddenColumnNames}
-                    columnExtensions={tableColumnVisibilityColumnExtensions}
-                />
-                <Toolbar />
-                <SearchPanel />
-                <ColumnChooser />
-            </Grid>
-        </Paper>
+        <Grid
+            rows={rows}
+            columns={columns}
+        >
+            <CellTooltip
+                for={tooltipColumns}
+            />
+            <GWPTypeProvider
+                for={gwpColumns}
+            />
+            <SortingState />
+            <IntegratedSorting />
+            <VirtualTable
+                columnExtensions={columnExtensions}
+                rowComponent={CustomTableRow}
+                height={height}
+            />
+            <TableHeaderRow showSortingControls />
+        </Grid>
     );
 };
 

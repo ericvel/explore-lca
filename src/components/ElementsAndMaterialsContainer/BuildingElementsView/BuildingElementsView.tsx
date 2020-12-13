@@ -35,6 +35,9 @@ const useStyles = makeStyles((theme: Theme) =>
         chart: {
             // height: 600,
             padding: theme.spacing(2)
+        },
+        elementTable: {
+            padding: theme.spacing(2)
         }
     }),
 );
@@ -63,35 +66,11 @@ const BuildingElementsView = (props: any) => {
     const selectedBuildingElement = useSelector((state: IRootState) => state.selectedBuildingElement);
     const elementRoute = useSelector((state: IRootState) => state.buildingElementRoute);
 
-    // const [elementRoute, setElementRoute] = useState<IBuildingElement[]>([]);
-
-    const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
-
-    useEffect(() => {
-        const childElements = getChildElements(selectedBuildingElement);
-        const chartData: IElementChartDataItem[] = [];
-
-        childElements.forEach(element => {
-            const dataEntry: IElementChartDataItem = {
-                name: element.name,
-                id: element.idbuilding_elements,
-                a1a3: Number(element.A1A3) || 0.0,
-                a4: Number(element.A4) || 0.0,
-                b4m: Number(element.B4_m) || 0.0,
-                b4t: Number(element.B4_t) || 0.0,
-            }
-
-            chartData.push(dataEntry);
-        });
-
-        setChartData(chartData);
-    }, [selectedBuildingElement]);
-
     useEffect(() => {
         const rootElement = buildingElements.find((element: IBuildingElement) => element.hierarchy === 0);
         if (rootElement !== undefined) {
-            dispatch(allActions.elementAndMaterialActions.selectBuildingElementAction(rootElement));
-            dispatch(allActions.elementAndMaterialActions.setBuildingElementRouteAction([rootElement]));
+            dispatch(allActions.elementAndMaterialActions.selectBuildingElement(rootElement));
+            dispatch(allActions.elementAndMaterialActions.setElementRoute([rootElement]));
         }
     }, []);
 
@@ -113,26 +92,10 @@ const BuildingElementsView = (props: any) => {
         return [];
     }
 
-    const goToChildElement = (elementId: number) => {
-        const childElement = buildingElements.find(element => element.idlevels === elementId);
-        if (childElement !== undefined) {
-            dispatch(allActions.elementAndMaterialActions.selectBuildingElementAction(childElement));
-            dispatch(allActions.elementAndMaterialActions.setBuildingElementRouteAction([...elementRoute, childElement]));
-        }
-    }
-
-    const goToElementMaterials = (elementId: number) => {
-        const childElement = buildingElements.find(element => element.idlevels === elementId);
-        if (childElement !== undefined) {
-            dispatch(allActions.elementAndMaterialActions.selectBuildingElementAction(childElement));            
-            dispatch(allActions.elementAndMaterialActions.setBuildingElementRouteAction([...elementRoute, childElement]));
-        }
-    }
-
     const handleBreadcrumbClick = (index: number) => {
         var tempRoute = elementRoute.slice(0, index + 1);
-        dispatch(allActions.elementAndMaterialActions.selectBuildingElementAction(tempRoute[tempRoute.length - 1]));
-        dispatch(allActions.elementAndMaterialActions.setBuildingElementRouteAction(tempRoute));
+        dispatch(allActions.elementAndMaterialActions.selectBuildingElement(tempRoute[tempRoute.length - 1]));
+        dispatch(allActions.elementAndMaterialActions.setElementRoute(tempRoute));
     };
 
     const childElements = getChildElements(selectedBuildingElement);
@@ -160,19 +123,10 @@ const BuildingElementsView = (props: any) => {
                                 <Paper>
                                     <ElementsTable />
                                 </Paper>
-                                {/* {childElements.map((child, index) =>
-                                    <BuildingElementItem
-                                        key={child.idlevels || index}
-                                        element={child}
-                                        hasMaterials={getElementMaterials(child)?.length > 0}
-                                        onClickChildElementButton={goToChildElement}
-                                        onClickElementMaterialsButton={goToElementMaterials}
-                                    />
-                                )} */}
                             </Grid>
                             <Grid item xs={6}>
                                 <Paper>
-                                    <GWPElementMaterialChart chartData={chartData} />
+                                    <GWPElementMaterialChart />
                                 </Paper>
                             </Grid>
                         </Grid>
