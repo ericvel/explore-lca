@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
+import { IRootState } from 'redux/reducers';
 
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';

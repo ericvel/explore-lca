@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, ReactText } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { IRootState } from '../../../../redux/reducers';
-import allActions from '../../../../redux/actions';
+import { IRootState } from 'redux/reducers';
+import allActions from 'redux/actions';
 
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -31,7 +31,6 @@ import _ from 'lodash';
 import ColumnData from "./ColumnData";
 
 interface Props {
-    // elementInventory: IMaterialInventory[] | false;
 }
 
 const useStyles = makeStyles((theme: Theme) =>

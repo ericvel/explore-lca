@@ -1,31 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import allActions from '../../../redux/actions';
+import { IRootState } from 'redux/reducers';
+import allActions from 'redux/actions';
 
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import HomeIcon from '@material-ui/icons/Home';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 
-import {
-    Chart,
-    Series,
-    CommonSeriesSettings,
-    Legend,
-    ValueAxis,
-    Title,
-    Tooltip,
-    Size
-} from 'devextreme-react/chart';
-
-import BuildingElementItem from '../BuildingElementItem';
 import MaterialsTable from "../MaterialsTable";
 import ElementsTable from "./ElementsTable";
-import GWPElementMaterialChart from '../../GWPElementMaterialChart';
+import GWPElementMaterialChart from './GWPElementMaterialChart';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         elementTable: {
             padding: theme.spacing(2)
-        }
+        },
     }),
 );
 
@@ -111,7 +99,7 @@ const BuildingElementsView = (props: any) => {
                             <StyledBreadcrumb
                                 key={index}
                                 label={element.name}
-                                variant="outlined"
+                                variant="default"
                                 icon={element.idlevels === 0 ? <HomeIcon fontSize="small" /> : undefined}
                                 onClick={() => handleBreadcrumbClick(index)}
                             />

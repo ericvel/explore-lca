@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import allActions from '../../redux/actions';
+import { IRootState } from 'redux/reducers';
+import allActions from 'redux/actions';
 
 import ReactDOM from "react-dom";
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
@@ -59,7 +59,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
         setAllMaterialsChecked((prev) => !prev);
     };
 
-    const headingText = allMaterialsChecked ? "Materials" : "Building elements";
+    const headingText = allMaterialsChecked ? "All materials" : "Building elements";
 
     const classes = useStyles();
 

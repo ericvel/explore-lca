@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import allActions from '../../redux/actions';
-import { IRootState } from '../../redux/reducers';
+import allActions from 'redux/actions';
+import { IRootState } from 'redux/reducers';
 
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.material.blue.light.css';
@@ -13,7 +13,6 @@ import Typography from '@material-ui/core/Typography';
 
 import BuildingsTable from '../BuildingsTable';
 import BuildingDetails from '../BuildingDetails';
-import CompareBuildingsDialog from '../UnusedComponents/CompareBuildingsDialog';
 import HelpButton from '../HelpButton';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -57,7 +56,6 @@ function App() {
       </Grid>
 
       <BuildingDetails />
-      <CompareBuildingsDialog />
     </Container>
   );
 }

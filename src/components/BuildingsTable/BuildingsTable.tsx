@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, ReactText } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import allActions from '../../redux/actions';
-import { IRootState } from '../../redux/reducers';
+import allActions from 'redux/actions';
+import { IRootState } from 'redux/reducers';
 
 import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -31,7 +31,7 @@ import {
 import _ from 'lodash';
 
 import ColumnData from './ColumnData';
-import LoadingIndicator from '../LoadingIndicator';
+import LoadingIndicator from 'components/LoadingIndicator';
 
 const URL = '/buildings'
 const getRowId = (row: any) => row[Object.keys(row)[0]];

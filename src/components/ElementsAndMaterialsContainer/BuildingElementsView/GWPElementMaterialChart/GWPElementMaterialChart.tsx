@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import allActions from '../../redux/actions';
+import { IRootState } from 'redux/reducers';
+import allActions from 'redux/actions';
 
 import { Theme, createStyles, makeStyles, withStyles, WithStyles, emphasize } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import text from '@material-ui/core/Typography';
 
 import {
     Chart,
@@ -33,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    // chartData: IElementChartDataItem[];
+    
 }
 
 

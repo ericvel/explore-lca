@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import allActions from '../../../redux/actions';
+import { IRootState } from 'redux/reducers';
+import allActions from 'redux/actions';
 
 import { createStyles, Theme, withStyles, WithStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';

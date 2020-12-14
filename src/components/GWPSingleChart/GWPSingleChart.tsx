@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
-import allActions from '../../redux/actions';
+import { IRootState } from 'redux/reducers';
+import allActions from 'redux/actions';
 
 import { Theme, createStyles, makeStyles, withStyles, WithStyles, emphasize } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -15,22 +15,6 @@ import {
     Title,
     Tooltip,
 } from 'devextreme-react/chart';
-import { Value } from "devextreme-react/range-selector";
-
-/* import {
-    Chart,
-    BarSeries,
-    Title,
-    ArgumentAxis,
-    ValueAxis,
-    Tooltip,
-} from '@devexpress/dx-react-chart-material-ui';
-import {
-    HoverState,
-    EventTracker,
-    ValueScale,
-    Animation
-} from '@devexpress/dx-react-chart'; */
 
 interface Props {
     chartData: ISingleChartDataItem[];
@@ -46,20 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-/* const Overlay = (props: any) => {
-    const classes = useStyles();
-    return <Tooltip.Overlay {...props} className={classes.overlay} />;
-};
-
-const ValueAxisLabel = (props: any) => {
-    const classes = useStyles();
-    return <ValueAxis.Label {...props} text="kgCO2e/m2" x={0} y={0} dy="50%" textAnchor="end" className={classes.valueAxisLabel} />
-}
-
-const ArgumentAxisLabel = (props: any) => {
-    return <ValueAxis.Label {...props} text="kgCO2e/m2" x={0} y={0} dy="50%" textAnchor="end" />
-} */
-
 const GWPSingleChart = (props: Props) => {
     const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
 
@@ -69,19 +39,6 @@ const GWPSingleChart = (props: Props) => {
         { lcaPhase: 'B4 (m)', gwp: Number(selectedBuildings[0].B4_m) || 0.0 },
         { lcaPhase: 'B4 (t)', gwp: Number(selectedBuildings[0].B4_t) || 0.0 },
     ];
-
-    const TooltipContent = (props: any) => {
-        return (
-            <div>
-                <div>
-                    <Typography>{props.value}</Typography>
-                </div>
-                <div>
-                    <Typography>Hey what up</Typography>
-                </div>
-            </div>
-        );
-    };
 
     const height = props.height;
 

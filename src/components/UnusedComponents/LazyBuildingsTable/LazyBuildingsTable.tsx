@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer, useMemo, useCallback, ReactText } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import allActions from '../../../redux/actions';
-import { IRootState } from '../../../redux/reducers';
+import allActions from 'redux/actions';
+import { IRootState } from 'redux/reducers';
 
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
