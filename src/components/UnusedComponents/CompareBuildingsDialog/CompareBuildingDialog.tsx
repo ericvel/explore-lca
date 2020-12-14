@@ -24,7 +24,7 @@ import Slide from '@material-ui/core/Slide';
 import Skeleton from '@material-ui/lab/Skeleton';
 import { TransitionProps } from '@material-ui/core/transitions';
 
-import GWPCompareChart from '../../GWPCompareChart';
+import GWPCompareChart from '../../BuildingDetails/MultipleBuildingsView/GWPCompareChart';
 
 const styles = (theme: Theme) =>
     createStyles({

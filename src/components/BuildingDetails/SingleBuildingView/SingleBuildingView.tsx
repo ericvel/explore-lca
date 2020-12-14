@@ -9,8 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 
-import ElementsAndMaterialsContainer from '../../ElementsAndMaterialsContainer';
-import GWPSingleChart from '../../GWPSingleChart';
+import ElementsAndMaterialsContainer from 'components/ElementsAndMaterialsContainer';
+import GWPSingleChart from './GWPSingleChart';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

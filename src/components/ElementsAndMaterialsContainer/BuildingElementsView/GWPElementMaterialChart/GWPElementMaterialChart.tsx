@@ -103,7 +103,6 @@ const GWPElementMaterialChart = (props: Props) => {
             dataSource={chartData}
             palette="Material"
             rotated={true}
-            onArgumentAxisClick={(props: any) => console.log(props)}
         >
             <Size
                 height={height}
@@ -113,7 +112,6 @@ const GWPElementMaterialChart = (props: Props) => {
                 type="stackedBar"
                 barWidth={40}
             >
-                {/* <Label visible></Label> */}
             </CommonSeriesSettings>
             <Series
                 valueField="a1a3"

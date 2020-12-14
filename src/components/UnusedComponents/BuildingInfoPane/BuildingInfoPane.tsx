@@ -17,7 +17,7 @@ import IconButton from '@material-ui/core/IconButton';
 import './BuildingInfoPane.css';
 
 import ElementsAndMaterialsContainer from '../../ElementsAndMaterialsContainer';
-import GWPSingleChart from '../../GWPSingleChart';
+import GWPSingleChart from '../../BuildingDetails/SingleBuildingView/GWPSingleChart';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

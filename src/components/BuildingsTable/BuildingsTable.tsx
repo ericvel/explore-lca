@@ -91,6 +91,7 @@ function BuildingsTable() {
     // Delays query so it is not fired on every keystroke
     const delayedCallback = useCallback(_.debounce(changeSearchTerm, 300), []);
 
+    // Only search in visible columns
     const [filteringColumnExtensions, setFilteringColumnExtensions] = useState(
         getHiddenColumnsFilteringExtensions(defaultHiddenColumnNames),
     );
@@ -150,7 +151,7 @@ function BuildingsTable() {
                 <TableHeaderRow showSortingControls />
                 <TableSelection
                     selectByRowClick
-                    highlightRow={!multipleSwitchChecked}
+                    highlightRow={true}
                     showSelectionColumn={multipleSwitchChecked}
                 />
                 <TableFixedColumns

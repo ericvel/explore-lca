@@ -5,8 +5,9 @@ import allActions from 'redux/actions';
 
 import { createStyles, Theme, withStyles, WithStyles, makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
-import GWPCompareChart from '../../GWPCompareChart';
+import GWPCompareChart from './GWPCompareChart';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,6 +39,7 @@ const MultipleBuildingsView = () => {
         <div className={classes.content}>
             <Grid container>
                 <Grid item xs={12}>
+                    <Typography variant="h5" color="textSecondary" gutterBottom>Embodied emissions</Typography>
                     <GWPCompareChart />
                 </Grid>
             </Grid>
