@@ -1,6 +1,6 @@
 import { 
-    BuildingElementActionTypes, MaterialInventoryActionTypes, SelectBuildingElementAction, ElementRouteActionTypes,
-    SET_BUILDING_ELEMENTS, SET_MATERIAL_INVENTORY, SELECT_BUILDING_ELEMENT, ADD_TO_ELEMENT_ROUTE, SET_BUILDING_ELEMENT_ROUTE
+    BuildingElementActionTypes, MaterialInventoryActionTypes, SelectBuildingElementAction, ElementRouteActionTypes, HoverBuildingElementActionTypes,
+    SET_BUILDING_ELEMENTS, SET_MATERIAL_INVENTORY, SELECT_BUILDING_ELEMENT, ADD_TO_ELEMENT_ROUTE, SET_BUILDING_ELEMENT_ROUTE, HOVER_BUILDING_ELEMENT, STOP_HOVER_BUILDING_ELEMENT
 } from '../actions/types';
 
 export const buildingElements = (state: IBuildingElement[] = [], action: BuildingElementActionTypes) => {
@@ -48,6 +48,18 @@ export const buildingElementRoute = (state: IBuildingElement[] = [], action: Ele
             return [...state, action.payload]
         case SET_BUILDING_ELEMENT_ROUTE:
             return action.payload;
+        default:
+            return state;
+    }
+}
+
+export const hoveredBuildingElement = (state: number | null = null, action: HoverBuildingElementActionTypes) => {
+    switch (action.type) {
+        case HOVER_BUILDING_ELEMENT:
+            console.log("Reducer called: ", action.payload);
+            return action.payload;
+        case STOP_HOVER_BUILDING_ELEMENT:
+            return null;
         default:
             return state;
     }

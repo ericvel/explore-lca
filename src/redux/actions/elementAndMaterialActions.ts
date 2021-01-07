@@ -1,6 +1,6 @@
 import { 
-    SET_BUILDING_ELEMENTS, SET_MATERIAL_INVENTORY, SELECT_BUILDING_ELEMENT, SET_BUILDING_ELEMENT_ROUTE, ADD_TO_ELEMENT_ROUTE,
-    BuildingElementActionTypes, MaterialInventoryActionTypes, SelectBuildingElementAction, ElementRouteActionTypes 
+    SET_BUILDING_ELEMENTS, SET_MATERIAL_INVENTORY, SELECT_BUILDING_ELEMENT, SET_BUILDING_ELEMENT_ROUTE, ADD_TO_ELEMENT_ROUTE, HOVER_BUILDING_ELEMENT, STOP_HOVER_BUILDING_ELEMENT,
+    BuildingElementActionTypes, MaterialInventoryActionTypes, SelectBuildingElementAction, ElementRouteActionTypes, HoverBuildingElementActionTypes
 } from './types'
 
 const setBuildingElements = (buildingElements: IBuildingElement[]): BuildingElementActionTypes => {
@@ -37,10 +37,26 @@ const setElementRoute = (route: IBuildingElement[]): ElementRouteActionTypes => 
     }
 }
 
+const hoverBuildingElement = (elementId: number): HoverBuildingElementActionTypes => {
+    return {
+        type: HOVER_BUILDING_ELEMENT,
+        payload: elementId
+    }
+}
+
+const stopHoverBuildingElement = (elementId: number): HoverBuildingElementActionTypes => {
+    return {
+        type: STOP_HOVER_BUILDING_ELEMENT,
+        payload: elementId
+    }
+}
+
 export default {
     setBuildingElements,
     setMaterialInventory,
     selectBuildingElement,
     addToElementRoute,
-    setElementRoute
+    setElementRoute,
+    hoverBuildingElement,
+    stopHoverBuildingElement
 }

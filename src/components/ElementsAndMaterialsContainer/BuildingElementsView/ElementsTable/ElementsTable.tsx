@@ -51,6 +51,7 @@ const ElementsTable = (props: Props) => {
 
     const buildingElements = useSelector((state: IRootState) => state.buildingElements);
     const selectedBuildingElement = useSelector((state: IRootState) => state.selectedBuildingElement);
+    const hoveredBuildingElement = useSelector((state: IRootState) => state.hoveredBuildingElement);
 
     const [columns] = useState(ColumnData.columns);
     const [columnExtensions] = useState(ColumnData.columnExtensions);
@@ -66,11 +67,15 @@ const ElementsTable = (props: Props) => {
         return [];
     }
 
-    const CustomTableRow = (props: any) => (
+    const CustomTableRow = ({ row, style, ...props }: any) => (
         <VirtualTable.Row
-            className={useStyles().customRow}
-            onClick={() => handleRowClick(props.row)}
             {...props}
+            className={useStyles().customRow}
+            style={{
+                backgroundColor: row.idbuilding_elements === hoveredBuildingElement ? '#F5F5F5' : undefined,
+                ...style
+            }}
+            onClick={() => handleRowClick(row)}
         />
     );
 

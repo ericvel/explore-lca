@@ -36,8 +36,11 @@ interface Props {
 
 
 const GWPElementMaterialChart = (props: Props) => {
+    const dispatch = useDispatch();
+
     const buildingElements = useSelector((state: IRootState) => state.buildingElements);
     const selectedBuildingElement = useSelector((state: IRootState) => state.selectedBuildingElement);
+    const hoveredBuildingElement = useSelector((state: IRootState) => state.hoveredBuildingElement); 
 
     const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
 
@@ -92,6 +95,20 @@ const GWPElementMaterialChart = (props: Props) => {
         };
     }
 
+    const onPointHoverChanged = (e: any) => {
+        const series = e.target;
+        const hoveredElementId = series.data.id;
+        
+        if (series.isHovered() && hoveredBuildingElement !== hoveredElementId) {            
+            console.log("Hovered: ", hoveredElementId);
+            dispatch(allActions.elementAndMaterialActions.hoverBuildingElement(hoveredElementId));
+            // Commands to execute when the series is hovered over
+        } else {
+            dispatch(allActions.elementAndMaterialActions.stopHoverBuildingElement(hoveredElementId));
+            // Commands to execute when the series is hovered out
+        }
+    }
+
     const height = 200 + (chartData.length * 50);
 
     const classes = useStyles();
@@ -103,6 +120,7 @@ const GWPElementMaterialChart = (props: Props) => {
             dataSource={chartData}
             palette="Material"
             rotated={true}
+            onPointHoverChanged={onPointHoverChanged}
         >
             <Size
                 height={height}
@@ -111,6 +129,7 @@ const GWPElementMaterialChart = (props: Props) => {
                 argumentField="name"
                 type="stackedBar"
                 barWidth={40}
+                hoverMode="allArgumentPoints"
             >
             </CommonSeriesSettings>
             <Series

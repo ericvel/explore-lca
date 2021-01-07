@@ -1,4 +1,4 @@
-import { TOGGLE_CAN_SELECT_MULTIPLE, TOGGLE_COMPARE_DIALOG_OPEN, ToggleCanSelectMultipleAction, ToggleCompareDialogOpen } from './types'
+import { TOGGLE_CAN_SELECT_MULTIPLE, TOGGLE_COMPARE_DIALOG_OPEN, ToggleCanSelectMultipleAction, ToggleCompareDialogOpenAction } from './types'
 
 const toggleCanSelectMultiple = (): ToggleCanSelectMultipleAction => {
     return {
@@ -6,7 +6,7 @@ const toggleCanSelectMultiple = (): ToggleCanSelectMultipleAction => {
     }
 }
 
-const toggleCompareDialogOpen = (): ToggleCompareDialogOpen => {
+const toggleCompareDialogOpen = (): ToggleCompareDialogOpenAction => {
     return {
         type: TOGGLE_COMPARE_DIALOG_OPEN,
     }

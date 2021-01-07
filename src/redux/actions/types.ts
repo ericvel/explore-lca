@@ -13,6 +13,9 @@ export const SET_BUILDING_ELEMENT_ROUTE = 'SET_BUILDING_ELEMENT_ROUTE';
 export const TOGGLE_CAN_SELECT_MULTIPLE = 'TOGGLE_CAN_SELECT_MULTIPLE';
 export const TOGGLE_COMPARE_DIALOG_OPEN = 'TOGGLE_COMPARE_DIALOG_OPEN';
 
+export const HOVER_BUILDING_ELEMENT = 'HOVER_BUILDING_ELEMENT';
+export const STOP_HOVER_BUILDING_ELEMENT = 'STOP_HOVER_BUILDING_ELEMENT';
+
 interface SetBuildingsAction {
     type: typeof SET_BUILDINGS;
     payload: IBuilding[];
@@ -56,8 +59,18 @@ export type ToggleCanSelectMultipleAction = {
     type: typeof TOGGLE_CAN_SELECT_MULTIPLE;
 }
 
-export type ToggleCompareDialogOpen = {
+export type ToggleCompareDialogOpenAction = {
     type: typeof TOGGLE_COMPARE_DIALOG_OPEN;
+}
+
+interface HoverBuildingElementAction {
+    type: typeof HOVER_BUILDING_ELEMENT;
+    payload: number;
+}
+
+interface StopHoverBuildingElementAction {
+    type: typeof STOP_HOVER_BUILDING_ELEMENT;
+    payload: number;
 }
 
 export type BuildingActionTypes = SetBuildingsAction;
@@ -65,5 +78,6 @@ export type SelectedBuildingActionTypes = SelectBuildingsAction | DeselectAllBui
 export type BuildingElementActionTypes = SetBuildingElementsAction;
 export type MaterialInventoryActionTypes = SetMaterialInventoryAction;
 export type ElementRouteActionTypes = AddToElementRouteAction | SetElementRouteAction;
+export type HoverBuildingElementActionTypes = HoverBuildingElementAction | StopHoverBuildingElementAction;
 // export type SelectedBuildingElementActionTypes = SelectBuildingElementAction;
 // export type { ToggleSelectMultipleSwitchAction };
