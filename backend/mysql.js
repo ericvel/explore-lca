@@ -1,10 +1,12 @@
 const mysql = require('mysql2');
+const dbconfig = require('./dbconfig');
 
 const pool = mysql.createPool({
-    host: process.env.MYSQL_HOST,
-    user: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PWD,
-    database: process.env.MYSQL_DB,
+    host: dbconfig.MYSQL_HOST,
+    user: dbconfig.MYSQL_USER,
+    password: dbconfig.MYSQL_PWD,
+    database: dbconfig.MYSQL_DB,
+    port: dbconfig.MYSQL_PORT
 });
 
 pool.config.connectionConfig.namedPlaceholders = true;
