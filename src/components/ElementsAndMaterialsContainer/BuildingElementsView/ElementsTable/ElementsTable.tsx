@@ -44,9 +44,9 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-// const getRowId = (row: any) => row.idmaterialInventory;
+const getRowId = (row: IBuildingElement) => "tableRow" + row.idbuilding_elements;
 
-const ElementsTable = (props: Props) => {
+const ElementsTable = (props: any) => {
     const dispatch = useDispatch();
 
     const buildingElements = useSelector((state: IRootState) => state.buildingElements);
@@ -70,11 +70,10 @@ const ElementsTable = (props: Props) => {
     const CustomTableRow = ({ row, style, ...props }: any) => (
         <VirtualTable.Row
             {...props}
+            id={"tableRow" + row.idbuilding_elements}
             className={useStyles().customRow}
-            style={{
-                backgroundColor: row.idbuilding_elements === hoveredBuildingElement ? '#F5F5F5' : undefined,
-                ...style
-            }}
+            onMouseEnter={() => handleMouseEnter(row)}            
+            onMouseLeave={() => handleMouseLeave(row)}
             onClick={() => handleRowClick(row)}
         />
     );
@@ -98,6 +97,16 @@ const ElementsTable = (props: Props) => {
             {...props}
         />
     );
+    
+    const handleMouseEnter = (row: IBuildingElement) => {
+        console.log("Hovered row ", row.idbuilding_elements)
+        props.onRowHover(row.name);
+    }
+
+    const handleMouseLeave = (row: IBuildingElement) => {
+        console.log("Unhovered row")        
+        props.onRowClearHover(row.name);
+    }
 
     const handleRowClick = (row: IBuildingElement) => {
         dispatch(allActions.elementAndMaterialActions.selectBuildingElement(row));
@@ -121,6 +130,7 @@ const ElementsTable = (props: Props) => {
         <Grid
             rows={rows}
             columns={columns}
+            getRowId={getRowId}
         >
             <CellTooltip
                 for={tooltipColumns}

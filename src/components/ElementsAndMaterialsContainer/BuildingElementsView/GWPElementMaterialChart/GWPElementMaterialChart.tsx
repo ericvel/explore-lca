@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from 'redux/reducers';
 import allActions from 'redux/actions';
@@ -30,21 +30,24 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    
+
 }
 
 
 
-const GWPElementMaterialChart = (props: Props) => {
+const GWPElementMaterialChart = (props: any) => {
     const dispatch = useDispatch();
 
     const buildingElements = useSelector((state: IRootState) => state.buildingElements);
     const selectedBuildingElement = useSelector((state: IRootState) => state.selectedBuildingElement);
-    const hoveredBuildingElement = useSelector((state: IRootState) => state.hoveredBuildingElement); 
+    const hoveredBuildingElement = useSelector((state: IRootState) => state.hoveredBuildingElement);
 
     const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
 
+    const chartRef: React.MutableRefObject<Chart | null> = useRef(null);
+
     useEffect(() => {
+        // chartRef.current;
         const childElements = getChildElements(selectedBuildingElement);
         const chartData: IElementChartDataItem[] = [];
 
@@ -63,6 +66,14 @@ const GWPElementMaterialChart = (props: Props) => {
 
         setChartData(chartData.reverse());
     }, [selectedBuildingElement]);
+
+    useEffect(() => {
+        if (props.hoveredRow !== null) {
+            handleRowHover(props.hoveredRow);
+        } else if (props.clearedRow !== null) {
+            handleRowClearHover(props.clearedRow);
+        }
+    }, [props.hoveredRow, props.clearedRow])
 
     const getChildElements = (parentElement: IBuildingElement) => {
         const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
@@ -96,16 +107,36 @@ const GWPElementMaterialChart = (props: Props) => {
     }
 
     const onPointHoverChanged = (e: any) => {
-        const series = e.target;
-        const hoveredElementId = series.data.id;
-        
-        if (series.isHovered() && hoveredBuildingElement !== hoveredElementId) {            
-            console.log("Hovered: ", hoveredElementId);
-            dispatch(allActions.elementAndMaterialActions.hoverBuildingElement(hoveredElementId));
-            // Commands to execute when the series is hovered over
+        const point = e.target;
+        const hoveredElementId = point.data.id;
+        const rowElement = document.getElementById("tableRow" + hoveredElementId);
+
+        if (point.isHovered()) {
+            // console.log("Hovered: ", hoveredElementId);
+            if (rowElement !== null) rowElement.style.backgroundColor = "#F5F5F5";
+            // dispatch(allActions.elementAndMaterialActions.hoverBuildingElement(hoveredElementId));
         } else {
-            dispatch(allActions.elementAndMaterialActions.stopHoverBuildingElement(hoveredElementId));
-            // Commands to execute when the series is hovered out
+            if (rowElement !== null) rowElement.style.removeProperty("background-color");
+            // dispatch(allActions.elementAndMaterialActions.stopHoverBuildingElement(hoveredElementId));
+        }
+    }
+
+
+    const handleRowHover = (elementName: string) => {
+        if (chartRef.current !== null) {
+            const chartInstance = chartRef.current.instance;
+            const a1a3Series = chartInstance.getSeriesByName("A1-A3");
+            const point = a1a3Series.getPointsByArg(elementName)[0];
+            point.hover();
+        }
+    }
+
+    const handleRowClearHover = (elementName: string) => {
+        if (chartRef.current !== null) {
+            const chartInstance = chartRef.current.instance;
+            const a1a3Series = chartInstance.getSeriesByName("A1-A3");
+            const point = a1a3Series.getPointsByArg(elementName)[0];
+            point.clearHover();
         }
     }
 
@@ -121,6 +152,7 @@ const GWPElementMaterialChart = (props: Props) => {
             palette="Material"
             rotated={true}
             onPointHoverChanged={onPointHoverChanged}
+            ref={chartRef}
         >
             <Size
                 height={height}

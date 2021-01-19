@@ -86,6 +86,17 @@ const BuildingElementsView = (props: any) => {
         dispatch(allActions.elementAndMaterialActions.setElementRoute(tempRoute));
     };
 
+    const [hoveredRow, setHoveredRow] = useState<string|null>(null);
+    const [clearedRow, setClearedRow] = useState<string|null>(null);
+
+    const handleRowHover = (elementName: string) => {
+        setHoveredRow(elementName);
+    }
+
+    const handleRowClearHover = (elementName: string) => {
+        setClearedRow(elementName);
+    }
+
     const childElements = getChildElements(selectedBuildingElement);
 
     const classes = useStyles();
@@ -109,12 +120,12 @@ const BuildingElementsView = (props: any) => {
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <Paper>
-                                    <ElementsTable />
+                                    <ElementsTable onRowHover={handleRowHover} onRowClearHover={handleRowClearHover}/>
                                 </Paper>
                             </Grid>
                             <Grid item xs={6}>
                                 <Paper>
-                                    <GWPElementMaterialChart />
+                                    <GWPElementMaterialChart hoveredRow={hoveredRow} clearedRow={clearedRow} />
                                 </Paper>
                             </Grid>
                         </Grid>
