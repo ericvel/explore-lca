@@ -1,18 +1,21 @@
 import {combineReducers} from 'redux';
 import { buildings, selectedBuildings } from './buildings';
-import { canSelectMultipleBuildings, isCompareDialogOpen } from './flags';
+import { isCompareDialogOpen } from './flags';
 import { buildingElements, materialInventory, selectedBuildingElement, buildingElementRoute, hoveredBuildingElement } from './elementsAndMaterials';
+import { contentType, displayMode, canSelectMultipleBuildings } from './ui';
 
 const rootReducer = combineReducers({
     buildings,
     selectedBuildings,
-    canSelectMultipleBuildings,
     isCompareDialogOpen,
     buildingElements,
     materialInventory,
     selectedBuildingElement,
     buildingElementRoute,
-    hoveredBuildingElement
+    hoveredBuildingElement,
+    contentType,
+    displayMode,
+    canSelectMultipleBuildings,
 });
 
 export default rootReducer;
