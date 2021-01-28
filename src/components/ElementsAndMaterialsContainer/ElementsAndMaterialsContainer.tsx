@@ -7,25 +7,51 @@ import ReactDOM from "react-dom";
 import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import Select from '@material-ui/core/Select';
+import Tooltip from '@material-ui/core/Tooltip';
 import Skeleton from '@material-ui/lab/Skeleton';
 
 import BuildingElementsView from './BuildingElementsView';
-import MaterialsTable from "./MaterialsTable";
+import MaterialsView from "./MaterialsView";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 180,
+        },
     }),
 );
 
-const ElementsAndMaterialsContainer = (props: any) => {    
+const ElementsAndMaterialsContainer = (props: any) => {
     const dispatch = useDispatch();
     const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
+    const contentType = useSelector((state: IRootState) => state.contentType);
+    const displayMode = useSelector((state: IRootState) => state.displayMode);
 
     const [loading, setLoading] = useState(false);
-    const [allMaterialsChecked, setAllMaterialsChecked] = useState(false);
+    const [tooltipOpen, setTooltipOpen] = useState(false);
+
+    const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        dispatch(allActions.uiActions.setContentType(event.target.value as string));
+    };
+
+    const handleRadioButtonChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(allActions.uiActions.setDisplayMode(event.target.value as string));
+    };
+
+    const handleTooltip = (isOpen: boolean) => {
+        setTooltipOpen(isOpen)
+    }
 
     useEffect(() => {
         if (selectedBuildings.length > 0) {
@@ -55,25 +81,42 @@ const ElementsAndMaterialsContainer = (props: any) => {
         }
     };
 
-    const handleChange = () => {
-        setAllMaterialsChecked((prev) => !prev);
-    };
 
-    const headingText = allMaterialsChecked ? "All materials" : "Building elements";
+    const headingText = contentType == 'buildingElements' ? "Building elements" : "All materials";
 
     const classes = useStyles();
 
     return (
         <div>
             <Grid container spacing={3} alignItems="center" justify="space-between">
-                <Grid item xs>
+                <Grid item>
                     <Typography variant="h5" color="textSecondary" gutterBottom>{headingText}</Typography>
                 </Grid>
-                <Grid item xs>
-                    <FormControlLabel
-                        control={<Switch checked={allMaterialsChecked} onChange={handleChange} />}
-                        label="Show all materials"
-                    />
+                <Grid item>
+                    <Tooltip title="Select what to display" open={tooltipOpen}>
+                        <FormControl className={classes.formControl}>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                displayEmpty
+                                value={contentType}
+                                onChange={handleSelectChange}
+                                onMouseEnter={() => handleTooltip(true)}
+                                onMouseLeave={() => handleTooltip(false)}
+                                onOpen={() => handleTooltip(false)}
+                            >
+                                <MenuItem value={'buildingElements'}>Building elements</MenuItem>
+                                <MenuItem value={'allMaterials'}>All materials</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Tooltip>
+                    <FormControl component="fieldset">
+                        <FormLabel component="legend" color="secondary">Display mode</FormLabel>
+                        <RadioGroup value={displayMode} onChange={handleRadioButtonChange} row>
+                            <FormControlLabel value="table" control={<Radio />} label="Table" />
+                            <FormControlLabel value="chart" control={<Radio />} label="Chart" />
+                        </RadioGroup>
+                    </FormControl>
                 </Grid>
             </Grid>
             {loading || props.parentIsLoading ?
@@ -81,10 +124,11 @@ const ElementsAndMaterialsContainer = (props: any) => {
                     <Skeleton height={120} /><Skeleton height={120} /><Skeleton height={120} />
                 </div>
                 :
-                allMaterialsChecked ?
-                    <MaterialsTable elementInventory={false} />
-                    :
+                contentType == 'buildingElements' ?
                     <BuildingElementsView />
+                    :
+                    <MaterialsView />
+                    // <MaterialsTable elementInventory={false} />
             }
         </div>
     );

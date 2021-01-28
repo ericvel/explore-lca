@@ -35,7 +35,7 @@ interface Props {
 
 
 
-const GWPElementMaterialChart = (props: any) => {
+const ElementsChart = (props: any) => {
     const dispatch = useDispatch();
 
     const buildingElements = useSelector((state: IRootState) => state.buildingElements);
@@ -47,14 +47,13 @@ const GWPElementMaterialChart = (props: any) => {
     const chartRef: React.MutableRefObject<Chart | null> = useRef(null);
 
     useEffect(() => {
-        // chartRef.current;
         const childElements = getChildElements(selectedBuildingElement);
         const chartData: IElementChartDataItem[] = [];
 
         childElements.forEach(element => {
             const dataEntry: IElementChartDataItem = {
                 name: element.name,
-                id: element.idbuilding_elements,
+                id: String(element.idbuilding_elements),
                 a1a3: Number(element.A1A3) || 0.0,
                 a4: Number(element.A4) || 0.0,
                 b4m: Number(element.B4_m) || 0.0,
@@ -67,6 +66,7 @@ const GWPElementMaterialChart = (props: any) => {
         setChartData(chartData.reverse());
     }, [selectedBuildingElement]);
 
+    /*
     useEffect(() => {
         if (props.hoveredRow !== null) {
             handleRowHover(props.hoveredRow);
@@ -74,6 +74,7 @@ const GWPElementMaterialChart = (props: any) => {
             handleRowClearHover(props.clearedRow);
         }
     }, [props.hoveredRow, props.clearedRow])
+    */
 
     const getChildElements = (parentElement: IBuildingElement) => {
         const childElements = buildingElements.filter(element => element.idparent === parentElement.idlevels);
@@ -104,6 +105,18 @@ const GWPElementMaterialChart = (props: any) => {
         return {
             text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`
         };
+    }
+
+    const onPointClick = (e: any) => {
+        const point = e.target;
+        const clickedElementId = Number(point.data.id);
+        
+        const element = buildingElements.find(el => el.idbuilding_elements === clickedElementId)
+
+        if (element !== undefined) {
+            dispatch(allActions.elementAndMaterialActions.selectBuildingElement(element));
+            dispatch(allActions.elementAndMaterialActions.addToElementRoute(element));
+        }
     }
 
     const onPointHoverChanged = (e: any) => {
@@ -151,8 +164,9 @@ const GWPElementMaterialChart = (props: any) => {
             dataSource={chartData}
             palette="Material"
             rotated={true}
-            onPointHoverChanged={onPointHoverChanged}
-            ref={chartRef}
+            onPointClick={onPointClick}
+        // onPointHoverChanged={onPointHoverChanged}
+        // ref={chartRef}
         >
             <Size
                 height={height}
@@ -210,4 +224,4 @@ const GWPElementMaterialChart = (props: any) => {
     );
 };
 
-export default GWPElementMaterialChart;
+export default ElementsChart;

@@ -101,7 +101,7 @@ const CompareBuildingDialog = () => {
     };
 
     const handleClose = () => {
-        dispatch(allActions.flagActions.toggleCompareDialogOpen());
+        // dispatch(allActions.flagActions.toggleCompareDialogOpen());
     };
 
     const { a1a3, a4, b4_m, b4_t } = checkedLCAPhases;

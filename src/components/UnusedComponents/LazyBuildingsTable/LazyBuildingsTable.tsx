@@ -235,7 +235,7 @@ function BuildingsTable() {
 
     const handleMultipleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         // setMultipleSwitchChecked(event.target.checked);
-        dispatch(allActions.flagActions.toggleCanSelectMultiple());
+        dispatch(allActions.uiActions.toggleCanSelectMultiple());
         dispatch(allActions.buildingActions.deselectAllBuildings());
         setSelectedRow([]);
     }

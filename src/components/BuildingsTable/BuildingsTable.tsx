@@ -58,7 +58,7 @@ function BuildingsTable() {
     const multipleSwitchChecked = useSelector((state: IRootState) => state.canSelectMultipleBuildings);
 
     const handleMultipleSwitchChange = () => {
-        dispatch(allActions.flagActions.toggleCanSelectMultiple());
+        dispatch(allActions.uiActions.toggleCanSelectMultiple());
         dispatch(allActions.buildingActions.deselectAllBuildings());
         setSelectedRow([]);
     }

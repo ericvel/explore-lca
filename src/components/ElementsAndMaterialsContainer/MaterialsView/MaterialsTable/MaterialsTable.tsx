@@ -24,9 +24,10 @@ import {
 import _ from 'lodash';
 
 import ColumnData from "./ColumnData";
+import { selectedBuildings } from "redux/reducers/buildings";
 
 interface Props {
-    elementInventory: IMaterialInventory[] | false;
+    elementInventory?: IMaterialInventory[];
 }
 
 // const getRowId = (row: any) => row.idmaterialInventory;
@@ -36,8 +37,10 @@ const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) => hid
         predicate: () => false,
     }));
 
-const MaterialsTable = (props: Props) => {    
-    const materialInventory = useSelector((state: IRootState) => state.materialInventory);
+const MaterialsTable = (props: Props) => {     
+    const contentType = useSelector((state: IRootState) => state.contentType);    
+    const materialInventory = useSelector((state: IRootState) => state.materialInventory);   
+    const selectedBuildingElement = useSelector((state: IRootState) => state.selectedBuildingElement);
 
     const [columns] = useState(ColumnData.columns);
     const [columnExtensions] = useState(ColumnData.columnExtensions);
@@ -47,6 +50,14 @@ const MaterialsTable = (props: Props) => {
     const [gwpColumns] = useState(['A1A3', 'A4', 'B4_t', 'B4_m'])
     const [searchTerm, setSearchTerm] = useState<string>();
 
+    const getElementMaterials = (parentElement: IBuildingElement) => {
+        const elementMaterials = materialInventory.filter(material => material.idbuilding_elements === parentElement.idbuilding_elements);
+        if (elementMaterials !== undefined) {
+            return elementMaterials;
+        }
+
+        return [];
+    }
 
     const GWPFormatter = ({value}: any) => value && value > 0.0 ? parseFloat(value).toFixed(3) : 0.0.toFixed(1);
 
@@ -75,7 +86,7 @@ const MaterialsTable = (props: Props) => {
     );
     
     // Displays only inventory for selected building element if one is selected
-    const rows = props.elementInventory || materialInventory;
+    const rows = contentType == 'buildingElements' ? getElementMaterials(selectedBuildingElement) : materialInventory;
 
     return (
         <Paper>

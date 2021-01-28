@@ -10,10 +10,16 @@ import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import HomeIcon from '@material-ui/icons/Home';
 import Paper from '@material-ui/core/Paper';
+import Switch from '@material-ui/core/Switch';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
-import MaterialsTable from "../MaterialsTable";
+import MaterialsView from "../MaterialsView";
 import ElementsTable from "./ElementsTable";
-import GWPElementMaterialChart from './GWPElementMaterialChart';
+import ElementsChart from './ElementsChart';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -53,6 +59,7 @@ const BuildingElementsView = (props: any) => {
     const materialInventory = useSelector((state: IRootState) => state.materialInventory);
     const selectedBuildingElement = useSelector((state: IRootState) => state.selectedBuildingElement);
     const elementRoute = useSelector((state: IRootState) => state.buildingElementRoute);
+    const displayMode = useSelector((state: IRootState) => state.displayMode);
 
     useEffect(() => {
         const rootElement = buildingElements.find((element: IBuildingElement) => element.hierarchy === 0);
@@ -86,8 +93,8 @@ const BuildingElementsView = (props: any) => {
         dispatch(allActions.elementAndMaterialActions.setElementRoute(tempRoute));
     };
 
-    const [hoveredRow, setHoveredRow] = useState<string|null>(null);
-    const [clearedRow, setClearedRow] = useState<string|null>(null);
+    const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+    const [clearedRow, setClearedRow] = useState<string | null>(null);
 
     const handleRowHover = (elementName: string) => {
         setHoveredRow(elementName);
@@ -104,7 +111,7 @@ const BuildingElementsView = (props: any) => {
     return (
         <div>
             <Grid container spacing={3}>
-                <Grid item xs>
+                <Grid item xs={12}>
                     <Breadcrumbs aria-label="breadcrumb" className={classes.breadCrumbs}>
                         {elementRoute.map((element, index) =>
                             <StyledBreadcrumb
@@ -116,21 +123,19 @@ const BuildingElementsView = (props: any) => {
                             />
                         )}
                     </Breadcrumbs>
+                </Grid>
+                <Grid item xs={12}>
                     {childElements?.length > 0 ?
-                        <Grid container spacing={2}>
-                            <Grid item xs={6}>
-                                <Paper>
-                                    <ElementsTable onRowHover={handleRowHover} onRowClearHover={handleRowClearHover}/>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Paper>
-                                    <GWPElementMaterialChart hoveredRow={hoveredRow} clearedRow={clearedRow} />
-                                </Paper>
-                            </Grid>
-                        </Grid>
+                        (displayMode == 'table' ?
+                            <Paper>
+                                <ElementsTable />
+                            </Paper>
+                            :
+                            <Paper>
+                                <ElementsChart />
+                            </Paper>)
                         :
-                        <MaterialsTable elementInventory={getElementMaterials(selectedBuildingElement)} />
+                        <MaterialsView />
                     }
                 </Grid>
             </Grid>
