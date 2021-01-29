@@ -110,7 +110,7 @@ const ElementsChart = (props: any) => {
     const onPointClick = (e: any) => {
         const point = e.target;
         const clickedElementId = Number(point.data.id);
-        
+
         const element = buildingElements.find(el => el.idbuilding_elements === clickedElementId)
 
         if (element !== undefined) {
@@ -120,6 +120,13 @@ const ElementsChart = (props: any) => {
     }
 
     const onPointHoverChanged = (e: any) => {
+        if (e.target.isHovered()) {
+            e.element.style.cursor = "pointer"
+        } else {
+            e.element.style.cursor = "auto"
+        }
+
+        /*
         const point = e.target;
         const hoveredElementId = point.data.id;
         const rowElement = document.getElementById("tableRow" + hoveredElementId);
@@ -132,6 +139,7 @@ const ElementsChart = (props: any) => {
             if (rowElement !== null) rowElement.style.removeProperty("background-color");
             // dispatch(allActions.elementAndMaterialActions.stopHoverBuildingElement(hoveredElementId));
         }
+        */
     }
 
 
@@ -165,7 +173,7 @@ const ElementsChart = (props: any) => {
             palette="Material"
             rotated={true}
             onPointClick={onPointClick}
-        // onPointHoverChanged={onPointHoverChanged}
+            onPointHoverChanged={onPointHoverChanged}
         // ref={chartRef}
         >
             <Size
@@ -196,7 +204,7 @@ const ElementsChart = (props: any) => {
             />
             <ValueAxis>
                 <Title
-                    text={"kgCO2e/m\xB2"}
+                    text={"kgCO2e"}
                     font={{
                         size: 14
                     }}
@@ -219,6 +227,7 @@ const ElementsChart = (props: any) => {
                 zIndex={1200}
                 arrowLength={6}
                 format="fixedPoint"
+                interactive
             />
         </Chart>
     );

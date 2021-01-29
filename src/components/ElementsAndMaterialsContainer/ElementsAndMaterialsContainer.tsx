@@ -94,7 +94,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
                 </Grid>
                 <Grid item>
                     <Tooltip title="Select what to display" open={tooltipOpen}>
-                        <FormControl className={classes.formControl}>
+                        <FormControl className={classes.formControl} variant="outlined">
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"

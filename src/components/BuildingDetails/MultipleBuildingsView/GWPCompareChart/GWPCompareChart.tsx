@@ -108,7 +108,7 @@ const GWPCompareChart = () => {
                 />
                 <ValueAxis>
                     <Title
-                        text={"kgCO2e/m\xB2"}
+                        text={"kgCO2e"}
                         font={{
                             size: 14
                         }}

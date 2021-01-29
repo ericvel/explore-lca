@@ -11,6 +11,8 @@ import {
     Chart,
     Series,
     ArgumentAxis,
+    CommonSeriesSettings,
+    SeriesTemplate,
     ValueAxis,
     Title,
     Tooltip,
@@ -46,27 +48,40 @@ const GWPSingleChart = (props: Props) => {
 
     return (
         <Paper>
-            <Chart className={classes.chart} dataSource={chartData}>
-                <Series
+            <Chart
+                className={classes.chart}
+                dataSource={chartData}
+                palette="Material"
+            >
+                <CommonSeriesSettings
+                    argumentField="lcaPhase"
+                    valueField="gwp"
+                    type="bar"
+                    showInLegend={false}
+                    ignoreEmptyPoints={true}
+                />
+                {/* <Series
                     valueField="gwp"
                     argumentField="lcaPhase"
                     name="Embodied emissions"
                     type="bar"
                     showInLegend={false}
-                />
+                /> */}
                 <ValueAxis>
                     <Title
-                        text={"kgCO2e/m\xB2"}
+                        text={"kgCO2e"}
                         font={{
                             size: 12
                         }}
                     />
                 </ValueAxis >
+                <SeriesTemplate nameField="lcaPhase" />
                 <Tooltip
                     enabled={true}
                     zIndex={1200}
                     arrowLength={6}
                     format="fixedPoint"
+                    interactive
                 />
             </Chart>
         </Paper>
