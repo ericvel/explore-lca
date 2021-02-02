@@ -26,7 +26,7 @@ import MaterialsView from "./MaterialsView";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         formControl: {
-            margin: theme.spacing(1),
+            marginRight: theme.spacing(2),
             minWidth: 180,
         },
     }),
@@ -82,7 +82,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
     };
 
 
-    const headingText = contentType == 'buildingElements' ? "Building elements" : "All materials";
+    const headingText = contentType == 'hierarchy' ? "Building elements" : "All materials";
 
     const classes = useStyles();
 
@@ -105,7 +105,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
                                 onMouseLeave={() => handleTooltip(false)}
                                 onOpen={() => handleTooltip(false)}
                             >
-                                <MenuItem value={'buildingElements'}>Building elements</MenuItem>
+                                <MenuItem value={'hierarchy'}>Elements (hierarchy)</MenuItem>
                                 <MenuItem value={'allMaterials'}>All materials</MenuItem>
                             </Select>
                         </FormControl>
@@ -124,7 +124,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
                     <Skeleton height={120} /><Skeleton height={120} /><Skeleton height={120} />
                 </div>
                 :
-                contentType == 'buildingElements' ?
+                contentType == 'hierarchy' ?
                     <BuildingElementsView />
                     :
                     <MaterialsView />
