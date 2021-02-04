@@ -1,1 +1,1 @@
-export { default } from './MultipleBuildingsView'
+export { default } from "./MultipleBuildingsView";

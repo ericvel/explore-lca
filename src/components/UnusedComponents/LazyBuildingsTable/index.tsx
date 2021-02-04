@@ -1,1 +1,1 @@
-export { default } from './LazyBuildingsTable'
+export { default } from "./LazyBuildingsTable";

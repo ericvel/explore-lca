@@ -1,1 +1,1 @@
-export { default } from './MaterialsChart'
+export { default } from "./MaterialsChart";

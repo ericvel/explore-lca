@@ -1,1 +1,1 @@
-export { default } from './CompareBuildingDialog'
+export { default } from "./CompareBuildingDialog";

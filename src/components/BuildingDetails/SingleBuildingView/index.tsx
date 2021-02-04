@@ -1,1 +1,1 @@
-export { default } from './SingleBuildingView'
+export { default } from "./SingleBuildingView";

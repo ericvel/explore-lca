@@ -1,1 +1,1 @@
-export { default } from './GWPSingleChart'
+export { default } from "./GWPSingleChart";

@@ -7,11 +7,10 @@
   
     background: rgba(255, 255, 255, .3);
   } */
-  
-  .loading-icon-mui {
-    position: absolute;
-    font-size: 40px;
-    top: calc(55% - 10px);
-    left: calc(25% - 10px);
-  }
-  
+
+.loading-icon-mui {
+  position: absolute;
+  font-size: 40px;
+  top: calc(55% - 10px);
+  left: calc(25% - 10px);
+}

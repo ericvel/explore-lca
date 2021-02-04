@@ -1,1 +1,1 @@
-export { default } from './ElementsTable'
+export { default } from "./ElementsTable";

@@ -1,1 +1,1 @@
-export { default } from './ElementsChart'
+export { default } from "./ElementsChart";

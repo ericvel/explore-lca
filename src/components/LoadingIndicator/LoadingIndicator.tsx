@@ -1,7 +1,7 @@
-import * as React from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import * as React from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-import './LoadingIndicator.css';
+import "./LoadingIndicator.css";
 
 const LoadingIndicator = () => (
   <div className="loading-shading-mui">

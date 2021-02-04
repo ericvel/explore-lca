@@ -13,6 +13,7 @@
 
 # config and credentials
 dbconfig.js
+firebase_config.js
 
 # misc
 .DS_Store

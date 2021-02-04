@@ -1,1 +1,1 @@
-export { default } from './TableSelect'
+export { default } from "./TableSelect";

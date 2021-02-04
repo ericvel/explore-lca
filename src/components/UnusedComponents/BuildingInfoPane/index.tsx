@@ -1,1 +1,1 @@
-export { default } from './BuildingInfoPane'
+export { default } from "./BuildingInfoPane";

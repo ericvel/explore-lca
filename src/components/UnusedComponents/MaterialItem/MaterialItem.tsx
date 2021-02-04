@@ -1,77 +1,81 @@
 import React, { useState, useEffect } from "react";
-import { Theme, createStyles, makeStyles, withStyles, emphasize } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Collapse from '@material-ui/core/Collapse';
-import Divider from '@material-ui/core/Divider';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionActions from '@material-ui/core/AccordionActions';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+import {
+  Theme,
+  createStyles,
+  makeStyles,
+  withStyles,
+  emphasize,
+} from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import Collapse from "@material-ui/core/Collapse";
+import Divider from "@material-ui/core/Divider";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionActions from "@material-ui/core/AccordionActions";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        materialPaper: {
-            margin: theme.spacing(1),
-            padding: theme.spacing(1),
-            // height: theme.spacing(8)            
-            // background: theme.palette.warning.light
-        },
-        divider: {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2)
-        },
-    }),
+  createStyles({
+    materialPaper: {
+      margin: theme.spacing(1),
+      padding: theme.spacing(1),
+      // height: theme.spacing(8)
+      // background: theme.palette.warning.light
+    },
+    divider: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+    },
+  })
 );
 
 const MaterialItem = (props: any) => {
-    // const [materialItem] = useState<MaterialItem>(props.materialItem);
-    const [expanded, setExpanded] = useState(false);
+  // const [materialItem] = useState<MaterialItem>(props.materialItem);
+  const [expanded, setExpanded] = useState(false);
 
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
-   /*  const {
+  /*  const {
         name, source, materialCat
     } = materialItem.material;
  */
-    const classes = useStyles();
+  const classes = useStyles();
 
-    return (
-        <div>
-            <Paper variant="outlined" className={classes.materialPaper}>
-                <Grid container spacing={2} alignItems="center" justify="space-between">
-                    <Grid item xs={10}>
-                        <Typography variant="body1">
-                            {/* name */}
-                        </Typography>
-                        <Grid container>
-                            <Grid container item xs={6}>
-
-                            </Grid>
-                            <Grid container item xs={6}>
-
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid item>
-                        <Tooltip title="See inventory entries">
-                            <IconButton color="default" aria-label="expand material" onClick={handleExpandClick}>
-                                <ExpandMoreIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
-                </Grid>
-                <Collapse in={expanded} timeout="auto">
-                    <Grid container>
-                        {/* {materialItem.inventoryEntries.map((inventory, index) =>
+  return (
+    <div>
+      <Paper variant="outlined" className={classes.materialPaper}>
+        <Grid container spacing={2} alignItems="center" justify="space-between">
+          <Grid item xs={10}>
+            <Typography variant="body1">{/* name */}</Typography>
+            <Grid container>
+              <Grid container item xs={6}></Grid>
+              <Grid container item xs={6}></Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Tooltip title="See inventory entries">
+              <IconButton
+                color="default"
+                aria-label="expand material"
+                onClick={handleExpandClick}
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
+        <Collapse in={expanded} timeout="auto">
+          <Grid container>
+            {/* {materialItem.inventoryEntries.map((inventory, index) =>
                             <div key={index}>
                                 <Divider variant="fullWidth" light={true} className={classes.divider} />
 
@@ -124,11 +128,11 @@ const MaterialItem = (props: any) => {
                             </div>
 
                         )} */}
-                    </Grid>
-                </Collapse>
-            </Paper>
-        </div>
-    );
+          </Grid>
+        </Collapse>
+      </Paper>
+    </div>
+  );
 };
 
 export default MaterialItem;

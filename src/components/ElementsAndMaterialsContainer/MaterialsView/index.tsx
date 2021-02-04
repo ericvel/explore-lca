@@ -1,1 +1,1 @@
-export { default } from './MaterialsView';
+export { default } from "./MaterialsView";

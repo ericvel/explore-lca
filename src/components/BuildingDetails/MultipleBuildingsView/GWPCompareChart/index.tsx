@@ -1,1 +1,1 @@
-export { default } from './GWPCompareChart'
+export { default } from "./GWPCompareChart";
