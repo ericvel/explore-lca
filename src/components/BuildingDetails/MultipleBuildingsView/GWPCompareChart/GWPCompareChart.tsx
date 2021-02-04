@@ -32,26 +32,51 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const GWPCompareChart = () => {
     const selectedBuildings = useSelector((state: IRootState) => state.selectedBuildings);
+    const checkedEEMetrics = useSelector((state: IRootState) => state.EEMetric);
+
     const [chartData, setChartData] = useState<ICompareChartDataItem[]>([]);
+
 
     useEffect(() => {
         const chartData: ICompareChartDataItem[] = [];
 
         selectedBuildings.forEach(building => {
+            var A1A3: number = Number(building.A1A3) || 0.0;
+            var A4: number = Number(building.A4) || 0.0;
+            var B4_m: number = Number(building.B4_m) || 0.0;
+            var B4_t: number = Number(building.B4_t) || 0.0;
+
+            // Divides by floor area if setting is checked
+            if (checkedEEMetrics.perSqM) {
+                A1A3 = A1A3 / building.floor_area;
+                A4 = A4 / building.floor_area;
+                B4_m = B4_m / building.floor_area;
+                B4_t = B4_t / building.floor_area;
+            }
+
+            // Divides by lifetime year if setting is checked
+            if (checkedEEMetrics.perYear) {
+                A1A3 = A1A3 / building.lifetime;
+                A4 = A4 / building.lifetime;
+                B4_m = B4_m / building.lifetime;
+                B4_t = B4_t / building.lifetime;
+            }
+
+
             const dataEntry: ICompareChartDataItem = {
                 name: building.building_name,
                 identifier: building.building_identifier,
-                a1a3: Number(building.A1A3) || 0.0,
-                a4: Number(building.A4) || 0.0,
-                b4m: Number(building.B4_m) || 0.0,
-                b4t: Number(building.B4_t) || 0.0,
+                a1a3: A1A3,
+                a4: A4,
+                b4m: B4_m,
+                b4t: B4_t,
             }
 
             chartData.push(dataEntry);
         });
 
         setChartData(chartData.reverse());
-    }, [selectedBuildings]);
+    }, [selectedBuildings, checkedEEMetrics]);
 
     const customizeTooltip = (arg: any) => {
         return {
@@ -74,6 +99,10 @@ const GWPCompareChart = () => {
 
         return data.value;
     }
+    
+    var axisTitle = "kgCO2e";
+    if (checkedEEMetrics.perSqM) axisTitle += "/m\xB2";
+    if (checkedEEMetrics.perYear) axisTitle += "/year";
 
     const classes = useStyles();
 
@@ -84,7 +113,7 @@ const GWPCompareChart = () => {
                 dataSource={chartData}
                 palette="Material"
                 rotated
-    
+
             >
                 <Size
                     height={500}
@@ -108,7 +137,7 @@ const GWPCompareChart = () => {
                 />
                 <ValueAxis>
                     <Title
-                        text={"kgCO2e"}
+                        text={axisTitle}
                         font={{
                             size: 14
                         }}

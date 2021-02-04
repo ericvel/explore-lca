@@ -88,6 +88,7 @@ const initialBuildingState: IBuilding = {
     project: "",
     country: "",
     city: "",
+    lifetime: 0,
     typology: "",
     construction_type: "",
     floor_area: 0,

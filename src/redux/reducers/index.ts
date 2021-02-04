@@ -3,6 +3,7 @@ import { buildings, selectedBuildings } from './buildings';
 import { isCompareDialogOpen } from './flags';
 import { buildingElements, materialInventory, selectedBuildingElement, buildingElementRoute, hoveredBuildingElement } from './elementsAndMaterials';
 import { contentType, displayMode, canSelectMultipleBuildings } from './ui';
+import { EEMetric } from './settings';
 
 const rootReducer = combineReducers({
     buildings,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     contentType,
     displayMode,
     canSelectMultipleBuildings,
+    EEMetric,
 });
 
 export default rootReducer;

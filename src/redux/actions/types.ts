@@ -19,6 +19,8 @@ export const STOP_HOVER_BUILDING_ELEMENT = 'STOP_HOVER_BUILDING_ELEMENT';
 export const SET_CONTENT_TYPE = 'SET_CONTENT_TYPE';
 export const SET_DISPLAY_MODE = 'SET_DISPLAY_MODE';
 
+export const SET_EE_METRIC = 'SET_EE_METRIC';
+
 interface SetBuildingsAction {
     type: typeof SET_BUILDINGS;
     payload: IBuilding[];
@@ -86,6 +88,12 @@ interface SetDisplayModeAction {
     payload: string;
 }
 
+interface SetEEMetricAction {
+    type: typeof SET_EE_METRIC;
+    name: string;
+    checked: boolean;
+}
+
 export type BuildingActionTypes = SetBuildingsAction;
 export type SelectedBuildingActionTypes = SelectBuildingsAction | DeselectAllBuildingsAction;
 export type BuildingElementActionTypes = SetBuildingElementsAction;
@@ -95,5 +103,6 @@ export type HoverBuildingElementActionTypes = HoverBuildingElementAction | StopH
 export type ContentTypeActionTypes = SetContentTypeAction;
 export type DisplayModeActionTypes = SetDisplayModeAction;
 export type CanSelectMultipleActionTypes = ToggleCanSelectMultipleAction;
+export type EEMetricActionTypes = SetEEMetricAction;
 // export type SelectedBuildingElementActionTypes = SelectBuildingElementAction;
 // export type { ToggleSelectMultipleSwitchAction };

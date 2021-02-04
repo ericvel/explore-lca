@@ -7,6 +7,7 @@ interface IBuilding {
     city: string;
     typology: string;
     construction_type: string;
+    lifetime: number;
     floor_area: number;
     A1A3: number?;
     A4: number?;

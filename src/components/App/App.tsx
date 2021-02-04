@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import BuildingsTable from '../BuildingsTable';
 import BuildingDetails from '../BuildingDetails';
 import HelpButton from '../HelpButton';
+import SettingsButton from '../SettingsButton';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,9 +44,12 @@ function App() {
                 bLCAd Tool - GUI
                 </Typography>
             </Grid>
-  
-            <Grid item >
+
+            <Grid item xs={1}>
               <HelpButton alertContentId="main" iconSize="large" />
+            </Grid>
+            <Grid item xs={1}>
+              <SettingsButton iconSize="large" />
             </Grid>
           </Grid>
 
