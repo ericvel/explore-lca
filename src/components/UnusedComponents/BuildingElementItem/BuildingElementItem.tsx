@@ -46,37 +46,37 @@ const BuildingElementItem = (props: any) => {
 
   return (
     <div>
-      <Paper variant="outlined" className={classes.buildingElementPaper}>
-        <Grid container spacing={2} alignItems="center" justify="space-between">
+      <Paper variant='outlined' className={classes.buildingElementPaper}>
+        <Grid container spacing={2} alignItems='center' justify='space-between'>
           <Grid item xs={10}>
-            <Typography variant="body1">{name}</Typography>
+            <Typography variant='body1'>{name}</Typography>
             <Grid container>
               <Grid container item xs={6}>
                 <Grid item xs={4}>
-                  <Typography variant="body2" color="textSecondary">
+                  <Typography variant='body2' color='textSecondary'>
                     A1-A3:
                   </Typography>
-                  <Typography variant="body2" color="textSecondary">
+                  <Typography variant='body2' color='textSecondary'>
                     A4:
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography variant="body2">{A1A3 || "0.0"}</Typography>
-                  <Typography variant="body2">{A4 || "0.0"}</Typography>
+                  <Typography variant='body2'>{A1A3 || "0.0"}</Typography>
+                  <Typography variant='body2'>{A4 || "0.0"}</Typography>
                 </Grid>
               </Grid>
               <Grid container item xs={6}>
                 <Grid item xs={4}>
-                  <Typography variant="body2" color="textSecondary">
+                  <Typography variant='body2' color='textSecondary'>
                     B4 (t):
                   </Typography>
-                  <Typography variant="body2" color="textSecondary">
+                  <Typography variant='body2' color='textSecondary'>
                     B4 (m):
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography variant="body2">{B4_t || "0.0"}</Typography>
-                  <Typography variant="body2">{B4_m || "0.0"}</Typography>
+                  <Typography variant='body2'>{B4_t || "0.0"}</Typography>
+                  <Typography variant='body2'>{B4_m || "0.0"}</Typography>
                 </Grid>
               </Grid>
             </Grid>
@@ -84,20 +84,20 @@ const BuildingElementItem = (props: any) => {
           <Grid item>
             {/* Check if element has children to decide if should display button */}
             {hasMaterials ? (
-              <Tooltip title="See materials">
+              <Tooltip title='See materials'>
                 <IconButton
-                  /* edge="end" */ color="secondary"
-                  aria-label="element materials"
+                  /* edge="end" */ color='secondary'
+                  aria-label='element materials'
                   onClick={() => props.onClickElementMaterialsButton(idlevels)}
                 >
                   <NavigateNextIcon />
                 </IconButton>
               </Tooltip>
             ) : (
-              <Tooltip title="See sub-elements">
+              <Tooltip title='See sub-elements'>
                 <IconButton
-                  /* edge="end" */ color="primary"
-                  aria-label="child elements"
+                  /* edge="end" */ color='primary'
+                  aria-label='child elements'
                   onClick={() => props.onClickChildElementButton(idlevels)}
                 >
                   <NavigateNextIcon />

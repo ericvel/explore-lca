@@ -8,7 +8,12 @@ import {
   buildingElementRoute,
   hoveredBuildingElement,
 } from "./elementsAndMaterials";
-import { contentType, displayMode, canSelectMultipleBuildings } from "./ui";
+import {
+  contentType,
+  displayMode,
+  canSelectMultipleBuildings,
+  isSimulationModeActive,
+} from "./ui";
 import { EEMetric } from "./settings";
 
 const rootReducer = combineReducers({
@@ -23,6 +28,7 @@ const rootReducer = combineReducers({
   contentType,
   displayMode,
   canSelectMultipleBuildings,
+  isSimulationModeActive,
   EEMetric,
 });
 

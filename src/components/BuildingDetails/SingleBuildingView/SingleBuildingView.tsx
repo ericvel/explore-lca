@@ -14,9 +14,13 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 import ElementsAndMaterialsContainer from "components/ElementsAndMaterialsContainer";
-import GWPSingleChart from "./GWPSingleChart";
+import SingleBuildingChart from "./SingleBuildingChart";
+import SimulationModeSwitch from "./SimulationModeSwitch";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -63,7 +67,14 @@ const SingleBuildingView = (props: any) => {
   const selectedBuildings = useSelector(
     (state: IRootState) => state.selectedBuildings
   );
-  const [building, setBuilding] = useState<IBuilding>(initialBuildingState);
+
+  const isSimulationModeChecked = useSelector(
+    (state: IRootState) => state.isSimulationModeActive
+  );
+
+  const handleSimulationModeChanged = () => {
+    dispatch(allActions.uiActions.toggleSimulationMode());
+  };
 
   const {
     building_identifier,
@@ -78,28 +89,26 @@ const SingleBuildingView = (props: any) => {
     B4_t,
   } = selectedBuildings[0];
 
-  const gwpChartData: ISingleChartDataItem[] = [
-    { lcaPhase: "A1-A3", gwp: Number(A1A3) || 0.0 },
-    { lcaPhase: "A4", gwp: Number(A4) || 0.0 },
-    { lcaPhase: "B4 (m)", gwp: Number(B4_m) || 0.0 },
-    { lcaPhase: "B4 (t)", gwp: Number(B4_t) || 0.0 },
-  ];
-
   const classes = useStyles();
 
   return (
     <div className={classes.content}>
       <Grid container spacing={3} className={classes.buildingSection}>
-        <Grid item xs={11}>
-          <Typography variant="h4" color="textPrimary">
-            {building_name}
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary" gutterBottom>
-            {building_identifier}
-          </Typography>
+        <Grid item container alignItems='flex-start' justify='space-between'>
+          <Grid item xs={8}>
+            <Typography variant='h4' color='textPrimary'>
+              {building_name}
+            </Typography>
+            <Typography variant='subtitle1' color='textSecondary' gutterBottom>
+              {building_identifier}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <SimulationModeSwitch />
+          </Grid>
         </Grid>
         <Grid item xs={6}>
-          <Typography variant="h5" color="textSecondary" gutterBottom>
+          <Typography variant='h5' color='textSecondary' gutterBottom>
             General info
           </Typography>
           <div>
@@ -112,9 +121,9 @@ const SingleBuildingView = (props: any) => {
               }}
               InputProps={{ disableUnderline: true }}
               fullWidth={true}
-              label="Project"
-              name="project"
-              margin="dense"
+              label='Project'
+              name='project'
+              margin='dense'
               defaultValue={project || "nil"}
             />
             <TextField
@@ -125,9 +134,9 @@ const SingleBuildingView = (props: any) => {
               }}
               InputProps={{ disableUnderline: true }}
               fullWidth={true}
-              label="Typology"
-              name="typology"
-              margin="dense"
+              label='Typology'
+              name='typology'
+              margin='dense'
               defaultValue={typology || "nil"}
             />
             <TextField
@@ -138,9 +147,9 @@ const SingleBuildingView = (props: any) => {
               }}
               InputProps={{ disableUnderline: true }}
               fullWidth={true}
-              label="Construction type"
-              name="construction_type"
-              margin="dense"
+              label='Construction type'
+              name='construction_type'
+              margin='dense'
               defaultValue={construction_type || "nil"}
             />
             <TextField
@@ -151,25 +160,25 @@ const SingleBuildingView = (props: any) => {
               }}
               InputProps={{ disableUnderline: true }}
               fullWidth={true}
-              label="Floor area"
-              name="floor_area"
-              margin="dense"
+              label='Floor area'
+              name='floor_area'
+              margin='dense'
               defaultValue={floor_area + " m\xB2" || "nil"}
             />
           </div>
         </Grid>
         <Grid item xs={6}>
-          <Typography variant="h5" color="textSecondary" gutterBottom>
+          <Typography variant='h5' color='textSecondary' gutterBottom>
             Embodied emissions
           </Typography>
-          <GWPSingleChart chartData={gwpChartData} height={250} />
+          <SingleBuildingChart />
         </Grid>
       </Grid>
 
       <Grid container spacing={3}>
         <Grid item xs>
-          <Divider variant="middle" light={true} className={classes.divider} />
-          <ElementsAndMaterialsContainer buildingId={building.idbuildings} />
+          <Divider variant='middle' light={true} className={classes.divider} />
+          <ElementsAndMaterialsContainer />
         </Grid>
       </Grid>
     </div>

@@ -52,20 +52,20 @@ const MaterialItem = (props: any) => {
 
   return (
     <div>
-      <Paper variant="outlined" className={classes.materialPaper}>
-        <Grid container spacing={2} alignItems="center" justify="space-between">
+      <Paper variant='outlined' className={classes.materialPaper}>
+        <Grid container spacing={2} alignItems='center' justify='space-between'>
           <Grid item xs={10}>
-            <Typography variant="body1">{/* name */}</Typography>
+            <Typography variant='body1'>{/* name */}</Typography>
             <Grid container>
               <Grid container item xs={6}></Grid>
               <Grid container item xs={6}></Grid>
             </Grid>
           </Grid>
           <Grid item>
-            <Tooltip title="See inventory entries">
+            <Tooltip title='See inventory entries'>
               <IconButton
-                color="default"
-                aria-label="expand material"
+                color='default'
+                aria-label='expand material'
                 onClick={handleExpandClick}
               >
                 <ExpandMoreIcon />
@@ -73,7 +73,7 @@ const MaterialItem = (props: any) => {
             </Tooltip>
           </Grid>
         </Grid>
-        <Collapse in={expanded} timeout="auto">
+        <Collapse in={expanded} timeout='auto'>
           <Grid container>
             {/* {materialItem.inventoryEntries.map((inventory, index) =>
                             <div key={index}>

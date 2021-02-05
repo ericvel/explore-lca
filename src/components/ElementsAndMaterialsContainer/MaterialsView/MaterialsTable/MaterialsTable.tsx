@@ -103,7 +103,7 @@ const MaterialsTable = (props: Props) => {
 
   // Displays only inventory for selected building element if one is selected
   const rows =
-    contentType == "buildingElements"
+    contentType == "hierarchy"
       ? getElementMaterials(selectedBuildingElement)
       : materialInventory;
 

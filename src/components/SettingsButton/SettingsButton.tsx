@@ -62,17 +62,17 @@ function SettingsButton(props: Props) {
 
   return (
     <div>
-      <IconButton aria-label="help" onClick={handleClickOpen}>
+      <IconButton aria-label='help' onClick={handleClickOpen}>
         <SettingsIcon fontSize={props.iconSize} />
       </IconButton>
-      <Drawer anchor="right" open={open} onClose={handleClose}>
+      <Drawer anchor='right' open={open} onClose={handleClose}>
         <Grid container spacing={3} className={classes.content}>
           <Grid item xs={12}>
-            <Typography variant="h4" color="textPrimary" gutterBottom>
+            <Typography variant='h4' color='textPrimary' gutterBottom>
               Settings
             </Typography>
-            <FormControl component="fieldset" className={classes.formControl}>
-              <FormLabel component="legend">
+            <FormControl component='fieldset' className={classes.formControl}>
+              <FormLabel component='legend'>
                 Embodied Emissions Metric
               </FormLabel>
               <FormGroup>
@@ -81,7 +81,7 @@ function SettingsButton(props: Props) {
                     <Checkbox
                       checked={perSqM}
                       onChange={handleEEMetricChange}
-                      name="perSqM"
+                      name='perSqM'
                     />
                   }
                   label={"Per m\xB2"}
@@ -91,10 +91,10 @@ function SettingsButton(props: Props) {
                     <Checkbox
                       checked={perYear}
                       onChange={handleEEMetricChange}
-                      name="perYear"
+                      name='perYear'
                     />
                   }
-                  label="Per year"
+                  label='Per year'
                 />
               </FormGroup>
             </FormControl>

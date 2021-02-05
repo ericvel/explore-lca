@@ -116,19 +116,19 @@ const GWPCompareChart = () => {
       <Chart
         className={classes.chart}
         dataSource={chartData}
-        palette="Material"
+        palette='Material'
         rotated
       >
         <Size height={500} />
         <CommonSeriesSettings
-          argumentField="name"
-          type="stackedBar"
+          argumentField='name'
+          type='stackedBar'
           barWidth={60}
         />
-        <Series valueField="a1a3" name="A1-A3" />
-        <Series valueField="a4" name="A4" />
-        <Series valueField="b4m" name="B4 (m)" />
-        <Series valueField="b4t" name="B4 (t)" />
+        <Series valueField='a1a3' name='A1-A3' />
+        <Series valueField='a4' name='A4' />
+        <Series valueField='b4m' name='B4 (m)' />
+        <Series valueField='b4t' name='B4 (t)' />
         <ValueAxis>
           <Title
             text={axisTitle}
@@ -141,17 +141,17 @@ const GWPCompareChart = () => {
           <Label customizeText={customizeArgumentAxisLabel} />
         </ArgumentAxis>
         <Legend
-          verticalAlignment="bottom"
-          horizontalAlignment="center"
-          itemTextPosition="top"
+          verticalAlignment='bottom'
+          horizontalAlignment='center'
+          itemTextPosition='top'
         />
         <Tooltip
           enabled={true}
-          location="edge"
+          location='edge'
           customizeTooltip={customizeTooltip}
           zIndex={1200}
           arrowLength={6}
-          format="fixedPoint"
+          format='fixedPoint'
         />
       </Chart>
     </Paper>

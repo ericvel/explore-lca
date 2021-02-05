@@ -47,7 +47,7 @@ function HelpButton(props: Props) {
 
   return (
     <div>
-      <IconButton aria-label="help" onClick={handleClickOpen}>
+      <IconButton aria-label='help' onClick={handleClickOpen}>
         <HelpOutlineIcon fontSize={props.iconSize} />
       </IconButton>
       <Dialog open={open} onClose={handleClose}>
@@ -58,7 +58,7 @@ function HelpButton(props: Props) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary" autoFocus>
+          <Button onClick={handleClose} color='primary' autoFocus>
             Ok
           </Button>
         </DialogActions>

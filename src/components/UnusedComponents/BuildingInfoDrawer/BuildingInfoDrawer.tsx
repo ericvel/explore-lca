@@ -164,8 +164,8 @@ const BuildingInfoDrawer = (props: any) => {
     <div>
       <Drawer
         className={classes.drawer}
-        variant="persistent"
-        anchor="right"
+        variant='persistent'
+        anchor='right'
         open={open}
         classes={{
           paper: classes.drawerPaper,
@@ -183,34 +183,34 @@ const BuildingInfoDrawer = (props: any) => {
           </div>
           <Grid container spacing={3} className={classes.buildingSection}>
             <Grid item xs={11}>
-              <Typography variant="h4" color="textPrimary">
+              <Typography variant='h4' color='textPrimary'>
                 {loading ? <Skeleton /> : building_name}
               </Typography>
               <Typography
-                variant="subtitle1"
-                color="textSecondary"
+                variant='subtitle1'
+                color='textSecondary'
                 gutterBottom
               >
                 {loading ? <Skeleton width={70} /> : building_identifier}
               </Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography variant="h5" color="textSecondary" gutterBottom>
+              <Typography variant='h5' color='textSecondary' gutterBottom>
                 General info
               </Typography>
               {loading ? (
                 <div>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                 </div>
               ) : (
@@ -222,9 +222,9 @@ const BuildingInfoDrawer = (props: any) => {
                     }}
                     InputProps={{ disableUnderline: true }}
                     fullWidth={true}
-                    label="Country"
-                    name="country"
-                    margin="dense"
+                    label='Country'
+                    name='country'
+                    margin='dense'
                     defaultValue={country || "nil"}
                   />
                   <TextField
@@ -234,9 +234,9 @@ const BuildingInfoDrawer = (props: any) => {
                     }}
                     InputProps={{ disableUnderline: true }}
                     fullWidth={true}
-                    label="City"
-                    name="city"
-                    margin="dense"
+                    label='City'
+                    name='city'
+                    margin='dense'
                     defaultValue={city || "nil"}
                   />
                   <TextField
@@ -246,9 +246,9 @@ const BuildingInfoDrawer = (props: any) => {
                     }}
                     InputProps={{ disableUnderline: true }}
                     fullWidth={true}
-                    label="Typology"
-                    name="typology"
-                    margin="dense"
+                    label='Typology'
+                    name='typology'
+                    margin='dense'
                     defaultValue={typology || "nil"}
                   />
                   <TextField
@@ -258,31 +258,31 @@ const BuildingInfoDrawer = (props: any) => {
                     }}
                     InputProps={{ disableUnderline: true }}
                     fullWidth={true}
-                    label="Construction type"
-                    name="construction_type"
-                    margin="dense"
+                    label='Construction type'
+                    name='construction_type'
+                    margin='dense'
                     defaultValue={construction_type || "nil"}
                   />
                 </div>
               )}
             </Grid>
             <Grid item xs>
-              <Typography variant="h5" color="textSecondary" gutterBottom>
+              <Typography variant='h5' color='textSecondary' gutterBottom>
                 GWP
               </Typography>
               {loading ? (
                 <div>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                 </div>
               ) : (
@@ -294,9 +294,9 @@ const BuildingInfoDrawer = (props: any) => {
                     }}
                     InputProps={{ disableUnderline: true }}
                     fullWidth={true}
-                    label="A1-A3"
-                    name="a1a3"
-                    margin="dense"
+                    label='A1-A3'
+                    name='a1a3'
+                    margin='dense'
                     defaultValue={A1A3 || "0.0"}
                   />
                   <TextField
@@ -306,9 +306,9 @@ const BuildingInfoDrawer = (props: any) => {
                     }}
                     InputProps={{ disableUnderline: true }}
                     fullWidth={true}
-                    label="A4"
-                    name="a4"
-                    margin="dense"
+                    label='A4'
+                    name='a4'
+                    margin='dense'
                     defaultValue={A4 || "0.0"}
                   />
                   <TextField
@@ -318,9 +318,9 @@ const BuildingInfoDrawer = (props: any) => {
                     }}
                     InputProps={{ disableUnderline: true }}
                     fullWidth={true}
-                    label="B4_m"
-                    name="b4m"
-                    margin="dense"
+                    label='B4_m'
+                    name='b4m'
+                    margin='dense'
                     defaultValue={B4_m || "0.0"}
                   />
                   <TextField
@@ -330,9 +330,9 @@ const BuildingInfoDrawer = (props: any) => {
                     }}
                     InputProps={{ disableUnderline: true }}
                     fullWidth={true}
-                    label="B4_t"
-                    name="b4t"
-                    margin="dense"
+                    label='B4_t'
+                    name='b4t'
+                    margin='dense'
                     defaultValue={B4_t || "0.0"}
                   />
                 </div>
@@ -340,7 +340,7 @@ const BuildingInfoDrawer = (props: any) => {
             </Grid>
           </Grid>
 
-          <Divider variant="middle" light={true} className={classes.divider} />
+          <Divider variant='middle' light={true} className={classes.divider} />
 
           <BuildingElementsView
             buildingId={props.selectedBuildingId}

@@ -65,10 +65,10 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="h6">{children}</Typography>
+      <Typography variant='h6'>{children}</Typography>
       {onClose ? (
         <IconButton
-          aria-label="close"
+          aria-label='close'
           className={classes.closeButton}
           onClick={onClose}
         >
@@ -174,7 +174,7 @@ const CompareBuildingDialog = () => {
       open={isCompareDialogOpen}
       onClose={handleClose}
     >
-      <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+      <DialogTitle id='customized-dialog-title' onClose={handleClose}>
         Compare buildings
       </DialogTitle>
       <DialogContent dividers>
@@ -188,48 +188,48 @@ const CompareBuildingDialog = () => {
                         } */}
           </Grid>
           <Grid item xs={6}>
-            <FormControl component="fieldset" className={classes.formControl}>
-              <FormLabel component="legend">LCA Phases</FormLabel>
+            <FormControl component='fieldset' className={classes.formControl}>
+              <FormLabel component='legend'>LCA Phases</FormLabel>
               <FormGroup>
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={a1a3}
                       onChange={handleCheckedLCAPhaseChange}
-                      name="a1a3"
+                      name='a1a3'
                     />
                   }
-                  label="A1-A3"
+                  label='A1-A3'
                 />
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={a4}
                       onChange={handleCheckedLCAPhaseChange}
-                      name="a4"
+                      name='a4'
                     />
                   }
-                  label="A4"
+                  label='A4'
                 />
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={b4_m}
                       onChange={handleCheckedLCAPhaseChange}
-                      name="b4_m"
+                      name='b4_m'
                     />
                   }
-                  label="B4 (m)"
+                  label='B4 (m)'
                 />
                 <FormControlLabel
                   control={
                     <Checkbox
                       checked={b4_t}
                       onChange={handleCheckedLCAPhaseChange}
-                      name="b4_t"
+                      name='b4_t'
                     />
                   }
-                  label="B4 (t)"
+                  label='B4 (t)'
                 />
               </FormGroup>
               {/* <FormHelperText>Helper text</FormHelperText> */}
@@ -238,7 +238,7 @@ const CompareBuildingDialog = () => {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={handleClose} color="primary">
+        <Button autoFocus onClick={handleClose} color='primary'>
           Ok, cool
         </Button>
       </DialogActions>

@@ -140,15 +140,15 @@ const BuildingElementsView = (props: any) => {
     <div>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Breadcrumbs aria-label="breadcrumb" className={classes.breadCrumbs}>
+          <Breadcrumbs aria-label='breadcrumb' className={classes.breadCrumbs}>
             {elementRoute.map((element, index) => (
               <StyledBreadcrumb
                 key={index}
                 label={element.name}
-                variant="default"
+                variant='default'
                 icon={
                   element.idlevels === 0 ? (
-                    <HomeIcon fontSize="small" />
+                    <HomeIcon fontSize='small' />
                   ) : undefined
                 }
                 onClick={() => handleBreadcrumbClick(index)}

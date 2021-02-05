@@ -16,7 +16,7 @@ import Typography from "@material-ui/core/Typography";
 import SingleBuildingView from "./SingleBuildingView";
 import MultipleBuildingsView from "./MultipleBuildingsView";
 
-const drawerWidth = "45vw";
+const drawerWidth = "50vw";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,11 +67,11 @@ const BuildingDetails = () => {
   return (
     <Drawer
       className={classes.drawer}
-      variant="permanent"
+      variant='permanent'
       classes={{
         paper: classes.drawerPaper,
       }}
-      anchor="right"
+      anchor='right'
     >
       {selectedBuildings.length > 0 ? (
         canSelectMultipleBuildings ? (
@@ -82,12 +82,12 @@ const BuildingDetails = () => {
       ) : (
         <Grid
           container
-          justify="center"
-          alignItems="center"
+          justify='center'
+          alignItems='center'
           className={classes.noSelectionContainer}
         >
           <Grid item xs={12}>
-            <Typography variant="h5" color="textSecondary" align="center">
+            <Typography variant='h5' color='textSecondary' align='center'>
               Select a building
             </Typography>
           </Grid>

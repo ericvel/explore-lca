@@ -23,7 +23,7 @@ import IconButton from "@material-ui/core/IconButton";
 import "./BuildingInfoPane.css";
 
 import ElementsAndMaterialsContainer from "../../ElementsAndMaterialsContainer";
-import GWPSingleChart from "../../BuildingDetails/SingleBuildingView/GWPSingleChart";
+import SingleBuildingChart from "../../BuildingDetails/SingleBuildingView/SingleBuildingChart";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -113,10 +113,10 @@ const BuildingInfoPane = (props: any) => {
   return (
     <div>
       <SlidingPane
-        className="sliding-pane close-button"
-        overlayClassName="sliding-pane-overlay"
+        className='sliding-pane close-button'
+        overlayClassName='sliding-pane-overlay'
         isOpen={isPaneOpen}
-        width="100%"
+        width='100%'
         hideHeader={true}
         onRequestClose={() => {
           // triggered on "<" on left top click or on outside click
@@ -126,7 +126,7 @@ const BuildingInfoPane = (props: any) => {
       >
         <div>
           <IconButton
-            aria-label="close"
+            aria-label='close'
             className={classes.closeButton}
             onClick={() => {
               dispatch(allActions.buildingActions.deselectAllBuildings());
@@ -138,12 +138,12 @@ const BuildingInfoPane = (props: any) => {
         <div>
           <Grid container spacing={3} className={classes.buildingSection}>
             <Grid item xs={11}>
-              <Typography variant="h4" color="textPrimary">
+              <Typography variant='h4' color='textPrimary'>
                 {loading ? <Skeleton /> : building_name}
               </Typography>
               <Typography
-                variant="subtitle1"
-                color="textSecondary"
+                variant='subtitle1'
+                color='textSecondary'
                 gutterBottom
               >
                 {loading ? <Skeleton width={70} /> : building_identifier}
@@ -151,7 +151,7 @@ const BuildingInfoPane = (props: any) => {
             </Grid>
             <Grid item xs={1}></Grid>
             <Grid item xs={6}>
-              <Typography variant="h5" color="textSecondary" gutterBottom>
+              <Typography variant='h5' color='textSecondary' gutterBottom>
                 General info
               </Typography>
               <div>
@@ -163,9 +163,9 @@ const BuildingInfoPane = (props: any) => {
                   }}
                   InputProps={{ disableUnderline: true }}
                   fullWidth={true}
-                  label="Project"
-                  name="project"
-                  margin="dense"
+                  label='Project'
+                  name='project'
+                  margin='dense'
                   defaultValue={project}
                 />
                 <TextField
@@ -176,9 +176,9 @@ const BuildingInfoPane = (props: any) => {
                   }}
                   InputProps={{ disableUnderline: true }}
                   fullWidth={true}
-                  label="Typology"
-                  name="typology"
-                  margin="dense"
+                  label='Typology'
+                  name='typology'
+                  margin='dense'
                   defaultValue={typology}
                 />
                 <TextField
@@ -189,9 +189,9 @@ const BuildingInfoPane = (props: any) => {
                   }}
                   InputProps={{ disableUnderline: true }}
                   fullWidth={true}
-                  label="Construction type"
-                  name="construction_type"
-                  margin="dense"
+                  label='Construction type'
+                  name='construction_type'
+                  margin='dense'
                   defaultValue={construction_type}
                 />
                 <TextField
@@ -202,41 +202,41 @@ const BuildingInfoPane = (props: any) => {
                   }}
                   InputProps={{ disableUnderline: true }}
                   fullWidth={true}
-                  label="Floor area"
-                  name="floor_area"
-                  margin="dense"
+                  label='Floor area'
+                  name='floor_area'
+                  margin='dense'
                   defaultValue={floor_area + " m\xB2" || "nil"}
                 />
               </div>
             </Grid>
             <Grid item xs>
-              <Typography variant="h5" color="textSecondary" gutterBottom>
+              <Typography variant='h5' color='textSecondary' gutterBottom>
                 GWP
               </Typography>
               {loading ? (
                 <div>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                   <Skeleton>
-                    <TextField label="a" margin="dense" />
+                    <TextField label='a' margin='dense' />
                   </Skeleton>
                 </div>
               ) : (
                 <div>
-                  <GWPSingleChart chartData={gwpChartData} height={250} />
+                  <SingleBuildingChart />
                 </div>
               )}
             </Grid>
           </Grid>
 
-          <Divider variant="middle" light={true} className={classes.divider} />
+          <Divider variant='middle' light={true} className={classes.divider} />
 
           <ElementsAndMaterialsContainer
             buildingId={building.idbuildings}

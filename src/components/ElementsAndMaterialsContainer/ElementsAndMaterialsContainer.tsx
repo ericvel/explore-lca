@@ -103,18 +103,18 @@ const ElementsAndMaterialsContainer = (props: any) => {
 
   return (
     <div>
-      <Grid container spacing={3} alignItems="center" justify="space-between">
+      <Grid container spacing={3} alignItems='center' justify='space-between'>
         <Grid item>
-          <Typography variant="h5" color="textSecondary" gutterBottom>
+          <Typography variant='h5' color='textSecondary' gutterBottom>
             {headingText}
           </Typography>
         </Grid>
         <Grid item>
-          <Tooltip title="Select what to display" open={tooltipOpen}>
-            <FormControl className={classes.formControl} variant="outlined">
+          <Tooltip title='Select what to display' open={tooltipOpen}>
+            <FormControl className={classes.formControl} variant='outlined'>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
                 displayEmpty
                 value={contentType}
                 onChange={handleSelectChange}
@@ -127,8 +127,8 @@ const ElementsAndMaterialsContainer = (props: any) => {
               </Select>
             </FormControl>
           </Tooltip>
-          <FormControl component="fieldset">
-            <FormLabel component="legend" color="secondary">
+          <FormControl component='fieldset'>
+            <FormLabel component='legend' color='secondary'>
               Display mode
             </FormLabel>
             <RadioGroup
@@ -137,14 +137,14 @@ const ElementsAndMaterialsContainer = (props: any) => {
               row
             >
               <FormControlLabel
-                value="table"
+                value='table'
                 control={<Radio />}
-                label="Table"
+                label='Table'
               />
               <FormControlLabel
-                value="chart"
+                value='chart'
                 control={<Radio />}
-                label="Chart"
+                label='Chart'
               />
             </RadioGroup>
           </FormControl>

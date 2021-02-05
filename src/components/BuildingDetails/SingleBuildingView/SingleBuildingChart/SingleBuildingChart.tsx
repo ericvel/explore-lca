@@ -25,21 +25,16 @@ import {
   Tooltip,
 } from "devextreme-react/chart";
 
-interface Props {
-  chartData: ISingleChartDataItem[];
-  height: number;
-}
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     chart: {
-      height: 250,
+      height: 200,
       padding: theme.spacing(2),
     },
   })
 );
 
-const GWPSingleChart = (props: Props) => {
+const SingleBuildingChart = () => {
   const selectedBuildings = useSelector(
     (state: IRootState) => state.selectedBuildings
   );
@@ -77,7 +72,6 @@ const GWPSingleChart = (props: Props) => {
   if (checkedEEMetrics.perSqM) axisTitle += "/m\xB2";
   if (checkedEEMetrics.perYear) axisTitle += "/year";
 
-  const height = props.height;
   const classes = useStyles();
 
   return (
@@ -85,12 +79,12 @@ const GWPSingleChart = (props: Props) => {
       <Chart
         className={classes.chart}
         dataSource={chartData}
-        palette="Material"
+        palette='Material'
       >
         <CommonSeriesSettings
-          argumentField="lcaPhase"
-          valueField="gwp"
-          type="bar"
+          argumentField='lcaPhase'
+          valueField='gwp'
+          type='bar'
           showInLegend={false}
           ignoreEmptyPoints={true}
         />
@@ -109,12 +103,12 @@ const GWPSingleChart = (props: Props) => {
             }}
           />
         </ValueAxis>
-        <SeriesTemplate nameField="lcaPhase" />
+        <SeriesTemplate nameField='lcaPhase' />
         <Tooltip
           enabled={true}
           zIndex={1200}
           arrowLength={6}
-          format="fixedPoint"
+          format='fixedPoint'
           interactive
         />
       </Chart>
@@ -122,4 +116,4 @@ const GWPSingleChart = (props: Props) => {
   );
 };
 
-export default GWPSingleChart;
+export default SingleBuildingChart;

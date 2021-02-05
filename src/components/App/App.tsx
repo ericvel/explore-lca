@@ -19,7 +19,7 @@ import SettingsButton from "../SettingsButton";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      width: "55vw",
+      width: "50vw",
       marginTop: theme.spacing(2),
     },
     mainContent: {
@@ -35,31 +35,31 @@ function App() {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth='xl'>
       <Grid
         container
         spacing={3}
-        justify="center"
+        justify='center'
         className={classes.container}
       >
         <Grid container className={classes.mainContent}>
           <Grid
             container
             item
-            alignItems="center"
-            justify="space-around"
+            alignItems='center'
+            justify='space-around'
             spacing={2}
             className={classes.titleBar}
           >
             <Grid item xs={10}>
-              <Typography variant="h2">bLCAd Tool - GUI</Typography>
+              <Typography variant='h2'>bLCAd Tool - GUI</Typography>
             </Grid>
 
             <Grid item xs={1}>
-              <HelpButton alertContentId="main" iconSize="large" />
+              <HelpButton alertContentId='main' iconSize='large' />
             </Grid>
             <Grid item xs={1}>
-              <SettingsButton iconSize="large" />
+              <SettingsButton iconSize='large' />
             </Grid>
           </Grid>
 

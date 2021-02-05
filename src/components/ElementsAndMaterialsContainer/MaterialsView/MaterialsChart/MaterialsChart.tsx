@@ -55,7 +55,7 @@ const MaterialsChart = (props: any) => {
 
   useEffect(() => {
     const materials =
-      contentType == "buildingElements"
+      contentType == "hierarchy"
         ? getElementMaterials(selectedBuildingElement)
         : materialInventory;
     const chartData: IMaterialChartDataItem[] = [];
@@ -153,22 +153,22 @@ const MaterialsChart = (props: any) => {
       className={classes.chart}
       // title="Embodied emissions"
       dataSource={chartData}
-      palette="Material"
+      palette='Material'
       rotated={true}
       // onPointHoverChanged={onPointHoverChanged}
       // ref={chartRef}
     >
       <Size height={height} />
       <CommonSeriesSettings
-        argumentField="id"
-        type="stackedBar"
+        argumentField='id'
+        type='stackedBar'
         barWidth={40}
-        hoverMode="allArgumentPoints"
+        hoverMode='allArgumentPoints'
       ></CommonSeriesSettings>
-      <Series valueField="a1a3" name="A1-A3" />
-      <Series valueField="a4" name="A4" />
-      <Series valueField="b4m" name="B4 (m)" />
-      <Series valueField="b4t" name="B4 (t)" />
+      <Series valueField='a1a3' name='A1-A3' />
+      <Series valueField='a4' name='A4' />
+      <Series valueField='b4m' name='B4 (m)' />
+      <Series valueField='b4t' name='B4 (t)' />
       <ValueAxis>
         <Title
           text={"kgCO2e"}
@@ -181,17 +181,17 @@ const MaterialsChart = (props: any) => {
         <Label customizeText={customizeArgumentAxisLabel} />
       </ArgumentAxis>
       <Legend
-        verticalAlignment="bottom"
-        horizontalAlignment="center"
-        itemTextPosition="top"
+        verticalAlignment='bottom'
+        horizontalAlignment='center'
+        itemTextPosition='top'
       />
       <Tooltip
         enabled={true}
-        location="edge"
+        location='edge'
         customizeTooltip={customizeTooltip}
         zIndex={1200}
         arrowLength={6}
-        format="fixedPoint"
+        format='fixedPoint'
       />
     </Chart>
   );

@@ -5,6 +5,8 @@ import {
   DisplayModeActionTypes,
   TOGGLE_CAN_SELECT_MULTIPLE,
   CanSelectMultipleActionTypes,
+  TOGGLE_SIMULATION_MODE,
+  SimulationModeActionTypes
 } from "../actions/types";
 
 export const contentType = (
@@ -37,6 +39,18 @@ export const canSelectMultipleBuildings = (
 ) => {
   switch (action.type) {
     case TOGGLE_CAN_SELECT_MULTIPLE:
+      return !state;
+    default:
+      return state;
+  }
+};
+
+export const isSimulationModeActive = (
+  state = false,
+  action: SimulationModeActionTypes
+) => {
+  switch (action.type) {
+    case TOGGLE_SIMULATION_MODE:
       return !state;
     default:
       return state;

@@ -27,10 +27,10 @@ function TableSelect(props: any) {
   return (
     <div>
       <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-label">Table</InputLabel>
+        <InputLabel id='demo-simple-select-label'>Table</InputLabel>
         <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          labelId='demo-simple-select-label'
+          id='demo-simple-select'
           value={props.tableName}
           onChange={handleChange}
         >

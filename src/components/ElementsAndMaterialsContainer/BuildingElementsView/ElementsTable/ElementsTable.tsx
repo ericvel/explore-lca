@@ -69,6 +69,7 @@ const ElementsTable = (props: any) => {
   const [columnExtensions] = useState(ColumnData.columnExtensions);
   const [gwpColumns] = useState(["A1A3", "A4", "B4_t", "B4_m"]);
   const [tooltipColumns] = useState(["name"]);
+  const [boldColumns] = useState(["name"]);
 
   const getChildElements = (parentElement: IBuildingElement) => {
     const childElements = buildingElements.filter(
@@ -94,7 +95,7 @@ const ElementsTable = (props: any) => {
 
   const TooltipFormatter = ({ value }: any) => (
     <Tooltip title={<span>Go to sub-elements</span>}>
-      <span>{value}</span>
+      <span><b>{value}</b></span>
     </Tooltip>
   );
 
@@ -117,6 +118,12 @@ const ElementsTable = (props: any) => {
     dispatch(allActions.elementAndMaterialActions.addToElementRoute(row));
   };
 
+  const BoldFormatter = ({ value }: any) => <b>{value}</b>;
+
+  const BoldTypeProvider = (props: any) => (
+    <DataTypeProvider formatterComponent={BoldFormatter} {...props} />
+  );
+
   const GWPFormatter = ({ value }: any) =>
     value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
 
@@ -130,6 +137,7 @@ const ElementsTable = (props: any) => {
 
   return (
     <Grid rows={rows} columns={columns} getRowId={getRowId}>
+      <BoldTypeProvider for={boldColumns} />
       <CellTooltip for={tooltipColumns} />
       <GWPTypeProvider for={gwpColumns} />
       <SortingState />

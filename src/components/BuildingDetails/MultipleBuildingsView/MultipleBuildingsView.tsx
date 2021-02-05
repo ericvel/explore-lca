@@ -47,7 +47,7 @@ const MultipleBuildingsView = () => {
     <div className={classes.content}>
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant="h5" color="textSecondary" gutterBottom>
+          <Typography variant='h5' color='textSecondary' gutterBottom>
             Embodied emissions
           </Typography>
           <GWPCompareChart />

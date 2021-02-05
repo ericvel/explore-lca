@@ -302,7 +302,7 @@ function BuildingsTable() {
           selection={selectedRow}
           onSelectionChange={changeSelection}
         />
-        <VirtualTable height="auto" columnExtensions={columnExtensions} />
+        <VirtualTable height='auto' columnExtensions={columnExtensions} />
         <TableHeaderRow showSortingControls />
         <TableSelection
           selectByRowClick
@@ -315,18 +315,18 @@ function BuildingsTable() {
           columnExtensions={tableColumnVisibilityColumnExtensions}
         />
         <Toolbar />
-        <Template name="toolbarContent">
+        <Template name='toolbarContent'>
           <TemplatePlaceholder />
           <FormControlLabel
             control={
               <Switch
                 checked={multipleSwitchChecked}
                 onChange={handleMultipleSwitchChange}
-                name="checkedB"
-                color="primary"
+                name='checkedB'
+                color='primary'
               />
             }
-            label="Select multiple"
+            label='Select multiple'
           />
         </Template>
         <SearchPanel />
