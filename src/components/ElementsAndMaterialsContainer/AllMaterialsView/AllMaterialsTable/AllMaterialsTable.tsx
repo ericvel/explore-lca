@@ -16,6 +16,10 @@ import {
   IntegratedFiltering,
   SearchState,
   DataTypeProvider,
+  GroupingState,
+  IntegratedGrouping,
+  SummaryState,
+  IntegratedSummary,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -26,6 +30,8 @@ import {
   ColumnChooser,
   TableColumnVisibility,
   TableFixedColumns,
+  TableGroupRow,
+  TableSummaryRow,
 } from "@devexpress/dx-react-grid-material-ui";
 import _ from "lodash";
 
@@ -38,13 +44,9 @@ const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
     predicate: () => false,
   }));
 
-const MaterialsTable = () => {
-  const contentType = useSelector((state: IRootState) => state.contentType);
+const AllMaterialsTable = () => {
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
-  );
-  const selectedBuildingElement = useSelector(
-    (state: IRootState) => state.selectedBuildingElement
   );
 
   const [columns] = useState(ColumnData.columns);
@@ -56,20 +58,15 @@ const MaterialsTable = () => {
     ColumnData.tableColumnVisibilityColumnExtensions
   );
   const [leftColumns] = useState(["name"]);
+  const [quantityColumns] = useState(["quantity"]);
   const [gwpColumns] = useState(["A1A3", "A4", "B4_t", "B4_m"]);
   const [searchTerm, setSearchTerm] = useState<string>();
 
-  const getElementMaterials = (parentElement: IBuildingElement) => {
-    const elementMaterials = materialInventory.filter(
-      (material) =>
-        material.idbuilding_elements === parentElement.idbuilding_elements
-    );
-    if (elementMaterials !== undefined) {
-      return elementMaterials;
-    }
+  const QuantityFormatter = ({ value }: any) => parseFloat(value).toFixed(3);
 
-    return [];
-  };
+  const QuantityTypeProvider = (props: any) => (
+    <DataTypeProvider formatterComponent={QuantityFormatter} {...props} />
+  );
 
   const GWPFormatter = ({ value }: any) =>
     value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
@@ -96,22 +93,62 @@ const MaterialsTable = () => {
       getHiddenColumnsFilteringExtensions(hiddenColumnNames)
     );
 
-  // Displays only inventory for selected building element if one is selected
-  const rows =
-    contentType == "hierarchy"
-      ? getElementMaterials(selectedBuildingElement)
-      : materialInventory;
+  const [grouping] = useState([{ columnName: "name" }]);
+  const [groupSummaryItems] = useState([
+    {
+      columnName: "quantity",
+      type: "sum",
+      showInGroupFooter: false,
+      alignByColumn: true,
+    },
+    {
+      columnName: "A1A3",
+      type: "sum",
+      showInGroupFooter: false,
+      alignByColumn: true,
+    },
+    {
+      columnName: "A4",
+      type: "sum",
+      showInGroupFooter: false,
+      alignByColumn: true,
+    },
+    {
+      columnName: "B4_m",
+      type: "sum",
+      showInGroupFooter: false,
+      alignByColumn: true,
+    },
+    {
+      columnName: "B4_t",
+      type: "sum",
+      showInGroupFooter: false,
+      alignByColumn: true,
+    },
+  ]);
+
+  // Displays all materials
+  const rows = materialInventory;
+
+  console.log("Sum ", rows[0].quantity + rows[0].quantity)
 
   return (
     <Paper>
       <Grid rows={rows} columns={columns}>
+        <QuantityTypeProvider for={gwpColumns} />
         <GWPTypeProvider for={gwpColumns} />
         <SearchState onValueChange={delayedCallback} />
         <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
         <SortingState />
         <IntegratedSorting />
+        <GroupingState grouping={grouping} />
+        <SummaryState groupItems={groupSummaryItems} />
+        <IntegratedGrouping />
+        <IntegratedSummary />
         <VirtualTable columnExtensions={columnExtensions} />
         <TableHeaderRow showSortingControls />
+        <TableGroupRow />
+        <TableSummaryRow />
         <TableFixedColumns leftColumns={leftColumns} />
         <TableColumnVisibility
           defaultHiddenColumnNames={defaultHiddenColumnNames}
@@ -126,4 +163,4 @@ const MaterialsTable = () => {
   );
 };
 
-export default MaterialsTable;
+export default AllMaterialsTable;

@@ -27,7 +27,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Skeleton from "@material-ui/lab/Skeleton";
 
 import BuildingElementsView from "./BuildingElementsView";
-import MaterialsView from "./MaterialsView";
+import AllMaterialsView from "./AllMaterialsView";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -86,6 +86,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
             dispatch(
               allActions.elementAndMaterialActions.setBuildingElements(data[0])
             );
+            console.log(data[1])
             dispatch(
               allActions.elementAndMaterialActions.setMaterialInventory(data[1])
             );
@@ -160,9 +161,8 @@ const ElementsAndMaterialsContainer = (props: any) => {
         ) : contentType == "hierarchy" ? (
           <BuildingElementsView />
         ) : (
-          <MaterialsView />
+          <AllMaterialsView />
         )
-        // <MaterialsTable elementInventory={false} />
       }
     </div>
   );

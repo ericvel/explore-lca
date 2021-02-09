@@ -5,7 +5,7 @@ var router = express.Router();
 const pool = require("../mysql");
 
 router.get("/:buildingId", (req, res) => {
-  const query = `SELECT idmaterialInventory, mi.idmaterials, m.name, source, dataType, sourceType, dataYear, FU, density, EEf_A1A3, RSL, m.comments, materialCat, quantity, RSL_mi, mi.A1A3, mi.A4, mi.B4_m, mi.B4_t, mi.idbuilding_elements, l.name AS buildingElementName 
+  const query = `SELECT idmaterialInventory, mi.idmaterials, m.name, source, dataType, sourceType, dataYear, FU, density, EEf_A1A3, RSL, m.comments, materialCat, CAST(quantity AS DECIMAL(20,3)) AS quantity, RSL_mi, mi.A1A3, mi.A4, mi.B4_m, mi.B4_t, mi.idbuilding_elements, l.name AS buildingElementName 
     FROM materialinventory AS mi
     JOIN materials AS m
     ON mi.idmaterials = m.idmaterials

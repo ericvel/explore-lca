@@ -36,11 +36,10 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
 // DRILL-DOWN CHART PLS
 // https://js.devexpress.com/Demos/WidgetsGallery/Demo/Charts/ChartsDrillDown/React/Light/
 
-const MaterialsChart = (props: any) => {
+const AllMaterialsChart = (props: any) => {
   const dispatch = useDispatch();
 
   const contentType = useSelector((state: IRootState) => state.contentType);
@@ -199,4 +198,4 @@ const MaterialsChart = (props: any) => {
   );
 };
 
-export default MaterialsChart;
+export default AllMaterialsChart;
