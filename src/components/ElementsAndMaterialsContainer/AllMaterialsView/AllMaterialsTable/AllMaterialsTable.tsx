@@ -20,6 +20,7 @@ import {
   IntegratedGrouping,
   SummaryState,
   IntegratedSummary,
+  TableGroupRowProps,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -36,6 +37,7 @@ import {
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
+import { GroupCell } from "./table-group-cell";
 
 // const getRowId = (row: any) => row.idmaterialInventory;
 const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
@@ -59,20 +61,14 @@ const AllMaterialsTable = () => {
   );
   const [leftColumns] = useState(["name"]);
   const [quantityColumns] = useState(["quantity"]);
-  const [gwpColumns] = useState(["A1A3", "A4", "B4_t", "B4_m"]);
+  const [decimalColumns] = useState(["quantity", "EEf_A1A3", "A1A3", "A4", "B4_t", "B4_m"]);
   const [searchTerm, setSearchTerm] = useState<string>();
 
-  const QuantityFormatter = ({ value }: any) => parseFloat(value).toFixed(3);
-
-  const QuantityTypeProvider = (props: any) => (
-    <DataTypeProvider formatterComponent={QuantityFormatter} {...props} />
-  );
-
-  const GWPFormatter = ({ value }: any) =>
+  const DecimalFormatter = ({ value }: any) =>
     value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
 
-  const GWPTypeProvider = (props: any) => (
-    <DataTypeProvider formatterComponent={GWPFormatter} {...props} />
+  const DecimalTypeProvider = (props: any) => (
+    <DataTypeProvider formatterComponent={DecimalFormatter} {...props} />
   );
 
   const changeSearchTerm = (value: any) => {
@@ -97,6 +93,12 @@ const AllMaterialsTable = () => {
   const [groupSummaryItems] = useState([
     {
       columnName: "quantity",
+      type: "sum",
+      showInGroupFooter: false,
+      alignByColumn: true,
+    },
+    {
+      columnName: "EEf_A1A3",
       type: "sum",
       showInGroupFooter: false,
       alignByColumn: true,
@@ -127,29 +129,42 @@ const AllMaterialsTable = () => {
     },
   ]);
 
+/*   const GroupCell = ({ row, children, ...props }: any) => (
+    <TableGroupRow.Cell {...props}>
+      <span>{children}</span>
+    </TableGroupRow.Cell>
+  ); */
+
+  const GroupCellContent = ({ row, children, ...props }: any) => (
+    <TableGroupRow.Content {...props}>
+      <span>{children}</span>
+    </TableGroupRow.Content>
+  );
+
+  const Messages = ({messages, ...props}: any) => {
+    
+  }
+
   // Displays all materials
   const rows = materialInventory;
-
-  console.log("Sum ", rows[0].quantity + rows[0].quantity)
 
   return (
     <Paper>
       <Grid rows={rows} columns={columns}>
-        <QuantityTypeProvider for={gwpColumns} />
-        <GWPTypeProvider for={gwpColumns} />
+        <DecimalTypeProvider for={decimalColumns} />
         <SearchState onValueChange={delayedCallback} />
         <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
         <SortingState />
         <IntegratedSorting />
-        <GroupingState grouping={grouping} />
+        <GroupingState grouping={grouping} columnExtensions={[{columnName: "name", groupingEnabled: false}]}/>
         <SummaryState groupItems={groupSummaryItems} />
         <IntegratedGrouping />
         <IntegratedSummary />
         <VirtualTable columnExtensions={columnExtensions} />
         <TableHeaderRow showSortingControls />
-        <TableGroupRow />
+        <TableGroupRow messages={{sum: "Total"}} cellComponent={GroupCell} /* contentComponent={GroupCellContent} */ />
         <TableSummaryRow />
-        <TableFixedColumns leftColumns={leftColumns} />
+        {/* <TableFixedColumns leftColumns={leftColumns} /> */}
         <TableColumnVisibility
           defaultHiddenColumnNames={defaultHiddenColumnNames}
           columnExtensions={tableColumnVisibilityColumnExtensions}
