@@ -86,7 +86,6 @@ const ElementsAndMaterialsContainer = (props: any) => {
             dispatch(
               allActions.elementAndMaterialActions.setBuildingElements(data[0])
             );
-            console.log(data[1])
             dispatch(
               allActions.elementAndMaterialActions.setMaterialInventory(data[1])
             );

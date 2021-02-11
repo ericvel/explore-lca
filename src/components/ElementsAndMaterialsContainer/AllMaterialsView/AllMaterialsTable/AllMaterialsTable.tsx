@@ -10,6 +10,8 @@ import {
   emphasize,
 } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
+import Tooltip from "@material-ui/core/Tooltip";
+
 import {
   SortingState,
   IntegratedSorting,
@@ -34,10 +36,19 @@ import {
   TableGroupRow,
   TableSummaryRow,
 } from "@devexpress/dx-react-grid-material-ui";
+
+import { Template, TemplateConnector } from "@devexpress/dx-react-core";
+import {
+  isTotalSummaryTableCell,
+  getColumnSummaries,
+  isGroupSummaryTableCell,
+} from "./helpers";
+
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
 import { GroupCell } from "./table-group-cell";
+import { SummaryCell } from "./table-summary-cell";
 
 // const getRowId = (row: any) => row.idmaterialInventory;
 const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
@@ -61,7 +72,14 @@ const AllMaterialsTable = () => {
   );
   const [leftColumns] = useState(["name"]);
   const [quantityColumns] = useState(["quantity"]);
-  const [decimalColumns] = useState(["quantity", "EEf_A1A3", "A1A3", "A4", "B4_t", "B4_m"]);
+  const [decimalColumns] = useState([
+    "quantity",
+    "EEf_A1A3",
+    "A1A3",
+    "A4",
+    "B4_t",
+    "B4_m",
+  ]);
   const [searchTerm, setSearchTerm] = useState<string>();
 
   const DecimalFormatter = ({ value }: any) =>
@@ -104,6 +122,24 @@ const AllMaterialsTable = () => {
       alignByColumn: true,
     },
     {
+      columnName: "FU",
+      type: "staticValue",
+      showInGroupFooter: false,
+      alignByColumn: true,
+    },
+    {
+      columnName: "materialCat",
+      type: "staticValue",
+      showInGroupFooter: false,
+      alignByColumn: true,
+    },
+    {
+      columnName: "RSL_mi",
+      type: "avg",
+      showInGroupFooter: false,
+      alignByColumn: true,
+    },
+    {
       columnName: "A1A3",
       type: "sum",
       showInGroupFooter: false,
@@ -129,21 +165,30 @@ const AllMaterialsTable = () => {
     },
   ]);
 
-/*   const GroupCell = ({ row, children, ...props }: any) => (
-    <TableGroupRow.Cell {...props}>
-      <span>{children}</span>
-    </TableGroupRow.Cell>
-  ); */
+  const groupRowSummaryItem = ({ value }: any) => {
+    var formattedValue;
+    if (typeof value === 'string') {
+      formattedValue = value;
+    } else {
+      formattedValue = value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
+    }
+  
+    return <strong>{formattedValue}</strong>;
+  };
 
-  const GroupCellContent = ({ row, children, ...props }: any) => (
-    <TableGroupRow.Content {...props}>
-      <span>{children}</span>
-    </TableGroupRow.Content>
-  );
+  const staticValueCalculator = (type: string, rows: any[], getValue: any) => {
+    if (type === "staticValue") {
+      if (!rows.length) {
+        return null;
+      }
+      return getValue(rows[0]);
+    }
+    return IntegratedSummary.defaultCalculator(type, rows, getValue);
+  };
 
-  const Messages = ({messages, ...props}: any) => {
-    
-  }
+  const messages = {
+    staticValue: "Static value",
+  };
 
   // Displays all materials
   const rows = materialInventory;
@@ -156,14 +201,22 @@ const AllMaterialsTable = () => {
         <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
         <SortingState />
         <IntegratedSorting />
-        <GroupingState grouping={grouping} columnExtensions={[{columnName: "name", groupingEnabled: false}]}/>
+        <GroupingState
+          grouping={grouping}
+          columnExtensions={[{ columnName: "name", groupingEnabled: false }]}
+        />
         <SummaryState groupItems={groupSummaryItems} />
         <IntegratedGrouping />
-        <IntegratedSummary />
+        <IntegratedSummary calculator={staticValueCalculator} />
         <VirtualTable columnExtensions={columnExtensions} />
         <TableHeaderRow showSortingControls />
-        <TableGroupRow messages={{sum: "Total"}} cellComponent={GroupCell} /* contentComponent={GroupCellContent} */ />
+        <TableGroupRow
+          /* messages={{ sum: "Total" }} */ cellComponent={GroupCell}
+          summaryCellComponent={SummaryCell}
+          summaryItemComponent={groupRowSummaryItem}
+        />
         <TableSummaryRow />
+
         {/* <TableFixedColumns leftColumns={leftColumns} /> */}
         <TableColumnVisibility
           defaultHiddenColumnNames={defaultHiddenColumnNames}

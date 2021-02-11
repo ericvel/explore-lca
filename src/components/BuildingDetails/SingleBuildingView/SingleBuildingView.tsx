@@ -112,7 +112,6 @@ const SingleBuildingView = (props: any) => {
             General info
           </Typography>
           <div>
-            {console.log("Project: ", project)}
             <TextField
               key={project || "project"}
               inputProps={{

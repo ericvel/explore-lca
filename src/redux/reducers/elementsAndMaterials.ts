@@ -81,7 +81,6 @@ export const hoveredBuildingElement = (
 ) => {
   switch (action.type) {
     case HOVER_BUILDING_ELEMENT:
-      console.log("Reducer called: ", action.payload);
       return action.payload;
     case STOP_HOVER_BUILDING_ELEMENT:
       return null;

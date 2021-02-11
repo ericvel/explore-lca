@@ -104,12 +104,10 @@ const ElementsTable = (props: any) => {
   );
 
   const handleMouseEnter = (row: IBuildingElement) => {
-    console.log("Hovered row ", row.idbuilding_elements);
     // props.onRowHover(row.name);
   };
 
   const handleMouseLeave = (row: IBuildingElement) => {
-    console.log("Unhovered row");
     // props.onRowClearHover(row.name);
   };
 
