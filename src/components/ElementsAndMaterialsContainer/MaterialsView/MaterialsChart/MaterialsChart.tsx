@@ -25,6 +25,8 @@ import {
   Label,
 } from "devextreme-react/chart";
 
+import { groupByMaterial, sortByEE, wrapArgumentAxisLabel } from "helpers/chartHelpers";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     chart: {
@@ -36,12 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-
-// DRILL-DOWN CHART PLS
-// https://js.devexpress.com/Demos/WidgetsGallery/Demo/Charts/ChartsDrillDown/React/Light/
-
 const MaterialsChart = (props: any) => {
-  const dispatch = useDispatch();
 
   const contentType = useSelector((state: IRootState) => state.contentType);
   const materialInventory = useSelector(
@@ -56,26 +53,10 @@ const MaterialsChart = (props: any) => {
   const chartRef: React.MutableRefObject<Chart | null> = useRef(null);
 
   useEffect(() => {
-    const materials =
-      contentType == "hierarchy"
-        ? getElementMaterials(selectedBuildingElement)
-        : materialInventory;
-    const chartData: IMaterialChartDataItem[] = [];
-
-    materials.forEach((material) => {
-      const dataEntry: IMaterialChartDataItem = {
-        name: material.name,
-        id: String(material.idmaterialInventory),
-        A1A3: Number(material.A1A3) || 0.0,
-        A4: Number(material.A4) || 0.0,
-        B4_m: Number(material.B4_m) || 0.0,
-        B4_t: Number(material.B4_t) || 0.0,
-      };
-
-      chartData.push(dataEntry);
-    });
-
-    setChartData(chartData.reverse());
+    const materialInventory = getElementMaterials(selectedBuildingElement);
+    const materialsGrouped: IMaterialChartDataItem[] = groupByMaterial(materialInventory);    
+    const sortedChartData = sortByEE(materialsGrouped);
+    setChartData(sortedChartData);
   }, []);
 
   const getElementMaterials = (parentElement: IBuildingElement) => {
@@ -157,20 +138,20 @@ const MaterialsChart = (props: any) => {
       dataSource={chartData}
       palette='Material'
       rotated={true}
-      // onPointHoverChanged={onPointHoverChanged}
-      // ref={chartRef}
+    // onPointHoverChanged={onPointHoverChanged}
+    // ref={chartRef}
     >
       <Size height={height} />
       <CommonSeriesSettings
-        argumentField='id'
+        argumentField='name'
         type='stackedBar'
         barWidth={40}
         hoverMode='allArgumentPoints'
       ></CommonSeriesSettings>
-      <Series valueField='a1a3' name='A1-A3' />
-      <Series valueField='a4' name='A4' />
-      <Series valueField='b4m' name='B4 (m)' />
-      <Series valueField='b4t' name='B4 (t)' />
+      <Series valueField='A1A3' name='A1-A3' />
+      <Series valueField='A4' name='A4' />
+      <Series valueField='B4_m' name='B4 (m)' />
+      <Series valueField='B4_t' name='B4 (t)' />
       <ValueAxis>
         <Title
           text={"kgCO2e"}
@@ -180,7 +161,7 @@ const MaterialsChart = (props: any) => {
         />
       </ValueAxis>
       <ArgumentAxis>
-        <Label customizeText={customizeArgumentAxisLabel} />
+        <Label customizeText={wrapArgumentAxisLabel} />
       </ArgumentAxis>
       <Legend
         verticalAlignment='bottom'

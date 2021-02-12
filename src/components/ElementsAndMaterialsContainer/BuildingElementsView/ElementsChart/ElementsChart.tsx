@@ -25,6 +25,8 @@ import {
   Label,
 } from "devextreme-react/chart";
 
+import { sortByEE, wrapArgumentAxisLabel } from "helpers/chartHelpers";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     chart: {
@@ -35,8 +37,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-interface Props {}
 
 const ElementsChart = (props: any) => {
   const dispatch = useDispatch();
@@ -71,8 +71,10 @@ const ElementsChart = (props: any) => {
 
       chartData.push(dataEntry);
     });
+    
+    const sortedChartData = sortByEE(chartData);
 
-    setChartData(chartData.reverse());
+    setChartData(sortedChartData);
   }, [selectedBuildingElement]);
 
   /*
@@ -188,7 +190,7 @@ const ElementsChart = (props: any) => {
       rotated={true}
       onPointClick={onPointClick}
       onPointHoverChanged={onPointHoverChanged}
-      // ref={chartRef}
+    // ref={chartRef}
     >
       <Size height={height} />
       <CommonSeriesSettings
@@ -197,10 +199,10 @@ const ElementsChart = (props: any) => {
         barWidth={40}
         hoverMode='allArgumentPoints'
       ></CommonSeriesSettings>
-      <Series valueField='a1a3' name='A1-A3' />
-      <Series valueField='a4' name='A4' />
-      <Series valueField='b4m' name='B4 (m)' />
-      <Series valueField='b4t' name='B4 (t)' />
+      <Series valueField='A1A3' name='A1-A3' />
+      <Series valueField='A4' name='A4' />
+      <Series valueField='B4_m' name='B4 (m)' />
+      <Series valueField='B4_t' name='B4 (t)' />
       <ValueAxis>
         <Title
           text={"kgCO2e"}
@@ -210,7 +212,7 @@ const ElementsChart = (props: any) => {
         />
       </ValueAxis>
       <ArgumentAxis>
-        <Label customizeText={customizeArgumentAxisLabel} />
+        <Label customizeText={wrapArgumentAxisLabel} />
       </ArgumentAxis>
       <Legend
         verticalAlignment='bottom'

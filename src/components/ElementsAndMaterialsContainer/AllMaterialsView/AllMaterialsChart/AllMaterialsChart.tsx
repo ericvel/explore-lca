@@ -25,6 +25,8 @@ import {
   Label,
 } from "devextreme-react/chart";
 
+import { groupByMaterial, sortByEE, wrapArgumentAxisLabel } from "helpers/chartHelpers";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     chart: {
@@ -35,9 +37,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-// DRILL-DOWN CHART PLS
-// https://js.devexpress.com/Demos/WidgetsGallery/Demo/Charts/ChartsDrillDown/React/Light/
 
 const AllMaterialsChart = () => {
 
@@ -50,60 +49,10 @@ const AllMaterialsChart = () => {
   const chartRef: React.MutableRefObject<Chart | null> = useRef(null);
 
   useEffect(() => {
-    const materials = materialInventory;
-    const materialsGrouped: IMaterialChartDataItem[] = [];
-
-    materials.reduce(function (res: any, value: IMaterialInventory) {
-      if (!res[value.name]) {
-        res[value.name] = { name: value.name, A1A3: 0.0, A4: 0.0, B4_m: 0.0, B4_t: 0.0 };
-        materialsGrouped.push(res[value.name])
-      }
-      res[value.name].A1A3 += value.A1A3;
-      res[value.name].A4 += value.A4;
-      res[value.name].B4_m += value.B4_m;
-      res[value.name].B4_t += value.B4_t;
-      return res;
-    }, {});
-
-    const chartData: IMaterialChartDataItem[] = [];
-
-    materialsGrouped.forEach((material) => {
-      const dataEntry: IMaterialChartDataItem = {
-        name: material.name,
-        id: String(material.name),
-        A1A3: Number(material.A1A3) || 0.0,
-        A4: Number(material.A4) || 0.0,
-        B4_m: Number(material.B4_m) || 0.0,
-        B4_t: Number(material.B4_t) || 0.0,
-      };
-
-      chartData.push(dataEntry);
-    });
-
-    chartData.sort(function (a, b) {
-      const aSum = a.A1A3 + a.A4 + a.B4_m + a.B4_t;
-      const bSum = b.A1A3 + b.A4 + b.B4_m + b.B4_t;
-      return aSum - bSum;
-    });
-
-    setChartData(chartData);
+    const materialsGrouped: IMaterialChartDataItem[] = groupByMaterial(materialInventory);    
+    const sortedChartData = sortByEE(materialsGrouped);
+    setChartData(sortedChartData);
   }, []);
-
-  // Wraps label over two lines if longer than 15 characters
-  const customizeArgumentAxisLabel = (data: any) => {
-    if (data.value.length > 15) {
-      const wordArray = data.value.split(" ");
-      if (wordArray.length > 2) {
-        const firstLine = wordArray.slice(0, 2).join(" ");
-        const secondLine = wordArray.slice(2).join(" ");
-        return firstLine + "\n" + secondLine;
-      } else {
-        return wordArray.join("\n");
-      }
-    }
-
-    return data.value;
-  };
 
   const customizeTooltip = (arg: any) => {
     return {
@@ -179,7 +128,7 @@ const AllMaterialsChart = () => {
         />
       </ValueAxis>
       <ArgumentAxis>
-        <Label customizeText={customizeArgumentAxisLabel} />
+        <Label customizeText={wrapArgumentAxisLabel} />
       </ArgumentAxis>
       <Legend
         verticalAlignment='bottom'

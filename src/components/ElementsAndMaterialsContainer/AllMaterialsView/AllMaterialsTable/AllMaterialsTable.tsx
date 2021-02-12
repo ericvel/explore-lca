@@ -117,12 +117,6 @@ const AllMaterialsTable = () => {
       alignByColumn: true,
     },
     {
-      columnName: "EEf_A1A3",
-      type: "sum",
-      showInGroupFooter: false,
-      alignByColumn: true,
-    },
-    {
       columnName: "FU",
       type: "staticValue",
       showInGroupFooter: false,
