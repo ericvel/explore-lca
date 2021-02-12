@@ -66,10 +66,10 @@ const MaterialsChart = (props: any) => {
       const dataEntry: IMaterialChartDataItem = {
         name: material.name,
         id: String(material.idmaterialInventory),
-        a1a3: Number(material.A1A3) || 0.0,
-        a4: Number(material.A4) || 0.0,
-        b4m: Number(material.B4_m) || 0.0,
-        b4t: Number(material.B4_t) || 0.0,
+        A1A3: Number(material.A1A3) || 0.0,
+        A4: Number(material.A4) || 0.0,
+        B4_m: Number(material.B4_m) || 0.0,
+        B4_t: Number(material.B4_t) || 0.0,
       };
 
       chartData.push(dataEntry);

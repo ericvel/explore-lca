@@ -89,19 +89,19 @@ interface ICompareChartDataItem {
 interface IElementChartDataItem {
   name: string;
   id: string;
-  a1a3: number;
-  a4: number;
-  b4m: number;
-  b4t: number;
+  A1A3: number;
+  A4: number;
+  B4_m: number;
+  B4_t: number;
 }
 
 interface IMaterialChartDataItem {
   name: string;
   id: string;
-  a1a3: number;
-  a4: number;
-  b4m: number;
-  b4t: number;
+  A1A3: number;
+  A4: number;
+  B4_m: number;
+  B4_t: number;
 }
 
 interface ITestChartData {

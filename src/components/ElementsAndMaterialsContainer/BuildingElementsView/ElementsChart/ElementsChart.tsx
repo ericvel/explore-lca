@@ -63,10 +63,10 @@ const ElementsChart = (props: any) => {
       const dataEntry: IElementChartDataItem = {
         name: element.name,
         id: String(element.idbuilding_elements),
-        a1a3: Number(element.A1A3) || 0.0,
-        a4: Number(element.A4) || 0.0,
-        b4m: Number(element.B4_m) || 0.0,
-        b4t: Number(element.B4_t) || 0.0,
+        A1A3: Number(element.A1A3) || 0.0,
+        A4: Number(element.A4) || 0.0,
+        B4_m: Number(element.B4_m) || 0.0,
+        B4_t: Number(element.B4_t) || 0.0,
       };
 
       chartData.push(dataEntry);
