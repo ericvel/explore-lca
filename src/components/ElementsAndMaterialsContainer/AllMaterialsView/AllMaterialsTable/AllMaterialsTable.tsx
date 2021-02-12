@@ -35,6 +35,7 @@ import {
   TableFixedColumns,
   TableGroupRow,
   TableSummaryRow,
+  GroupingPanel,
 } from "@devexpress/dx-react-grid-material-ui";
 
 import { Template, TemplateConnector } from "@devexpress/dx-react-core";
@@ -224,6 +225,7 @@ const AllMaterialsTable = () => {
           onHiddenColumnNamesChange={onHiddenColumnNamesChange}
         />
         <Toolbar />
+        <GroupingPanel showSortingControls />
         <SearchPanel />
         <ColumnChooser />
       </Grid>
