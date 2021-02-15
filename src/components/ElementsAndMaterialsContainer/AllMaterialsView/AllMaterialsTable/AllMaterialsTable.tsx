@@ -11,6 +11,10 @@ import {
 } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import EditIcon from "@material-ui/icons/Edit";
+import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 import {
   SortingState,
@@ -23,6 +27,7 @@ import {
   SummaryState,
   IntegratedSummary,
   TableGroupRowProps,
+  EditingState,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -36,22 +41,17 @@ import {
   TableGroupRow,
   TableSummaryRow,
   GroupingPanel,
+  TableEditColumn,
+  TableEditRow,
 } from "@devexpress/dx-react-grid-material-ui";
-
-import { Template, TemplateConnector } from "@devexpress/dx-react-core";
-import {
-  isTotalSummaryTableCell,
-  getColumnSummaries,
-  isGroupSummaryTableCell,
-} from "./helpers";
 
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
-import { GroupCell } from "./table-group-cell";
-import { SummaryCell } from "./table-summary-cell";
+import { GroupCell } from "./GroupCell";
+import { SummaryCell } from "./SummaryCell";
 
-// const getRowId = (row: any) => row.idmaterialInventory;
+const getRowId = (row: any) => row.idmaterialInventory;
 const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
   hiddenColumnNames.map((columnName) => ({
     columnName,
@@ -63,6 +63,10 @@ const AllMaterialsTable = () => {
     (state: IRootState) => state.materialInventory
   );
 
+  const isSimulationModeActive = useSelector(
+    (state: IRootState) => state.isSimulationModeActive
+  );
+
   const [columns] = useState(ColumnData.columns);
   const [columnExtensions] = useState(ColumnData.columnExtensions);
   const [defaultHiddenColumnNames] = useState(
@@ -71,16 +75,13 @@ const AllMaterialsTable = () => {
   const [tableColumnVisibilityColumnExtensions] = useState(
     ColumnData.tableColumnVisibilityColumnExtensions
   );
-  const [leftColumns] = useState(["name"]);
-  const [quantityColumns] = useState(["quantity"]);
-  const [decimalColumns] = useState([
-    "quantity",
-    "EEf_A1A3",
-    "A1A3",
-    "A4",
-    "B4_t",
-    "B4_m",
-  ]);
+  const [grouping] = useState([{ columnName: "name" }]);
+  const [groupSummaryItems] = useState(ColumnData.groupSummaryItems);
+  const [leftColumns] = useState([TableEditColumn.COLUMN_TYPE]);
+  const [decimalColumns] = useState(ColumnData.decimalColumns);
+
+  const [editingStateColumnExtensions] = useState(ColumnData.editingStateColumnExtensions);
+
   const [searchTerm, setSearchTerm] = useState<string>();
 
   const DecimalFormatter = ({ value }: any) =>
@@ -108,66 +109,17 @@ const AllMaterialsTable = () => {
       getHiddenColumnsFilteringExtensions(hiddenColumnNames)
     );
 
-  const [grouping] = useState([{ columnName: "name" }]);
-  const [groupSummaryItems] = useState([
-    {
-      columnName: "quantity",
-      type: "sum",
-      showInGroupFooter: false,
-      alignByColumn: true,
-    },
-    {
-      columnName: "FU",
-      type: "staticValue",
-      showInGroupFooter: false,
-      alignByColumn: true,
-    },
-    {
-      columnName: "materialCat",
-      type: "staticValue",
-      showInGroupFooter: false,
-      alignByColumn: true,
-    },
-    {
-      columnName: "RSL_mi",
-      type: "avg",
-      showInGroupFooter: false,
-      alignByColumn: true,
-    },
-    {
-      columnName: "A1A3",
-      type: "sum",
-      showInGroupFooter: false,
-      alignByColumn: true,
-    },
-    {
-      columnName: "A4",
-      type: "sum",
-      showInGroupFooter: false,
-      alignByColumn: true,
-    },
-    {
-      columnName: "B4_m",
-      type: "sum",
-      showInGroupFooter: false,
-      alignByColumn: true,
-    },
-    {
-      columnName: "B4_t",
-      type: "sum",
-      showInGroupFooter: false,
-      alignByColumn: true,
-    },
-  ]);
-
   const groupRowSummaryItem = ({ value }: any) => {
+    // Removes summary type label (i.e. "Sum: " or "Count: ")
     var formattedValue;
-    if (typeof value === 'string') {
+    if (typeof value === "string") {
       formattedValue = value;
     } else {
-      formattedValue = value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
+      // Formats decimal numbers
+      formattedValue =
+        value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
     }
-  
+
     return <strong>{formattedValue}</strong>;
   };
 
@@ -176,43 +128,99 @@ const AllMaterialsTable = () => {
       if (!rows.length) {
         return null;
       }
+      // Just display string value as "summary"
       return getValue(rows[0]);
     }
     return IntegratedSummary.defaultCalculator(type, rows, getValue);
   };
 
-  const messages = {
-    staticValue: "Static value",
+  const EditButton = ({ onExecute }: any) => (
+    <IconButton onClick={onExecute} title='Edit row'>
+      <EditIcon />
+    </IconButton>
+  );
+
+  const CommitButton = ({ onExecute }: any) => (
+    <IconButton onClick={onExecute} title='Save changes'>
+      <SaveIcon />
+    </IconButton>
+  );
+
+  const CancelButton = ({ onExecute }: any) => (
+    <IconButton color='secondary' onClick={onExecute} title='Cancel changes'>
+      <CancelIcon />
+    </IconButton>
+  );
+
+  const commandComponents: any = {
+    edit: EditButton,
+    commit: CommitButton,
+    cancel: CancelButton,
   };
 
+  const Command = ({ id, onExecute }: any) => {
+    const CommandButton = commandComponents[id];
+    return <CommandButton onExecute={onExecute} />;
+  };
+  /* 
+  const availableValues = {
+    product: globalSalesValues.product,
+    region: globalSalesValues.region,
+    customer: globalSalesValues.customer,
+  };
+
+  const EditCell = (props: any) => {
+    const { column } = props;
+    const availableColumnValues = availableValues[column.name];
+    if (availableColumnValues) {
+      return (
+        <LookupEditCell
+          {...props}
+          availableColumnValues={availableColumnValues}
+        />
+      );
+    }
+    return <TableEditRow.Cell {...props} />;
+  };
+ */
   // Displays all materials
   const rows = materialInventory;
 
   return (
     <Paper>
-      <Grid rows={rows} columns={columns}>
+      <Grid rows={rows} columns={columns} getRowId={getRowId}>
         <DecimalTypeProvider for={decimalColumns} />
         <SearchState onValueChange={delayedCallback} />
         <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
         <SortingState />
         <IntegratedSorting />
-        <GroupingState
-          grouping={grouping}
-          columnExtensions={[{ columnName: "name", groupingEnabled: false }]}
-        />
+        <GroupingState grouping={grouping} />
         <SummaryState groupItems={groupSummaryItems} />
         <IntegratedGrouping />
         <IntegratedSummary calculator={staticValueCalculator} />
+        <EditingState
+          onCommitChanges={() => {}}
+          columnExtensions={editingStateColumnExtensions}
+        />
         <VirtualTable columnExtensions={columnExtensions} />
         <TableHeaderRow showSortingControls />
+
+        <TableEditRow />
+        <TableEditColumn
+          showEditCommand={isSimulationModeActive}
+          commandComponent={Command}
+          width={isSimulationModeActive ? 100 : 0.1}
+        />
         <TableGroupRow
-          /* messages={{ sum: "Total" }} */ cellComponent={GroupCell}
+          cellComponent={GroupCell}
           summaryCellComponent={SummaryCell}
           summaryItemComponent={groupRowSummaryItem}
+          indentColumnWidth={isSimulationModeActive ? 0.1 : 48}
         />
         <TableSummaryRow />
-
-        {/* <TableFixedColumns leftColumns={leftColumns} /> */}
+        <TableFixedColumns
+          leftColumns={isSimulationModeActive ? leftColumns : []}
+        />
         <TableColumnVisibility
           defaultHiddenColumnNames={defaultHiddenColumnNames}
           columnExtensions={tableColumnVisibilityColumnExtensions}

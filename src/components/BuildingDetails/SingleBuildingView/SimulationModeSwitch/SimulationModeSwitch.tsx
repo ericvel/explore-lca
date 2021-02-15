@@ -9,7 +9,7 @@ import Switch from "@material-ui/core/Switch";
 const SimulationModeSwitch = () => {
   const dispatch = useDispatch();
 
-  const isSimulationModeChecked = useSelector(
+  const isSimulationModeActive = useSelector(
     (state: IRootState) => state.isSimulationModeActive
   );
 
@@ -21,7 +21,7 @@ const SimulationModeSwitch = () => {
     <FormControlLabel
       control={
         <Switch
-          checked={isSimulationModeChecked}
+          checked={isSimulationModeActive}
           onChange={handleSimulationModeChanged}
           name='simulationChecked'
           color='primary'
