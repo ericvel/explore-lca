@@ -15,6 +15,7 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
+import Input from "@material-ui/core/Input";
 
 import {
   SortingState,
@@ -50,6 +51,9 @@ import _ from "lodash";
 import ColumnData from "./ColumnData";
 import { GroupCell } from "./GroupCell";
 import { SummaryCell } from "./SummaryCell";
+import { LookupEditCell } from "./LookupEditCell";
+import { DecimalTypeProvider } from "./DecimalTypeProvider";
+import allActions from "redux/actions";
 
 const getRowId = (row: any) => row.idmaterialInventory;
 const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
@@ -58,7 +62,69 @@ const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
     predicate: () => false,
   }));
 
+const availableValues: any = {
+  sourceType: [
+    "Ecoinvent",
+    "EPD",
+    "Superfirma 1",
+    "WowzaCompany",
+    "Other",
+    "na",
+  ],
+};
+
+const EditCell = (props: any) => {
+  const { column } = props;
+  const availableColumnValues = availableValues[column.name];
+  if (availableColumnValues) {
+    return (
+      <LookupEditCell
+        {...props}
+        availableColumnValues={availableColumnValues}
+      />
+    );
+  }
+  return <TableEditRow.Cell {...props} />;
+};
+
+const EditButton = ({ onExecute }: any) => (
+  <Tooltip title='Edit row' enterDelay={200}>
+    <IconButton onClick={onExecute}>
+      <EditIcon />
+    </IconButton>
+  </Tooltip>
+);
+
+const CommitButton = ({ onExecute }: any) => (
+  <Tooltip title='Save changes' enterDelay={200}>
+    <IconButton onClick={onExecute}>
+      <SaveIcon />
+    </IconButton>
+  </Tooltip>
+);
+
+const CancelButton = ({ onExecute }: any) => (
+  <Tooltip title='Cancel changes' enterDelay={200}>
+    <IconButton color='secondary' onClick={onExecute}>
+      <CancelIcon />
+    </IconButton>
+  </Tooltip>
+);
+
+const commandComponents: any = {
+  edit: EditButton,
+  commit: CommitButton,
+  cancel: CancelButton,
+};
+
+const Command = ({ id, onExecute }: any) => {
+  const CommandButton = commandComponents[id];
+  return <CommandButton onExecute={onExecute} />;
+};
+
 const AllMaterialsTable = () => {
+  const dispatch = useDispatch();
+
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
   );
@@ -77,19 +143,16 @@ const AllMaterialsTable = () => {
   );
   const [grouping] = useState([{ columnName: "name" }]);
   const [groupSummaryItems] = useState(ColumnData.groupSummaryItems);
-  const [leftColumns] = useState([TableEditColumn.COLUMN_TYPE]);
+  const [leftFixedColumns] = useState([TableEditColumn.COLUMN_TYPE]);
   const [decimalColumns] = useState(ColumnData.decimalColumns);
 
-  const [editingStateColumnExtensions] = useState(ColumnData.editingStateColumnExtensions);
+  const [editingStateColumnExtensions] = useState(
+    ColumnData.editingStateColumnExtensions
+  );
+  const [editingRowIds, getEditingRowIds] = useState<React.ReactText[]>([]);
+  const [rowChanges, setRowChanges] = useState({});
 
   const [searchTerm, setSearchTerm] = useState<string>();
-
-  const DecimalFormatter = ({ value }: any) =>
-    value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
-
-  const DecimalTypeProvider = (props: any) => (
-    <DataTypeProvider formatterComponent={DecimalFormatter} {...props} />
-  );
 
   const changeSearchTerm = (value: any) => {
     console.log("Changed search term: ", value);
@@ -134,55 +197,20 @@ const AllMaterialsTable = () => {
     return IntegratedSummary.defaultCalculator(type, rows, getValue);
   };
 
-  const EditButton = ({ onExecute }: any) => (
-    <IconButton onClick={onExecute} title='Edit row'>
-      <EditIcon />
-    </IconButton>
-  );
-
-  const CommitButton = ({ onExecute }: any) => (
-    <IconButton onClick={onExecute} title='Save changes'>
-      <SaveIcon />
-    </IconButton>
-  );
-
-  const CancelButton = ({ onExecute }: any) => (
-    <IconButton color='secondary' onClick={onExecute} title='Cancel changes'>
-      <CancelIcon />
-    </IconButton>
-  );
-
-  const commandComponents: any = {
-    edit: EditButton,
-    commit: CommitButton,
-    cancel: CancelButton,
-  };
-
-  const Command = ({ id, onExecute }: any) => {
-    const CommandButton = commandComponents[id];
-    return <CommandButton onExecute={onExecute} />;
-  };
-  /* 
-  const availableValues = {
-    product: globalSalesValues.product,
-    region: globalSalesValues.region,
-    customer: globalSalesValues.customer,
-  };
-
-  const EditCell = (props: any) => {
-    const { column } = props;
-    const availableColumnValues = availableValues[column.name];
-    if (availableColumnValues) {
-      return (
-        <LookupEditCell
-          {...props}
-          availableColumnValues={availableColumnValues}
-        />
+  const commitChanges = ({ changed }: any) => {
+    let changedRows: IMaterialInventory[] = [];
+    if (changed) {
+      changedRows = materialInventory.map((row) =>
+        changed[row.idmaterialInventory]
+          ? { ...row, ...changed[row.idmaterialInventory] }
+          : row
       );
     }
-    return <TableEditRow.Cell {...props} />;
+    dispatch(
+      allActions.elementAndMaterialActions.setMaterialInventory(changedRows)
+    );
   };
- */
+
   // Displays all materials
   const rows = materialInventory;
 
@@ -199,13 +227,18 @@ const AllMaterialsTable = () => {
         <IntegratedGrouping />
         <IntegratedSummary calculator={staticValueCalculator} />
         <EditingState
-          onCommitChanges={() => {}}
+          editingRowIds={editingRowIds}
+          onEditingRowIdsChange={getEditingRowIds}
+          rowChanges={rowChanges}
+          onRowChangesChange={setRowChanges}
+          // onAddedRowsChange={changeAddedRows}
+          onCommitChanges={commitChanges}
           columnExtensions={editingStateColumnExtensions}
         />
         <VirtualTable columnExtensions={columnExtensions} />
         <TableHeaderRow showSortingControls />
 
-        <TableEditRow />
+        <TableEditRow cellComponent={EditCell} />
         <TableEditColumn
           showEditCommand={isSimulationModeActive}
           commandComponent={Command}
@@ -219,7 +252,7 @@ const AllMaterialsTable = () => {
         />
         <TableSummaryRow />
         <TableFixedColumns
-          leftColumns={isSimulationModeActive ? leftColumns : []}
+          leftColumns={isSimulationModeActive ? leftFixedColumns : []}
         />
         <TableColumnVisibility
           defaultHiddenColumnNames={defaultHiddenColumnNames}

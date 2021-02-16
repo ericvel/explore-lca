@@ -11,6 +11,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Typography from "@material-ui/core/Typography";
+import Tooltip from "@material-ui/core/Tooltip";
 
 interface Props {
   iconSize?: "small" | "inherit" | "large" | "default" | undefined;
@@ -47,9 +48,11 @@ function HelpButton(props: Props) {
 
   return (
     <div>
-      <IconButton aria-label='help' onClick={handleClickOpen}>
-        <HelpOutlineIcon fontSize={props.iconSize} />
-      </IconButton>
+      <Tooltip title="Help">
+        <IconButton aria-label='help' onClick={handleClickOpen}>
+          <HelpOutlineIcon fontSize={props.iconSize} />
+        </IconButton>
+      </Tooltip>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{"How to use"}</DialogTitle>
         <DialogContent>

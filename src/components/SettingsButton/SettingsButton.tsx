@@ -16,6 +16,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Checkbox from "@material-ui/core/Checkbox";
+import Tooltip from "@material-ui/core/Tooltip";
 
 interface Props {
   iconSize?: "small" | "inherit" | "large" | "default" | undefined;
@@ -62,9 +63,11 @@ function SettingsButton(props: Props) {
 
   return (
     <div>
-      <IconButton aria-label='help' onClick={handleClickOpen}>
-        <SettingsIcon fontSize={props.iconSize} />
-      </IconButton>
+      <Tooltip title="Settings">
+        <IconButton aria-label='help' onClick={handleClickOpen}>
+          <SettingsIcon fontSize={props.iconSize} />
+        </IconButton>
+      </Tooltip>
       <Drawer anchor='right' open={open} onClose={handleClose}>
         <Grid container spacing={3} className={classes.content}>
           <Grid item xs={12}>

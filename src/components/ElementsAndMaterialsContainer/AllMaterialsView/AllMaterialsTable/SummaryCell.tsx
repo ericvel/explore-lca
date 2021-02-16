@@ -1,8 +1,4 @@
-import * as React from "react";
-import * as PropTypes from "prop-types";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import IconButton from "@material-ui/core/IconButton";
+import React from "react";
 import TableCell from "@material-ui/core/TableCell";
 import Grid from "@material-ui/core/Grid";
 import Tooltip from "@material-ui/core/Tooltip";

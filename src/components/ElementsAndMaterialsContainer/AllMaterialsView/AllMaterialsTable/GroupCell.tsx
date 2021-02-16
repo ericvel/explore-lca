@@ -1,6 +1,4 @@
-import * as React from "react";
-import * as PropTypes from "prop-types";
-// import classNames from "classnames";
+import React from "react";
 import ChevronRight from "@material-ui/icons/ChevronRight";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import IconButton from "@material-ui/core/IconButton";
