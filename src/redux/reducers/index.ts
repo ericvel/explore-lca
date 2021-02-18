@@ -7,6 +7,7 @@ import {
   selectedBuildingElement,
   buildingElementRoute,
   hoveredBuildingElement,
+  simulationData,
 } from "./elementsAndMaterials";
 import {
   contentType,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   canSelectMultipleBuildings,
   isSimulationModeActive,
   EEMetric,
+  simulationData
 });
 
 export default rootReducer;

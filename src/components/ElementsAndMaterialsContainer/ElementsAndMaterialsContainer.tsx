@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
 import allActions from "redux/actions";
+import { getSimulationFromDb } from "services/firebase";
 
 import ReactDOM from "react-dom";
 import {
@@ -82,18 +83,46 @@ const ElementsAndMaterialsContainer = (props: any) => {
           Promise.all(responses.map((response) => response.json()))
         )
         .then((data) => {
-          ReactDOM.unstable_batchedUpdates(() => {
-            dispatch(
-              allActions.elementAndMaterialActions.setBuildingElements(data[0])
-            );
-            dispatch(
-              allActions.elementAndMaterialActions.setMaterialInventory(data[1])
-            );
-            setLoading(false);
-          });
+          getSimulationFromDb(String(buildingId))
+            .then((doc) => {
+              let simulationData: ISimulationData[] = [];
+              if (doc.exists) {
+                for (let [key, value] of Object.entries(doc.data()!)) {
+                  simulationData.push({
+                    inventoryId: key,
+                    simulatedFields: value,
+                  });
+                }
+                console.log("Simulation data: ", simulationData);
+              }
+
+              ReactDOM.unstable_batchedUpdates(() => {
+                dispatch(
+                  allActions.elementAndMaterialActions.setBuildingElements(
+                    data[0]
+                  )
+                );
+                dispatch(
+                  allActions.elementAndMaterialActions.setMaterialInventory(
+                    data[1]
+                  )
+                );
+                dispatch(
+                  allActions.elementAndMaterialActions.setSimulationData(
+                    simulationData
+                  )
+                );
+                setLoading(false);
+              });
+            })
+            .catch((error) => {
+              console.log("Error getting simulation data:", error);
+              setLoading(false);
+            });
         })
         .catch(() => setLoading(false));
     }
+    getSimulationFromDb(String(buildingId));
   };
 
   const headingText =
@@ -150,19 +179,17 @@ const ElementsAndMaterialsContainer = (props: any) => {
           </FormControl>
         </Grid>
       </Grid>
-      {
-        loading || props.parentIsLoading ? (
-          <div>
-            <Skeleton height={120} />
-            <Skeleton height={120} />
-            <Skeleton height={120} />
-          </div>
-        ) : contentType == "hierarchy" ? (
-          <BuildingElementsView />
-        ) : (
-          <AllMaterialsView />
-        )
-      }
+      {loading || props.parentIsLoading ? (
+        <div>
+          <Skeleton height={120} />
+          <Skeleton height={120} />
+          <Skeleton height={120} />
+        </div>
+      ) : contentType == "hierarchy" ? (
+        <BuildingElementsView />
+      ) : (
+        <AllMaterialsView />
+      )}
     </div>
   );
 };

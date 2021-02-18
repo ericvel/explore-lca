@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
+import { writeSimulationToDb } from "services/firebase";
 
 import {
   Theme,
@@ -54,6 +55,8 @@ import { SummaryCell } from "./SummaryCell";
 import { LookupEditCell } from "./LookupEditCell";
 import { DecimalTypeProvider } from "./DecimalTypeProvider";
 import allActions from "redux/actions";
+import { write } from "fs";
+import { selectedBuildings } from "redux/reducers/buildings";
 
 const getRowId = (row: any) => row.idmaterialInventory;
 const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
@@ -125,6 +128,9 @@ const Command = ({ id, onExecute }: any) => {
 const AllMaterialsTable = () => {
   const dispatch = useDispatch();
 
+  const selectedBuildings = useSelector(
+    (state: IRootState) => state.selectedBuildings
+  );
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
   );
@@ -205,6 +211,12 @@ const AllMaterialsTable = () => {
           ? { ...row, ...changed[row.idmaterialInventory] }
           : row
       );
+      const key = Object.keys(changed)[0];
+      const value = changed[key];
+      console.log("Changed row: ", key);
+      console.log("Changed values: ", value);
+
+      writeSimulationToDb(String(selectedBuildings[0].idbuildings), changed);
     }
     dispatch(
       allActions.elementAndMaterialActions.setMaterialInventory(changedRows)

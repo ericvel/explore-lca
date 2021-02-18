@@ -6,11 +6,13 @@ import {
   ADD_TO_ELEMENT_ROUTE,
   HOVER_BUILDING_ELEMENT,
   STOP_HOVER_BUILDING_ELEMENT,
+  SET_SIMULATION_DATA,
   BuildingElementActionTypes,
   MaterialInventoryActionTypes,
   SelectBuildingElementAction,
   ElementRouteActionTypes,
   HoverBuildingElementActionTypes,
+  SimulationDataActionTypes,
 } from "./types";
 
 const setBuildingElements = (
@@ -75,6 +77,15 @@ const stopHoverBuildingElement = (
   };
 };
 
+const setSimulationData = (
+  simulationData: ISimulationData[]
+): SimulationDataActionTypes => {
+  return {
+    type: SET_SIMULATION_DATA,
+    payload: simulationData,
+  };
+};
+
 export default {
   setBuildingElements,
   setMaterialInventory,
@@ -83,4 +94,5 @@ export default {
   setElementRoute,
   hoverBuildingElement,
   stopHoverBuildingElement,
+  setSimulationData,
 };

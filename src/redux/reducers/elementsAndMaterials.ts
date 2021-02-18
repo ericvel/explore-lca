@@ -4,6 +4,7 @@ import {
   SelectBuildingElementAction,
   ElementRouteActionTypes,
   HoverBuildingElementActionTypes,
+  SimulationDataActionTypes,
   SET_BUILDING_ELEMENTS,
   SET_MATERIAL_INVENTORY,
   SELECT_BUILDING_ELEMENT,
@@ -11,6 +12,7 @@ import {
   SET_BUILDING_ELEMENT_ROUTE,
   HOVER_BUILDING_ELEMENT,
   STOP_HOVER_BUILDING_ELEMENT,
+  SET_SIMULATION_DATA
 } from "../actions/types";
 
 export const buildingElements = (
@@ -84,6 +86,18 @@ export const hoveredBuildingElement = (
       return action.payload;
     case STOP_HOVER_BUILDING_ELEMENT:
       return null;
+    default:
+      return state;
+  }
+};
+
+export const simulationData = (
+  state: ISimulationData[] = [],
+  action: SimulationDataActionTypes
+) => {
+  switch (action.type) {
+    case SET_SIMULATION_DATA:
+      return action.payload;
     default:
       return state;
   }

@@ -23,6 +23,8 @@ export const SET_EE_METRIC = "SET_EE_METRIC";
 
 export const TOGGLE_SIMULATION_MODE = "TOGGLE_SIMULATION_MODE";
 
+export const SET_SIMULATION_DATA = "SET_SIMULATION_DATA";
+
 interface SetBuildingsAction {
   type: typeof SET_BUILDINGS;
   payload: IBuilding[];
@@ -100,6 +102,11 @@ interface ToggleSimulationModeAction {
   type: typeof TOGGLE_SIMULATION_MODE;
 }
 
+interface SetSimulationData {
+  type: typeof SET_SIMULATION_DATA;
+  payload: ISimulationData[];
+}
+
 export type BuildingActionTypes = SetBuildingsAction;
 export type SelectedBuildingActionTypes =
   | SelectBuildingsAction
@@ -117,3 +124,4 @@ export type DisplayModeActionTypes = SetDisplayModeAction;
 export type CanSelectMultipleActionTypes = ToggleCanSelectMultipleAction;
 export type EEMetricActionTypes = SetEEMetricAction;
 export type SimulationModeActionTypes = ToggleSimulationModeAction;
+export type SimulationDataActionTypes = SetSimulationData;
