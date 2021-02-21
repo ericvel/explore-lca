@@ -134,10 +134,47 @@ const AllMaterialsTable = () => {
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
   );
-
   const isSimulationModeActive = useSelector(
     (state: IRootState) => state.isSimulationModeActive
   );
+  const simulationData = useSelector(
+    (state: IRootState) => state.simulationData
+  );
+
+  const [rows, setRows] = useState<IMaterialInventory[]>([]);
+
+  useEffect(() => {
+    if (isSimulationModeActive) {
+      let rowsWithSimulation = materialInventory;
+      simulationData.forEach((simulatedEntry) => {
+        let rowIndex = rowsWithSimulation.findIndex(
+          (row) => row.idmaterialInventory === simulatedEntry.inventoryId
+        );
+        console.log("Index: ", rowIndex)
+        const fields = simulatedEntry.simulatedFields;
+        /* for (const field of fields) {
+          (rowsWithSimulation[rowIndex] as any)[field.fieldName] =
+            field.simulatedValue;
+        } */
+        /* fields.forEach((field) => {
+          (rowsWithSimulation[rowIndex] as any)[field.fieldName] = field.simulatedValue;
+        }) */
+        /* const row = simulatedEntry.simulatedFields;
+
+        const tempRows = rowsWithSimulation.map((originalEntry) =>
+          originalEntry.idmaterialInventory === simulatedEntry.inventoryId
+            ? { ...originalEntry, ...row }
+            : originalEntry
+        );
+
+        rowsWithSimulation = tempRows; */
+      });
+      setRows(rowsWithSimulation);
+      console.log("Rows: ", rowsWithSimulation);
+    } else {
+      setRows(materialInventory);
+    }
+  }, [isSimulationModeActive]);
 
   const [columns] = useState(ColumnData.columns);
   const [columnExtensions] = useState(ColumnData.columnExtensions);
@@ -224,7 +261,7 @@ const AllMaterialsTable = () => {
   };
 
   // Displays all materials
-  const rows = materialInventory;
+  // const rows = materialInventory;
 
   return (
     <Paper>
