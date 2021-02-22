@@ -25,7 +25,11 @@ import {
   Label,
 } from "devextreme-react/chart";
 
-import { groupByMaterial, sortByEE, wrapArgumentAxisLabel } from "helpers/chartHelpers";
+import {
+  groupByMaterial,
+  sortByEE,
+  wrapArgumentAxisLabel,
+} from "helpers/chartHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,17 +43,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const AllMaterialsChart = () => {
-
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
   );
 
   const [chartData, setChartData] = useState<IMaterialChartDataItem[]>([]);
 
-  const chartRef: React.MutableRefObject<Chart | null> = useRef(null);
-
   useEffect(() => {
-    const materialsGrouped: IMaterialChartDataItem[] = groupByMaterial(materialInventory);    
+    const materialsGrouped: IMaterialChartDataItem[] = groupByMaterial(
+      materialInventory
+    );
     const sortedChartData = sortByEE(materialsGrouped);
     setChartData(sortedChartData);
   }, []);
@@ -58,40 +61,6 @@ const AllMaterialsChart = () => {
     return {
       text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`,
     };
-  };
-
-  const onPointHoverChanged = (e: any) => {
-    const point = e.target;
-    const hoveredElementId = point.data.id;
-    const rowElement = document.getElementById("tableRow" + hoveredElementId);
-
-    if (point.isHovered()) {
-      // console.log("Hovered: ", hoveredElementId);
-      if (rowElement !== null) rowElement.style.backgroundColor = "#F5F5F5";
-      // dispatch(allActions.elementAndMaterialActions.hoverBuildingElement(hoveredElementId));
-    } else {
-      if (rowElement !== null)
-        rowElement.style.removeProperty("background-color");
-      // dispatch(allActions.elementAndMaterialActions.stopHoverBuildingElement(hoveredElementId));
-    }
-  };
-
-  const handleRowHover = (elementName: string) => {
-    if (chartRef.current !== null) {
-      const chartInstance = chartRef.current.instance;
-      const a1a3Series = chartInstance.getSeriesByName("A1-A3");
-      const point = a1a3Series.getPointsByArg(elementName)[0];
-      point.hover();
-    }
-  };
-
-  const handleRowClearHover = (elementName: string) => {
-    if (chartRef.current !== null) {
-      const chartInstance = chartRef.current.instance;
-      const a1a3Series = chartInstance.getSeriesByName("A1-A3");
-      const point = a1a3Series.getPointsByArg(elementName)[0];
-      point.clearHover();
-    }
   };
 
   const height = 200 + chartData.length * 30;
@@ -105,8 +74,6 @@ const AllMaterialsChart = () => {
       dataSource={chartData}
       palette='Material'
       rotated={true}
-    // onPointHoverChanged={onPointHoverChanged}
-    // ref={chartRef}
     >
       <Size height={height} />
       <CommonSeriesSettings

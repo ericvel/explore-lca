@@ -147,10 +147,12 @@ const AllMaterialsTable = () => {
     if (isSimulationModeActive) {
       let rowsWithSimulation = materialInventory;
       simulationData.forEach((simulatedEntry) => {
-        let rowIndex = rowsWithSimulation.findIndex(
+        /* let rowIndex = rowsWithSimulation.findIndex(
           (row) => row.idmaterialInventory === simulatedEntry.inventoryId
         );
         console.log("Index: ", rowIndex)
+         */
+        // console.log("SimulatedRow: ", simulatedEntry)
         const fields = simulatedEntry.simulatedFields;
         /* for (const field of fields) {
           (rowsWithSimulation[rowIndex] as any)[field.fieldName] =
@@ -159,7 +161,7 @@ const AllMaterialsTable = () => {
         /* fields.forEach((field) => {
           (rowsWithSimulation[rowIndex] as any)[field.fieldName] = field.simulatedValue;
         }) */
-        /* const row = simulatedEntry.simulatedFields;
+        const row = simulatedEntry.simulatedFields;
 
         const tempRows = rowsWithSimulation.map((originalEntry) =>
           originalEntry.idmaterialInventory === simulatedEntry.inventoryId
@@ -167,10 +169,10 @@ const AllMaterialsTable = () => {
             : originalEntry
         );
 
-        rowsWithSimulation = tempRows; */
+        rowsWithSimulation = tempRows;
       });
       setRows(rowsWithSimulation);
-      console.log("Rows: ", rowsWithSimulation);
+      // console.log("Rows: ", rowsWithSimulation);
     } else {
       setRows(materialInventory);
     }

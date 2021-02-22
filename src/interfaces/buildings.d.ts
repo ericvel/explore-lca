@@ -37,7 +37,7 @@ interface IBuilding {
 }
 
 interface IBuildingElement {
-  idbuilding_elements: string;
+  idbuilding_elements: number;
   idlevels: number;
   name: string;
   A1A3: ?number;
@@ -49,8 +49,8 @@ interface IBuildingElement {
 }
 
 interface IMaterialInventory {
-  idmaterialInventory: string;
-  idmaterials: string;
+  idmaterialInventory: number;
+  idmaterials: number;
   name: string;
   source: string;
   dataType: string;
@@ -105,7 +105,7 @@ interface IMaterialChartDataItem {
 }
 
 interface ISimulationData {
-  inventoryId: string;
+  inventoryId: number;
   simulatedFields: { fieldName: string; simulatedValue: string | number }[];
 }
 

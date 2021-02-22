@@ -25,7 +25,11 @@ import {
   Label,
 } from "devextreme-react/chart";
 
-import { groupByMaterial, sortByEE, wrapArgumentAxisLabel } from "helpers/chartHelpers";
+import {
+  groupByMaterial,
+  sortByEE,
+  wrapArgumentAxisLabel,
+} from "helpers/chartHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +43,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const MaterialsChart = (props: any) => {
-
   const contentType = useSelector((state: IRootState) => state.contentType);
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
@@ -54,7 +57,9 @@ const MaterialsChart = (props: any) => {
 
   useEffect(() => {
     const materialInventory = getElementMaterials(selectedBuildingElement);
-    const materialsGrouped: IMaterialChartDataItem[] = groupByMaterial(materialInventory);    
+    const materialsGrouped: IMaterialChartDataItem[] = groupByMaterial(
+      materialInventory
+    );
     const sortedChartData = sortByEE(materialsGrouped);
     setChartData(sortedChartData);
   }, []);
@@ -71,60 +76,10 @@ const MaterialsChart = (props: any) => {
     return [];
   };
 
-  // Wraps label over two lines if longer than 15 characters
-  const customizeArgumentAxisLabel = (data: any) => {
-    if (data.value.length > 15) {
-      const wordArray = data.value.split(" ");
-      if (wordArray.length > 2) {
-        const firstLine = wordArray.slice(0, 2).join(" ");
-        const secondLine = wordArray.slice(2).join(" ");
-        return firstLine + "\n" + secondLine;
-      } else {
-        return wordArray.join("\n");
-      }
-    }
-
-    return data.value;
-  };
-
   const customizeTooltip = (arg: any) => {
     return {
       text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`,
     };
-  };
-
-  const onPointHoverChanged = (e: any) => {
-    const point = e.target;
-    const hoveredElementId = point.data.id;
-    const rowElement = document.getElementById("tableRow" + hoveredElementId);
-
-    if (point.isHovered()) {
-      // console.log("Hovered: ", hoveredElementId);
-      if (rowElement !== null) rowElement.style.backgroundColor = "#F5F5F5";
-      // dispatch(allActions.elementAndMaterialActions.hoverBuildingElement(hoveredElementId));
-    } else {
-      if (rowElement !== null)
-        rowElement.style.removeProperty("background-color");
-      // dispatch(allActions.elementAndMaterialActions.stopHoverBuildingElement(hoveredElementId));
-    }
-  };
-
-  const handleRowHover = (elementName: string) => {
-    if (chartRef.current !== null) {
-      const chartInstance = chartRef.current.instance;
-      const a1a3Series = chartInstance.getSeriesByName("A1-A3");
-      const point = a1a3Series.getPointsByArg(elementName)[0];
-      point.hover();
-    }
-  };
-
-  const handleRowClearHover = (elementName: string) => {
-    if (chartRef.current !== null) {
-      const chartInstance = chartRef.current.instance;
-      const a1a3Series = chartInstance.getSeriesByName("A1-A3");
-      const point = a1a3Series.getPointsByArg(elementName)[0];
-      point.clearHover();
-    }
   };
 
   const height = 200 + chartData.length * 50;
@@ -138,8 +93,6 @@ const MaterialsChart = (props: any) => {
       dataSource={chartData}
       palette='Material'
       rotated={true}
-    // onPointHoverChanged={onPointHoverChanged}
-    // ref={chartRef}
     >
       <Size height={height} />
       <CommonSeriesSettings

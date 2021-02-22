@@ -89,7 +89,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
               if (doc.exists) {
                 for (let [key, value] of Object.entries(doc.data()!)) {
                   simulationData.push({
-                    inventoryId: key,
+                    inventoryId: Number(key),
                     simulatedFields: value,
                   });
                 }
@@ -125,8 +125,8 @@ const ElementsAndMaterialsContainer = (props: any) => {
     getSimulationFromDb(String(buildingId));
   };
 
-  const headingText =
-    contentType == "hierarchy" ? "Building elements" : "All materials";
+  const headingText = "Materials";
+    // contentType == "hierarchy" ? "Building elements" : "All materials";
 
   const classes = useStyles();
 
@@ -141,18 +141,23 @@ const ElementsAndMaterialsContainer = (props: any) => {
         <Grid item>
           <Tooltip title='Select what to display' open={tooltipOpen}>
             <FormControl className={classes.formControl} variant='outlined'>
+              <InputLabel id='demo-simple-select-outlined-label'>
+                Group by
+              </InputLabel>
               <Select
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
                 displayEmpty
                 value={contentType}
+                label='Group by'
                 onChange={handleSelectChange}
                 onMouseEnter={() => handleTooltip(true)}
                 onMouseLeave={() => handleTooltip(false)}
                 onOpen={() => handleTooltip(false)}
               >
-                <MenuItem value={"hierarchy"}>Elements (hierarchy)</MenuItem>
-                <MenuItem value={"allMaterials"}>All materials</MenuItem>
+                <MenuItem value={"hierarchy"}>Building element</MenuItem>
+                <MenuItem value={"allMaterials"}>Product</MenuItem>
+                <MenuItem value={"category"}>Category</MenuItem>
               </Select>
             </FormControl>
           </Tooltip>

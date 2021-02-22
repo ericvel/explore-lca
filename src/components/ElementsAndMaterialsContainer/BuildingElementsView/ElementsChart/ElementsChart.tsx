@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ElementsChart = (props: any) => {
+const ElementsChart = () => {
   const dispatch = useDispatch();
 
   const buildingElements = useSelector(
@@ -47,13 +47,7 @@ const ElementsChart = (props: any) => {
   const selectedBuildingElement = useSelector(
     (state: IRootState) => state.selectedBuildingElement
   );
-  const hoveredBuildingElement = useSelector(
-    (state: IRootState) => state.hoveredBuildingElement
-  );
-
   const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
-
-  const chartRef: React.MutableRefObject<Chart | null> = useRef(null);
 
   useEffect(() => {
     const childElements = getChildElements(selectedBuildingElement);
@@ -71,21 +65,11 @@ const ElementsChart = (props: any) => {
 
       chartData.push(dataEntry);
     });
-    
+
     const sortedChartData = sortByEE(chartData);
 
     setChartData(sortedChartData);
   }, [selectedBuildingElement]);
-
-  /*
-    useEffect(() => {
-        if (props.hoveredRow !== null) {
-            handleRowHover(props.hoveredRow);
-        } else if (props.clearedRow !== null) {
-            handleRowClearHover(props.clearedRow);
-        }
-    }, [props.hoveredRow, props.clearedRow])
-    */
 
   const getChildElements = (parentElement: IBuildingElement) => {
     const childElements = buildingElements.filter(
@@ -96,22 +80,6 @@ const ElementsChart = (props: any) => {
     }
 
     return [];
-  };
-
-  // Wraps label over two lines if longer than 15 characters
-  const customizeArgumentAxisLabel = (data: any) => {
-    if (data.value.length > 15) {
-      const wordArray = data.value.split(" ");
-      if (wordArray.length > 2) {
-        const firstLine = wordArray.slice(0, 2).join(" ");
-        const secondLine = wordArray.slice(2).join(" ");
-        return firstLine + "\n" + secondLine;
-      } else {
-        return wordArray.join("\n");
-      }
-    }
-
-    return data.value;
   };
 
   const customizeTooltip = (arg: any) => {
@@ -142,39 +110,6 @@ const ElementsChart = (props: any) => {
     } else {
       e.element.style.cursor = "auto";
     }
-
-    /*
-        const point = e.target;
-        const hoveredElementId = point.data.id;
-        const rowElement = document.getElementById("tableRow" + hoveredElementId);
-
-        if (point.isHovered()) {
-            // console.log("Hovered: ", hoveredElementId);
-            if (rowElement !== null) rowElement.style.backgroundColor = "#F5F5F5";
-            // dispatch(allActions.elementAndMaterialActions.hoverBuildingElement(hoveredElementId));
-        } else {
-            if (rowElement !== null) rowElement.style.removeProperty("background-color");
-            // dispatch(allActions.elementAndMaterialActions.stopHoverBuildingElement(hoveredElementId));
-        }
-        */
-  };
-
-  const handleRowHover = (elementName: string) => {
-    if (chartRef.current !== null) {
-      const chartInstance = chartRef.current.instance;
-      const a1a3Series = chartInstance.getSeriesByName("A1-A3");
-      const point = a1a3Series.getPointsByArg(elementName)[0];
-      point.hover();
-    }
-  };
-
-  const handleRowClearHover = (elementName: string) => {
-    if (chartRef.current !== null) {
-      const chartInstance = chartRef.current.instance;
-      const a1a3Series = chartInstance.getSeriesByName("A1-A3");
-      const point = a1a3Series.getPointsByArg(elementName)[0];
-      point.clearHover();
-    }
   };
 
   const height = 200 + chartData.length * 50;
@@ -190,7 +125,6 @@ const ElementsChart = (props: any) => {
       rotated={true}
       onPointClick={onPointClick}
       onPointHoverChanged={onPointHoverChanged}
-    // ref={chartRef}
     >
       <Size height={height} />
       <CommonSeriesSettings

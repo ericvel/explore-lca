@@ -40,7 +40,7 @@ export const materialInventory = (
 };
 
 const initialSelectedElementState: IBuildingElement = {
-  idbuilding_elements: "0",
+  idbuilding_elements: 0,
   idlevels: 0,
   name: "",
   hierarchy: 0,
