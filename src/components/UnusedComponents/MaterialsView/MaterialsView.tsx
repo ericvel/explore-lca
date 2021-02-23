@@ -23,8 +23,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
-import AllMaterialsTable from "./AllMaterialsTable";
-import AllMaterialsChart from "./AllMaterialsChart";
+import MaterialsTable from "./MaterialsTable";
+import MaterialsChart from "./MaterialsChart";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const MaterialsView = (props: any) => {
   const dispatch = useDispatch();
 
-  const contentType = useSelector((state: IRootState) => state.contentType);
+  const contentType = useSelector((state: IRootState) => state.materialsGroupBy);
   const displayMode = useSelector((state: IRootState) => state.displayMode);
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
@@ -61,11 +61,11 @@ const MaterialsView = (props: any) => {
         <Grid item xs>
           {displayMode == "table" ? (
             <Paper>
-              <AllMaterialsTable />
+              <MaterialsTable />
             </Paper>
           ) : (
             <Paper>
-              <AllMaterialsChart />
+              <MaterialsChart />
             </Paper>
           )}
         </Grid>

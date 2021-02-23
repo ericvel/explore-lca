@@ -28,7 +28,9 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Skeleton from "@material-ui/lab/Skeleton";
 
 import BuildingElementsView from "./BuildingElementsView";
-import AllMaterialsView from "./AllMaterialsView";
+import ProductView from "./ProductView";
+import CategoryView from "./CategoryView";
+import { GroupBy } from "interfaces/enums";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,19 +41,24 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ElementsAndMaterialsContainer = (props: any) => {
+const MaterialsContainer = (props: any) => {
   const dispatch = useDispatch();
   const selectedBuildings = useSelector(
     (state: IRootState) => state.selectedBuildings
   );
-  const contentType = useSelector((state: IRootState) => state.contentType);
+  const materialInventory = useSelector(
+    (state: IRootState) => state.materialInventory
+  );
+  const groupBy = useSelector((state: IRootState) => state.materialsGroupBy);
   const displayMode = useSelector((state: IRootState) => state.displayMode);
 
   const [loading, setLoading] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    dispatch(allActions.uiActions.setContentType(event.target.value as string));
+    dispatch(
+      allActions.uiActions.setMaterialsGroupBy(event.target.value as string)
+    );
   };
 
   const handleRadioButtonChange = (
@@ -65,7 +72,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
   };
 
   useEffect(() => {
-    if (selectedBuildings.length > 0) {
+    if (selectedBuildings.length) {
       loadData();
     }
   }, [selectedBuildings]);
@@ -125,9 +132,6 @@ const ElementsAndMaterialsContainer = (props: any) => {
     getSimulationFromDb(String(buildingId));
   };
 
-  const headingText = "Materials";
-    // contentType == "hierarchy" ? "Building elements" : "All materials";
-
   const classes = useStyles();
 
   return (
@@ -135,7 +139,7 @@ const ElementsAndMaterialsContainer = (props: any) => {
       <Grid container spacing={3} alignItems='center' justify='space-between'>
         <Grid item>
           <Typography variant='h5' color='textSecondary' gutterBottom>
-            {headingText}
+            Materials
           </Typography>
         </Grid>
         <Grid item>
@@ -148,16 +152,18 @@ const ElementsAndMaterialsContainer = (props: any) => {
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
                 displayEmpty
-                value={contentType}
+                value={groupBy}
                 label='Group by'
                 onChange={handleSelectChange}
                 onMouseEnter={() => handleTooltip(true)}
                 onMouseLeave={() => handleTooltip(false)}
                 onOpen={() => handleTooltip(false)}
               >
-                <MenuItem value={"hierarchy"}>Building element</MenuItem>
-                <MenuItem value={"allMaterials"}>Product</MenuItem>
-                <MenuItem value={"category"}>Category</MenuItem>
+                <MenuItem value={GroupBy.BuildingElement}>
+                  Building element
+                </MenuItem>
+                <MenuItem value={GroupBy.Product}>Product</MenuItem>
+                <MenuItem value={GroupBy.Category}>Category</MenuItem>
               </Select>
             </FormControl>
           </Tooltip>
@@ -190,13 +196,15 @@ const ElementsAndMaterialsContainer = (props: any) => {
           <Skeleton height={120} />
           <Skeleton height={120} />
         </div>
-      ) : contentType == "hierarchy" ? (
+      ) : groupBy === GroupBy.BuildingElement ? (
         <BuildingElementsView />
+      ) : groupBy === GroupBy.Product ? (
+        <ProductView materials={materialInventory} />
       ) : (
-        <AllMaterialsView />
+        <CategoryView materials={materialInventory} />
       )}
     </div>
   );
 };
 
-export default ElementsAndMaterialsContainer;
+export default MaterialsContainer;

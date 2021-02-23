@@ -7,9 +7,6 @@ import {
   Theme,
   createStyles,
   makeStyles,
-  withStyles,
-  WithStyles,
-  emphasize,
 } from "@material-ui/core/styles";
 
 import {
@@ -42,39 +39,25 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const MaterialsChart = (props: any) => {
-  const contentType = useSelector((state: IRootState) => state.contentType);
+interface Props {
+  materials: IMaterialInventory[];
+}
+
+const ProductChart = (props: Props) => {
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
   );
-  const selectedBuildingElement = useSelector(
-    (state: IRootState) => state.selectedBuildingElement
-  );
 
-  const [chartData, setChartData] = useState<IMaterialChartDataItem[]>([]);
-
-  const chartRef: React.MutableRefObject<Chart | null> = useRef(null);
+  const [chartData, setChartData] = useState<IChartDataItem[]>([]);
 
   useEffect(() => {
-    const materialInventory = getElementMaterials(selectedBuildingElement);
-    const materialsGrouped: IMaterialChartDataItem[] = groupByMaterial(
-      materialInventory
+    console.log("Props: ", props.materials)
+    const materialsGrouped: IChartDataItem[] = groupByMaterial(
+      props.materials
     );
     const sortedChartData = sortByEE(materialsGrouped);
     setChartData(sortedChartData);
   }, []);
-
-  const getElementMaterials = (parentElement: IBuildingElement) => {
-    const elementMaterials = materialInventory.filter(
-      (material) =>
-        material.idbuilding_elements === parentElement.idbuilding_elements
-    );
-    if (elementMaterials !== undefined) {
-      return elementMaterials;
-    }
-
-    return [];
-  };
 
   const customizeTooltip = (arg: any) => {
     return {
@@ -82,7 +65,7 @@ const MaterialsChart = (props: any) => {
     };
   };
 
-  const height = 200 + chartData.length * 50;
+  const height = 200 + chartData.length * 30;
 
   const classes = useStyles();
 
@@ -133,4 +116,4 @@ const MaterialsChart = (props: any) => {
   );
 };
 
-export default MaterialsChart;
+export default ProductChart;

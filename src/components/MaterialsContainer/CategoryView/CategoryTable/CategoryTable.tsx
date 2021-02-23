@@ -55,8 +55,10 @@ import { SummaryCell } from "./SummaryCell";
 import { LookupEditCell } from "./LookupEditCell";
 import { DecimalTypeProvider } from "./DecimalTypeProvider";
 import allActions from "redux/actions";
-import { write } from "fs";
-import { selectedBuildings } from "redux/reducers/buildings";
+
+interface Props {
+  materials: IMaterialInventory[];
+}
 
 const getRowId = (row: any) => row.idmaterialInventory;
 const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
@@ -125,15 +127,13 @@ const Command = ({ id, onExecute }: any) => {
   return <CommandButton onExecute={onExecute} />;
 };
 
-const AllMaterialsTable = () => {
+const CategoryTable = (props: Props) => {
   const dispatch = useDispatch();
 
   const selectedBuildings = useSelector(
     (state: IRootState) => state.selectedBuildings
   );
-  const materialInventory = useSelector(
-    (state: IRootState) => state.materialInventory
-  );
+
   const isSimulationModeActive = useSelector(
     (state: IRootState) => state.isSimulationModeActive
   );
@@ -145,7 +145,7 @@ const AllMaterialsTable = () => {
 
   useEffect(() => {
     if (isSimulationModeActive) {
-      let rowsWithSimulation = materialInventory;
+      let rowsWithSimulation = props.materials;
       simulationData.forEach((simulatedEntry) => {
         /* let rowIndex = rowsWithSimulation.findIndex(
           (row) => row.idmaterialInventory === simulatedEntry.inventoryId
@@ -174,7 +174,7 @@ const AllMaterialsTable = () => {
       setRows(rowsWithSimulation);
       // console.log("Rows: ", rowsWithSimulation);
     } else {
-      setRows(materialInventory);
+      setRows(props.materials);
     }
   }, [isSimulationModeActive]);
 
@@ -186,7 +186,7 @@ const AllMaterialsTable = () => {
   const [tableColumnVisibilityColumnExtensions] = useState(
     ColumnData.tableColumnVisibilityColumnExtensions
   );
-  const [grouping] = useState([{ columnName: "name" }]);
+  const [grouping] = useState([ { columnName: "materialCat" }, { columnName: "name" }]);
   const [groupSummaryItems] = useState(ColumnData.groupSummaryItems);
   const [leftFixedColumns] = useState([TableEditColumn.COLUMN_TYPE]);
   const [decimalColumns] = useState(ColumnData.decimalColumns);
@@ -245,7 +245,7 @@ const AllMaterialsTable = () => {
   const commitChanges = ({ changed }: any) => {
     let changedRows: IMaterialInventory[] = [];
     if (changed) {
-      changedRows = materialInventory.map((row) =>
+      changedRows = props.materials.map((row) =>
         changed[row.idmaterialInventory]
           ? { ...row, ...changed[row.idmaterialInventory] }
           : row
@@ -319,4 +319,4 @@ const AllMaterialsTable = () => {
   );
 };
 
-export default AllMaterialsTable;
+export default CategoryTable;

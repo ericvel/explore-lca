@@ -23,8 +23,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
-import MaterialsTable from "./MaterialsTable";
-import MaterialsChart from "./MaterialsChart";
+import CategoryTable from "./CategoryTable";
+import CategoryChart from "./CategoryChart";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,10 +41,16 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const MaterialsView = (props: any) => {
+interface Props {
+  materials: IMaterialInventory[];
+}
+
+const CategoryView = (props: Props) => {
   const dispatch = useDispatch();
 
-  const contentType = useSelector((state: IRootState) => state.contentType);
+  const contentType = useSelector(
+    (state: IRootState) => state.materialsGroupBy
+  );
   const displayMode = useSelector((state: IRootState) => state.displayMode);
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
@@ -52,6 +58,18 @@ const MaterialsView = (props: any) => {
   const selectedBuildingElement = useSelector(
     (state: IRootState) => state.selectedBuildingElement
   );
+
+  const getElementMaterials = (parentElement: IBuildingElement) => {
+    const elementMaterials = materialInventory.filter(
+      (material) =>
+        material.idbuilding_elements === parentElement.idbuilding_elements
+    );
+    if (elementMaterials !== undefined) {
+      return elementMaterials;
+    }
+
+    return [];
+  };
 
   const classes = useStyles();
 
@@ -61,11 +79,11 @@ const MaterialsView = (props: any) => {
         <Grid item xs>
           {displayMode == "table" ? (
             <Paper>
-              <MaterialsTable />
+              <CategoryTable materials={props.materials} />
             </Paper>
           ) : (
             <Paper>
-              <MaterialsChart />
+              <CategoryChart materials={props.materials} />
             </Paper>
           )}
         </Grid>
@@ -74,4 +92,4 @@ const MaterialsView = (props: any) => {
   );
 };
 
-export default MaterialsView;
+export default CategoryView;

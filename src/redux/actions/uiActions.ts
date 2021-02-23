@@ -1,6 +1,6 @@
 import {
-  SET_CONTENT_TYPE,
-  ContentTypeActionTypes,
+  SET_MATERIALS_GROUP_BY,
+  MaterialsGroupByActionTypes,
   SET_DISPLAY_MODE,
   DisplayModeActionTypes,
   TOGGLE_CAN_SELECT_MULTIPLE,
@@ -9,10 +9,10 @@ import {
   SimulationModeActionTypes
 } from "./types";
 
-const setContentType = (contentType: string): ContentTypeActionTypes => {
+const setMaterialsGroupBy = (groupBy: string): MaterialsGroupByActionTypes => {
   return {
-    type: SET_CONTENT_TYPE,
-    payload: contentType,
+    type: SET_MATERIALS_GROUP_BY,
+    payload: groupBy,
   };
 };
 
@@ -36,7 +36,7 @@ const toggleSimulationMode = (): SimulationModeActionTypes => {
 };
 
 export default {
-  setContentType,
+  setMaterialsGroupBy,
   setDisplayMode,
   toggleCanSelectMultiple,
   toggleSimulationMode

@@ -7,9 +7,6 @@ import {
   Theme,
   createStyles,
   makeStyles,
-  withStyles,
-  WithStyles,
-  emphasize,
 } from "@material-ui/core/styles";
 
 import {
@@ -42,16 +39,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const AllMaterialsChart = () => {
+interface Props {
+  materials: IMaterialInventory[];
+}
+
+const CategoryChart = (props: Props) => {
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
   );
 
-  const [chartData, setChartData] = useState<IMaterialChartDataItem[]>([]);
+  const [chartData, setChartData] = useState<IChartDataItem[]>([]);
 
   useEffect(() => {
-    const materialsGrouped: IMaterialChartDataItem[] = groupByMaterial(
-      materialInventory
+    console.log("Props: ", props.materials)
+    const materialsGrouped: IChartDataItem[] = groupByMaterial(
+      props.materials
     );
     const sortedChartData = sortByEE(materialsGrouped);
     setChartData(sortedChartData);
@@ -114,4 +116,4 @@ const AllMaterialsChart = () => {
   );
 };
 
-export default AllMaterialsChart;
+export default CategoryChart;

@@ -85,7 +85,7 @@ interface ICompareChartDataItem {
   b4m: number;
   b4t: number;
 }
-
+/* 
 interface IElementChartDataItem {
   name: string;
   id: string;
@@ -94,7 +94,8 @@ interface IElementChartDataItem {
   B4_m: number;
   B4_t: number;
 }
-
+ */
+/* 
 interface IMaterialChartDataItem {
   name: string;
   id: string;
@@ -102,6 +103,17 @@ interface IMaterialChartDataItem {
   A4: number;
   B4_m: number;
   B4_t: number;
+  materialCat: string;
+}
+ */
+interface IChartDataItem {
+  name: string;
+  id: string;
+  A1A3: number;
+  A4: number;
+  B4_m: number;
+  B4_t: number;
+  materialCat: string;
 }
 
 interface ISimulationData {
@@ -109,10 +121,3 @@ interface ISimulationData {
   simulatedFields: { fieldName: string; simulatedValue: string | number }[];
 }
 
-interface ITestChartData {
-  lcaPhase: string;
-}
-
-interface IValue {
-  prop: string | number;
-}

@@ -16,7 +16,7 @@ export const TOGGLE_COMPARE_DIALOG_OPEN = "TOGGLE_COMPARE_DIALOG_OPEN";
 export const HOVER_BUILDING_ELEMENT = "HOVER_BUILDING_ELEMENT";
 export const STOP_HOVER_BUILDING_ELEMENT = "STOP_HOVER_BUILDING_ELEMENT";
 
-export const SET_CONTENT_TYPE = "SET_CONTENT_TYPE";
+export const SET_MATERIALS_GROUP_BY = "SET_CONTENT_TYPE";
 export const SET_DISPLAY_MODE = "SET_DISPLAY_MODE";
 
 export const SET_EE_METRIC = "SET_EE_METRIC";
@@ -82,8 +82,8 @@ interface StopHoverBuildingElementAction {
   payload: number;
 }
 
-interface SetContentTypeAction {
-  type: typeof SET_CONTENT_TYPE;
+interface SetMaterialsGroupByAction {
+  type: typeof SET_MATERIALS_GROUP_BY;
   payload: string;
 }
 
@@ -119,7 +119,7 @@ export type ElementRouteActionTypes =
 export type HoverBuildingElementActionTypes =
   | HoverBuildingElementAction
   | StopHoverBuildingElementAction;
-export type ContentTypeActionTypes = SetContentTypeAction;
+export type MaterialsGroupByActionTypes = SetMaterialsGroupByAction;
 export type DisplayModeActionTypes = SetDisplayModeAction;
 export type CanSelectMultipleActionTypes = ToggleCanSelectMultipleAction;
 export type EEMetricActionTypes = SetEEMetricAction;

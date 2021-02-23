@@ -7,9 +7,6 @@ import {
   Theme,
   createStyles,
   makeStyles,
-  withStyles,
-  WithStyles,
-  emphasize,
 } from "@material-ui/core/styles";
 
 import {
@@ -25,7 +22,11 @@ import {
   Label,
 } from "devextreme-react/chart";
 
-import { sortByEE, wrapArgumentAxisLabel } from "helpers/chartHelpers";
+import {
+  groupByMaterial,
+  sortByEE,
+  wrapArgumentAxisLabel,
+} from "helpers/chartHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,45 +39,33 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const ElementsChart = () => {
-  const dispatch = useDispatch();
-
-  const buildingElements = useSelector(
-    (state: IRootState) => state.buildingElements
+const MaterialsChart = () => {
+  const groupBy = useSelector((state: IRootState) => state.materialsGroupBy);
+  const materialInventory = useSelector(
+    (state: IRootState) => state.materialInventory
   );
   const selectedBuildingElement = useSelector(
     (state: IRootState) => state.selectedBuildingElement
   );
-  const [chartData, setChartData] = useState<IElementChartDataItem[]>([]);
+
+  const [chartData, setChartData] = useState<IChartDataItem[]>([]);
 
   useEffect(() => {
-    const childElements = getChildElements(selectedBuildingElement);
-    const chartData: IElementChartDataItem[] = [];
-
-    childElements.forEach((element) => {
-      const dataEntry: IElementChartDataItem = {
-        name: element.name,
-        id: String(element.idbuilding_elements),
-        A1A3: Number(element.A1A3) || 0.0,
-        A4: Number(element.A4) || 0.0,
-        B4_m: Number(element.B4_m) || 0.0,
-        B4_t: Number(element.B4_t) || 0.0,
-      };
-
-      chartData.push(dataEntry);
-    });
-
-    const sortedChartData = sortByEE(chartData);
-
-    setChartData(sortedChartData);
-  }, [selectedBuildingElement]);
-
-  const getChildElements = (parentElement: IBuildingElement) => {
-    const childElements = buildingElements.filter(
-      (element) => element.idparent === parentElement.idlevels
+    const materialInventory = getElementMaterials(selectedBuildingElement);
+    const materialsGrouped: IChartDataItem[] = groupByMaterial(
+      materialInventory
     );
-    if (childElements !== undefined) {
-      return childElements;
+    const sortedChartData = sortByEE(materialsGrouped);
+    setChartData(sortedChartData);
+  }, []);
+
+  const getElementMaterials = (parentElement: IBuildingElement) => {
+    const elementMaterials = materialInventory.filter(
+      (material) =>
+        material.idbuilding_elements === parentElement.idbuilding_elements
+    );
+    if (elementMaterials !== undefined) {
+      return elementMaterials;
     }
 
     return [];
@@ -86,30 +75,6 @@ const ElementsChart = () => {
     return {
       text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`,
     };
-  };
-
-  const onPointClick = (e: any) => {
-    const point = e.target;
-    const clickedElementId = Number(point.data.id);
-
-    const element = buildingElements.find(
-      (el) => el.idbuilding_elements === clickedElementId
-    );
-
-    if (element !== undefined) {
-      dispatch(
-        allActions.elementAndMaterialActions.selectBuildingElement(element)
-      );
-      dispatch(allActions.elementAndMaterialActions.addToElementRoute(element));
-    }
-  };
-
-  const onPointHoverChanged = (e: any) => {
-    if (e.target.isHovered()) {
-      e.element.style.cursor = "pointer";
-    } else {
-      e.element.style.cursor = "auto";
-    }
   };
 
   const height = 200 + chartData.length * 50;
@@ -123,8 +88,6 @@ const ElementsChart = () => {
       dataSource={chartData}
       palette='Material'
       rotated={true}
-      onPointClick={onPointClick}
-      onPointHoverChanged={onPointHoverChanged}
     >
       <Size height={height} />
       <CommonSeriesSettings
@@ -160,10 +123,9 @@ const ElementsChart = () => {
         zIndex={1200}
         arrowLength={6}
         format='fixedPoint'
-        interactive
       />
     </Chart>
   );
 };
 
-export default ElementsChart;
+export default MaterialsChart;

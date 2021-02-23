@@ -73,7 +73,7 @@ const BuildingDetails = () => {
       }}
       anchor='right'
     >
-      {selectedBuildings.length > 0 ? (
+      {selectedBuildings.length ? (
         canSelectMultipleBuildings ? (
           <MultipleBuildingsView />
         ) : (

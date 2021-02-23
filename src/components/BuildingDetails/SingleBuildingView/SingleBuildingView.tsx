@@ -18,7 +18,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 
-import ElementsAndMaterialsContainer from "components/ElementsAndMaterialsContainer";
+import MaterialsContainer from "components/MaterialsContainer";
 import SingleBuildingChart from "./SingleBuildingChart";
 import SimulationModeSwitch from "./SimulationModeSwitch";
 
@@ -177,7 +177,7 @@ const SingleBuildingView = (props: any) => {
       <Grid container spacing={3}>
         <Grid item xs>
           <Divider variant='middle' light={true} className={classes.divider} />
-          <ElementsAndMaterialsContainer />
+          <MaterialsContainer />
         </Grid>
       </Grid>
     </div>

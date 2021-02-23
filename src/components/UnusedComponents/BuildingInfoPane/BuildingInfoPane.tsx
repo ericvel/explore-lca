@@ -22,7 +22,7 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import IconButton from "@material-ui/core/IconButton";
 import "./BuildingInfoPane.css";
 
-import ElementsAndMaterialsContainer from "../../ElementsAndMaterialsContainer";
+import MaterialsContainer from "../../MaterialsContainer";
 import SingleBuildingChart from "../../BuildingDetails/SingleBuildingView/SingleBuildingChart";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -238,7 +238,7 @@ const BuildingInfoPane = (props: any) => {
 
           <Divider variant='middle' light={true} className={classes.divider} />
 
-          <ElementsAndMaterialsContainer
+          <MaterialsContainer
             buildingId={building.idbuildings}
             parentIsLoading={loading}
           />

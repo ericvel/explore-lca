@@ -1,6 +1,6 @@
 import {
-  SET_CONTENT_TYPE,
-  ContentTypeActionTypes,
+  SET_MATERIALS_GROUP_BY,
+  MaterialsGroupByActionTypes,
   SET_DISPLAY_MODE,
   DisplayModeActionTypes,
   TOGGLE_CAN_SELECT_MULTIPLE,
@@ -9,12 +9,14 @@ import {
   SimulationModeActionTypes
 } from "../actions/types";
 
-export const contentType = (
-  state = "hierarchy",
-  action: ContentTypeActionTypes
+import { GroupBy } from "interfaces/enums";
+ 
+export const materialsGroupBy = (
+  state = GroupBy.BuildingElement,
+  action: MaterialsGroupByActionTypes
 ) => {
   switch (action.type) {
-    case SET_CONTENT_TYPE:
+    case SET_MATERIALS_GROUP_BY:
       return action.payload;
     default:
       return state;

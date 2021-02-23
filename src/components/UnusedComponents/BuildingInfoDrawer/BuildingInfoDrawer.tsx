@@ -29,7 +29,7 @@ import Skeleton from "@material-ui/lab/Skeleton";
 import IconButton from "@material-ui/core/IconButton";
 import "./BuildingInfoDrawer.css";
 import ReactDOM from "react-dom";
-import BuildingElementsView from "../../ElementsAndMaterialsContainer/BuildingElementsView";
+import BuildingElementsView from "../../MaterialsContainer/BuildingElementsView";
 
 const drawerWidth = 400;
 

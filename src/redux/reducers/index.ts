@@ -10,7 +10,7 @@ import {
   simulationData,
 } from "./elementsAndMaterials";
 import {
-  contentType,
+  materialsGroupBy,
   displayMode,
   canSelectMultipleBuildings,
   isSimulationModeActive,
@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
   selectedBuildingElement,
   buildingElementRoute,
   hoveredBuildingElement,
-  contentType,
+  materialsGroupBy,
   displayMode,
   canSelectMultipleBuildings,
   isSimulationModeActive,

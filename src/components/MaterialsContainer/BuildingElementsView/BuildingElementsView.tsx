@@ -16,16 +16,10 @@ import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
 import HomeIcon from "@material-ui/icons/Home";
 import Paper from "@material-ui/core/Paper";
-import Switch from "@material-ui/core/Switch";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
 
-import MaterialsView from "../MaterialsView";
 import ElementsTable from "./ElementsTable";
 import ElementsChart from "./ElementsChart";
+import ProductView from "../ProductView";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -121,17 +115,6 @@ const BuildingElementsView = (props: any) => {
     dispatch(allActions.elementAndMaterialActions.setElementRoute(tempRoute));
   };
 
-  const [hoveredRow, setHoveredRow] = useState<string | null>(null);
-  const [clearedRow, setClearedRow] = useState<string | null>(null);
-
-  const handleRowHover = (elementName: string) => {
-    setHoveredRow(elementName);
-  };
-
-  const handleRowClearHover = (elementName: string) => {
-    setClearedRow(elementName);
-  };
-
   const childElements = getChildElements(selectedBuildingElement);
 
   const classes = useStyles();
@@ -157,7 +140,7 @@ const BuildingElementsView = (props: any) => {
           </Breadcrumbs>
         </Grid>
         <Grid item xs={12}>
-          {childElements?.length > 0 ? (
+          {childElements?.length ? (
             displayMode == "table" ? (
               <Paper>
                 <ElementsTable />
@@ -168,7 +151,9 @@ const BuildingElementsView = (props: any) => {
               </Paper>
             )
           ) : (
-            <MaterialsView />
+            <ProductView
+              materials={getElementMaterials(selectedBuildingElement)}
+            />
           )}
         </Grid>
       </Grid>

@@ -30,6 +30,7 @@ import {
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
+import { GroupBy } from "interfaces/enums";
 
 // const getRowId = (row: any) => row.idmaterialInventory;
 const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
@@ -39,7 +40,7 @@ const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
   }));
 
 const MaterialsTable = () => {
-  const contentType = useSelector((state: IRootState) => state.contentType);
+  const contentType = useSelector((state: IRootState) => state.materialsGroupBy);
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
   );
@@ -98,7 +99,7 @@ const MaterialsTable = () => {
 
   // Displays only inventory for selected building element if one is selected
   const rows =
-    contentType == "hierarchy"
+    contentType == GroupBy.BuildingElement
       ? getElementMaterials(selectedBuildingElement)
       : materialInventory;
 
