@@ -50,9 +50,7 @@ import {
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
-import { GroupCell } from "./GroupCell";
-import { SummaryCell } from "./SummaryCell";
-import { LookupEditCell } from "./LookupEditCell";
+import { GroupCell, SummaryCell, LookupEditCell } from "./CustomCells";
 import { DecimalTypeProvider } from "./DecimalTypeProvider";
 import allActions from "redux/actions";
 

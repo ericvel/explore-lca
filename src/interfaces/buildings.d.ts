@@ -72,6 +72,10 @@ interface IMaterialInventory {
   buildingElementName: string;
 }
 
+interface IMaterialTableRow {
+  
+}
+
 interface ISingleChartDataItem {
   lcaPhase: string;
   gwp: number;

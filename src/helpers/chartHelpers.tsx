@@ -88,3 +88,34 @@ export const getElementMaterials = (materialInventory: IMaterialInventory[], par
 
   return [];
 };
+
+// Groups material inventory by material type, sums material inventory embodied emission values
+export const groupByMaterial2 = (materials: IMaterialInventory[]) => {
+  const materialsGrouped: any[] = [];
+
+  materials.reduce(function (res: any, value: IMaterialInventory) {
+    if (!res[value.name]) {
+      res[value.name] = {
+        ...value,
+        name: value.name,
+        idmaterialInventory: value.idmaterials,
+        quantity: 0.0,
+        A1A3: 0.0,
+        A4: 0.0,
+        B4_m: 0.0,
+        B4_t: 0.0,
+        idmaterials: null,
+      };
+      materialsGrouped.push(res[value.name]);
+    }
+
+    res[value.name].quantity += value.quantity;
+    res[value.name].A1A3 += value.A1A3;
+    res[value.name].A4 += value.A4;
+    res[value.name].B4_m += value.B4_m;
+    res[value.name].B4_t += value.B4_t;
+    return res;
+  }, {});
+
+  return materialsGrouped;
+};
