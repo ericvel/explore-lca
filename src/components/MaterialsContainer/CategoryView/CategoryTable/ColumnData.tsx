@@ -3,32 +3,35 @@ import { Table } from "@devexpress/dx-react-grid-material-ui";
 
 class ColumnData {
   static readonly columns: Column[] = [
-    { name: "idmaterialInventory", title: "ID" },
     { name: "name", title: "Name" },
+    // { name: "idmaterialInventory", title: "ID" },
     { name: "buildingElementName", title: "Building element" },
     { name: "quantity", title: "Quantity" },
     { name: "FU", title: "FU" },
-    { name: "sourceType", title: "Source" },
-    { name: "RSL", title: "RSL" },
     { name: "materialCat", title: "Category" },
     { name: "RSL_mi", title: "RSL (Inventory)" },
-    { name: "EEf_A1A3", title: "EEf_A1A3" },
+    { name: "sourceType", title: "Source type" },
     { name: "A1A3", title: "A1-A3" },
     { name: "A4", title: "A4" },
     { name: "B4_m", title: "B4 (m)" },
     { name: "B4_t", title: "B4 (t)" },
-    // { name: "source", title: "Source" },
+    { name: "RSL", title: "RSL" },
+    { name: "source", title: "Source" },
     { name: "dataType", title: "Data type" },
     { name: "dataYear", title: "Data year" },
-    { name: "comments", title: "comments" },
+    { name: "density", title: "Density" },
+    { name: "EEf_A1A3", title: "EEf_A1A3" },
+    { name: "country", title: "Country" },
+    { name: "city", title: "City" },
+    { name: "comments", title: "Comments" },
   ];
 
   static readonly columnExtensions: Table.ColumnExtension[] = [
-    { columnName: "idmaterialInventory", width: 100, wordWrapEnabled: true },
-    { columnName: "name", width: 200, wordWrapEnabled: true },
-    // { columnName: "source", width: 200, wordWrapEnabled: true },
+    { columnName: "idmaterialInventory", width: 80},
+    { columnName: "name", width: 300, wordWrapEnabled: true },
     { columnName: "dataType", width: 120 },
     { columnName: "sourceType", width: 100 },
+    { columnName: "source", width: 200, wordWrapEnabled: true },
     { columnName: "dataYear", width: 100 },
     { columnName: "FU", width: 70 },
     { columnName: "EEf_A1A3", width: 110 },
@@ -41,7 +44,7 @@ class ColumnData {
     { columnName: "A4", width: 130 },
     { columnName: "B4_m", width: 130 },
     { columnName: "B4_t", width: 130 },
-    { columnName: "buildingElementName", width: 200, wordWrapEnabled: true },
+    { columnName: "buildingElementName", width: 160, wordWrapEnabled: true },
   ];
 
   static readonly defaultHiddenColumnNames: string[] = [
@@ -51,6 +54,9 @@ class ColumnData {
     "dataYear",
     "comments",
     "EEf_A1A3",
+    "density",
+    "country",
+    "city"
   ];
 
   static readonly tableColumnVisibilityColumnExtensions = [

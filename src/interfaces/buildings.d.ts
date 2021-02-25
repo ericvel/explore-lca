@@ -50,31 +50,65 @@ interface IBuildingElement {
 
 interface IMaterialInventory {
   idmaterialInventory: number;
-  idmaterials: number;
+  parentId: number;
   name: string;
-  source: string;
-  dataType: string;
-  sourceType: string;
-  dataYear?: string;
-  FU: string;
-  density: ?number;
-  EEf_A1A3: number;
-  RSL: ?number;
-  comments: ?string;
-  materialCat: string;
   quantity: number;
-  RSL_mi: ?number;
+  FU: string;
   A1A3: ?number;
   A4: ?number;
   B4_m: ?number;
   B4_t: ?number;
+  RSL_mi: ?number;
   idbuilding_elements: number;
   buildingElementName: string;
+  materialCat: string;
+  sourceType: string;
+  source: string;
+  dataType: string;
+  dataYear?: string;
+  density: ?number;
+  EEf_A1A3: number;
+  RSL: ?number;
+  country: string?;
+  city: string?;
+  comments: ?string;
 }
 
-interface IMaterialTableRow {
-  
+interface IMaterialTableParentRow {
+  idmaterials: number;
+  name: string;
+  materialCat: string;
+  sourceType: string;
+  A1A3: ?number;
+  A4: ?number;
+  B4_m: ?number;
+  B4_t: ?number;
+  RSL_mi: ?number;
+  source: string;
+  dataType: string;
+  dataYear?: string;
+  density: ?number;
+  EEf_A1A3: number;
+  RSL: ?number;
+  comments: ?string;
+  parentId: null;
 }
+
+interface IMaterialTableChildRow {
+  idmaterialInventory: number;
+  name: string;
+  quantity: number;
+  FU: string;
+  A1A3: ?number;
+  A4: ?number;
+  B4_m: ?number;
+  B4_t: ?number;
+  RSL_mi: ?number;
+  buildingElementName: string;
+  parentId: number;
+}
+
+type IMaterialTableRow = IMaterialTableParentRow | IMaterialTableChildRow;
 
 interface ISingleChartDataItem {
   lcaPhase: string;
@@ -124,4 +158,3 @@ interface ISimulationData {
   inventoryId: number;
   simulatedFields: { fieldName: string; simulatedValue: string | number }[];
 }
-

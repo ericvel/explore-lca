@@ -23,7 +23,7 @@ import {
 } from "devextreme-react/chart";
 
 import {
-  groupByMaterial,
+  groupByMaterialForChart,
   sortByEE,
   wrapArgumentAxisLabel,
 } from "helpers/chartHelpers";
@@ -52,7 +52,7 @@ const CategoryChart = (props: Props) => {
 
   useEffect(() => {
     console.log("Props: ", props.materials)
-    const materialsGrouped: IChartDataItem[] = groupByMaterial(
+    const materialsGrouped: IChartDataItem[] = groupByMaterialForChart(
       props.materials
     );
     const sortedChartData = sortByEE(materialsGrouped);

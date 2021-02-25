@@ -25,7 +25,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 
 import CategoryTable from "./CategoryTable";
 import CategoryChart from "./CategoryChart";
-import { groupByMaterial2 } from "helpers/chartHelpers";
+import { groupByMaterial, createChildRows } from "helpers/chartHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,13 +60,15 @@ const CategoryView = (props: Props) => {
     (state: IRootState) => state.selectedBuildingElement
   );
 
-  const [materialData, setMaterialData] = useState<IMaterialInventory[]>([]);
+  const [materialData, setMaterialData] = useState<IMaterialTableRow[]>([]);
 
   useEffect(() => {
-    const groupedMaterials: IMaterialInventory[] = groupByMaterial2(
+    const groupedMaterials: IMaterialTableRow[] = groupByMaterial(
       materialInventory
     );
-    const treeData = groupedMaterials.concat(materialInventory);
+    const childRows = createChildRows(materialInventory);
+
+    const treeData: IMaterialTableRow[] = groupedMaterials.concat(childRows);
 
     setMaterialData(treeData);
   }, []);

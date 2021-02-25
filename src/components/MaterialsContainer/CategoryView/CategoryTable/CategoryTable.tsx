@@ -57,10 +57,23 @@ import { DecimalTypeProvider } from "./DecimalTypeProvider";
 import allActions from "redux/actions";
 
 interface Props {
-  materials: IMaterialInventory[];
+  materials: IMaterialTableRow[];
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    parentTreeCell: {
+      fontWeight: "bold",
+      "&:hover": {
+        backgroundColor: "#F5F5F5",
+        cursor: "pointer",
+      },
+    },
+  })
+);
+
 const getRowId = (row: any) => row.idmaterialInventory;
+
 const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
   hiddenColumnNames.map((columnName) => ({
     columnName,
@@ -74,9 +87,7 @@ const CategoryTable = (props: Props) => {
     (state: IRootState) => state.selectedBuildings
   );
 
-  const [rows, setRows] = useState<IMaterialInventory[]>(props.materials);
-
-  
+  const [rows, setRows] = useState<IMaterialTableRow[]>(props.materials);
 
   const [columns] = useState(ColumnData.columns);
   const [columnExtensions] = useState(ColumnData.columnExtensions);
@@ -109,22 +120,64 @@ const CategoryTable = (props: Props) => {
       getHiddenColumnsFilteringExtensions(hiddenColumnNames)
     );
 
-  const [expandedRowIds, setExpandenRowIds] = useState([]);
+  const [expandedRowIds, setExpandedRowIds] = useState<(string | number)[]>([]);
+
+  const [leftFixedColumns] = useState(["name"]);
+  const [boldColumns] = useState(["name"]);
+
+  const BoldFormatter = ({ value }: any) => <b>{value}</b>;
+
+  const BoldTypeProvider = (props: any) => (
+    <DataTypeProvider formatterComponent={BoldFormatter} {...props} />
+  );
+
+  const CustomCell = ({ row, className, ...props }: any) => {
+    // console.log(className);
+    const classes = useStyles();
+    return row.parentId === null ? (
+      <TableTreeColumn.Cell
+        {...props}
+        className={`${classes.parentTreeCell} ${className}`}
+        onClick={() => toggleExpandedRow(row.idmaterialInventory)}
+      />
+    ) : (
+      <TableTreeColumn.Cell {...props} className={className} />
+    );
+  };
+
+  const toggleExpandedRow = (rowId: number) => {
+    console.log("lezgo")
+    let stateCopy = expandedRowIds;
+    var index = expandedRowIds.indexOf(rowId);
+    if (index > -1) {
+      stateCopy.splice(index, 1);
+    } else {
+      stateCopy.push(rowId);
+    }
+    console.log("State copy: ", stateCopy)
+    setExpandedRowIds(stateCopy);
+  };
 
   const getChildRows = (row: any, rootRows: any) => {
     // console.log("row: ", row)
     // console.log("rootRows: ", rootRows)
     const childRows = rootRows.filter(
-      (r: any) => r.idmaterials === (row ? row.idmaterialInventory : null)
+      (r: any) => r.parentId === (row ? row.idmaterialInventory : null)
     );
     return childRows.length ? childRows : null;
   };
 
+  console.log("Expanded row ids: ", expandedRowIds)
+
   return (
     <Paper>
       <Grid rows={props.materials} columns={columns} getRowId={getRowId}>
+        {/* <BoldTypeProvider for={boldColumns} /> */}
         <DecimalTypeProvider for={decimalColumns} />
-        <TreeDataState />
+        <TreeDataState
+          expandedRowIds={expandedRowIds}
+          onExpandedRowIdsChange={setExpandedRowIds}
+        />
         <CustomTreeData getChildRows={getChildRows} />
         <SearchState onValueChange={delayedCallback} />
         <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
@@ -132,7 +185,8 @@ const CategoryTable = (props: Props) => {
         <IntegratedSorting />
         <VirtualTable columnExtensions={columnExtensions} />
         <TableHeaderRow showSortingControls />
-        <TableTreeColumn for='name' />
+        <TableTreeColumn for='name' cellComponent={CustomCell} />
+        <TableFixedColumns leftColumns={leftFixedColumns} />
         <TableColumnVisibility
           defaultHiddenColumnNames={defaultHiddenColumnNames}
           columnExtensions={tableColumnVisibilityColumnExtensions}

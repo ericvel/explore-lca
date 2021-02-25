@@ -27,7 +27,7 @@ export const sortByEE = (chartData: IChartDataItem[]) => {
 };
 
 // Groups material inventory by material type, sums material inventory embodied emission values
-export const groupByMaterial = (materials: IMaterialInventory[]) => {
+export const groupByMaterialForChart = (materials: IMaterialInventory[]) => {
   const materialsGrouped: IChartDataItem[] = [];
 
   materials.reduce(function (res: any, value: IMaterialInventory) {
@@ -77,7 +77,10 @@ export const groupByCategory = (materials: IMaterialInventory[]) => {
   return materialsGrouped;
 };
 
-export const getElementMaterials = (materialInventory: IMaterialInventory[], parentElement: IBuildingElement) => {
+export const getElementMaterials = (
+  materialInventory: IMaterialInventory[],
+  parentElement: IBuildingElement
+) => {
   const elementMaterials = materialInventory.filter(
     (material) =>
       material.idbuilding_elements === parentElement.idbuilding_elements
@@ -90,21 +93,22 @@ export const getElementMaterials = (materialInventory: IMaterialInventory[], par
 };
 
 // Groups material inventory by material type, sums material inventory embodied emission values
-export const groupByMaterial2 = (materials: IMaterialInventory[]) => {
+export const groupByMaterial = (materials: IMaterialInventory[]) => {
   const materialsGrouped: any[] = [];
 
   materials.reduce(function (res: any, value: IMaterialInventory) {
     if (!res[value.name]) {
       res[value.name] = {
         ...value,
-        name: value.name,
-        idmaterialInventory: value.idmaterials,
+        // name: value.name,
+        idmaterialInventory: value.parentId,
         quantity: 0.0,
         A1A3: 0.0,
         A4: 0.0,
         B4_m: 0.0,
         B4_t: 0.0,
-        idmaterials: null,
+        parentId: null,
+        buildingElementName: "",
       };
       materialsGrouped.push(res[value.name]);
     }
@@ -118,4 +122,27 @@ export const groupByMaterial2 = (materials: IMaterialInventory[]) => {
   }, {});
 
   return materialsGrouped;
+};
+
+// Groups material inventory by material type, sums material inventory embodied emission values
+export const createChildRows = (materials: IMaterialInventory[]) => {
+  /* materials.forEach((material) => {
+    material.name = String(material.idmaterialInventory);
+  }); */
+
+  const childRows: IMaterialTableChildRow[] = materials.map((m) => ({
+    idmaterialInventory: m.idmaterialInventory,
+    name: String(m.idmaterialInventory),
+    buildingElementName: m.buildingElementName,
+    quantity: m.quantity,
+    FU: m.FU,
+    A1A3: m.A1A3,
+    A4: m.A4,
+    B4_m: m.B4_m,
+    B4_t: m.B4_t,
+    RSL_mi: m.RSL_mi,
+    parentId: m.parentId,
+  }));
+
+  return childRows;
 };
