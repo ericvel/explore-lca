@@ -49,6 +49,13 @@ import {
   TableEditRow,
   TableTreeColumn,
 } from "@devexpress/dx-react-grid-material-ui";
+import {
+  Plugin,
+  Template,
+  TemplateConnector,
+  TemplatePlaceholder,
+  Action,
+} from "@devexpress/dx-react-core";
 
 import _ from "lodash";
 
@@ -127,26 +134,23 @@ const CategoryTable = (props: Props) => {
 
   const BoldFormatter = ({ value }: any) => <b>{value}</b>;
 
-  const BoldTypeProvider = (props: any) => (
-    <DataTypeProvider formatterComponent={BoldFormatter} {...props} />
-  );
-
-  const CustomCell = ({ row, className, ...props }: any) => {
-    // console.log(className);
-    const classes = useStyles();
-    return row.parentId === null ? (
-      <TableTreeColumn.Cell
-        {...props}
-        className={`${classes.parentTreeCell} ${className}`}
-        onClick={() => toggleExpandedRow(row.idmaterialInventory)}
-      />
-    ) : (
-      <TableTreeColumn.Cell {...props} className={className} />
-    );
+  const BoldTypeProvider = (props: any) => {
+    console.log("Type provider props: ", props);
+    return <DataTypeProvider formatterComponent={BoldFormatter} {...props} />;
   };
 
+  const CustomCell = ({ row, style, ...props }: any) => (
+    <TableTreeColumn.Cell
+      {...props}
+      style={{
+        fontWeight: row.parentId === null ? "bold" : undefined,
+        ...style
+      }}
+    />
+  );
+
   const toggleExpandedRow = (rowId: number) => {
-    console.log("lezgo")
+    // console.log("lezgo")
     let stateCopy = expandedRowIds;
     var index = expandedRowIds.indexOf(rowId);
     if (index > -1) {
@@ -154,8 +158,8 @@ const CategoryTable = (props: Props) => {
     } else {
       stateCopy.push(rowId);
     }
-    console.log("State copy: ", stateCopy)
-    setExpandedRowIds(stateCopy);
+    // console.log("State copy: ", stateCopy)
+    debugExpandedRows(stateCopy);
   };
 
   const getChildRows = (row: any, rootRows: any) => {
@@ -167,7 +171,12 @@ const CategoryTable = (props: Props) => {
     return childRows.length ? childRows : null;
   };
 
-  console.log("Expanded row ids: ", expandedRowIds)
+  const debugExpandedRows = (props: any) => {
+    console.log("Debug props: ", props);
+    setExpandedRowIds(props);
+  };
+
+  // console.log("Expanded row ids: ", expandedRowIds);
 
   return (
     <Paper>
