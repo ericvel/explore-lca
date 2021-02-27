@@ -23,8 +23,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
-import CategoryTable from "./CategoryTable";
-import CategoryChart from "./CategoryChart";
+import ProductTable from "./ProductTable";
+import ProductChart from "./ProductChart";
 import { groupByMaterial, createChildRows } from "helpers/chartHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -46,7 +46,7 @@ interface Props {
   materials: IMaterialInventory[];
 }
 
-const CategoryView = (props: Props) => {
+const ProductView = (props: Props) => {
   const dispatch = useDispatch();
 
   const displayMode = useSelector((state: IRootState) => state.displayMode);
@@ -60,8 +60,11 @@ const CategoryView = (props: Props) => {
     const groupedMaterials: IMaterialTableRow[] = groupByMaterial(
       materialInventory
     );
+    const childRows = createChildRows(materialInventory);
 
-    setMaterialData(groupedMaterials);
+    const treeData: IMaterialTableRow[] = groupedMaterials.concat(childRows);
+
+    setMaterialData(treeData);
   }, []);
 
   return (
@@ -70,11 +73,11 @@ const CategoryView = (props: Props) => {
         <Grid item xs>
           {displayMode == "table" ? (
             <Paper>
-              <CategoryTable materials={materialData} />
+              <ProductTable materials={props.materials} />
             </Paper>
           ) : (
             <Paper>
-              <CategoryChart materials={props.materials} />
+              <ProductChart materials={props.materials} />
             </Paper>
           )}
         </Grid>
@@ -83,4 +86,4 @@ const CategoryView = (props: Props) => {
   );
 };
 
-export default CategoryView;
+export default ProductView;

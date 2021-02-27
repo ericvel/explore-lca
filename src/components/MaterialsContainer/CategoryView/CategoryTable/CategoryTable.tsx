@@ -49,35 +49,17 @@ import {
   TableEditRow,
   TableTreeColumn,
 } from "@devexpress/dx-react-grid-material-ui";
-import {
-  Plugin,
-  Template,
-  TemplateConnector,
-  TemplatePlaceholder,
-  Action,
-} from "@devexpress/dx-react-core";
 
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
+import { GroupCell, SummaryCell, LookupEditCell } from "./CustomCells";
 import { DecimalTypeProvider } from "./DecimalTypeProvider";
 import allActions from "redux/actions";
 
 interface Props {
   materials: IMaterialTableRow[];
 }
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    parentTreeCell: {
-      fontWeight: "bold",
-      "&:hover": {
-        backgroundColor: "#F5F5F5",
-        cursor: "pointer",
-      },
-    },
-  })
-);
 
 const getRowId = (row: any) => row.idmaterialInventory;
 
@@ -89,12 +71,6 @@ const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
 
 const CategoryTable = (props: Props) => {
   const dispatch = useDispatch();
-
-  const selectedBuildings = useSelector(
-    (state: IRootState) => state.selectedBuildings
-  );
-
-  const [rows, setRows] = useState<IMaterialTableRow[]>(props.materials);
 
   const [columns] = useState(ColumnData.columns);
   const [columnExtensions] = useState(ColumnData.columnExtensions);
@@ -144,7 +120,7 @@ const CategoryTable = (props: Props) => {
       {...props}
       style={{
         fontWeight: row.parentId === null ? "bold" : undefined,
-        ...style
+        ...style,
       }}
     />
   );
@@ -159,7 +135,7 @@ const CategoryTable = (props: Props) => {
       stateCopy.push(rowId);
     }
     // console.log("State copy: ", stateCopy)
-    debugExpandedRows(stateCopy);
+    setExpandedRowIds(stateCopy);
   };
 
   const getChildRows = (row: any, rootRows: any) => {
@@ -171,31 +147,23 @@ const CategoryTable = (props: Props) => {
     return childRows.length ? childRows : null;
   };
 
-  const debugExpandedRows = (props: any) => {
-    console.log("Debug props: ", props);
-    setExpandedRowIds(props);
-  };
+  const [grouping] = useState([{ columnName: "materialCat" }]);
 
-  // console.log("Expanded row ids: ", expandedRowIds);
 
   return (
     <Paper>
       <Grid rows={props.materials} columns={columns} getRowId={getRowId}>
-        {/* <BoldTypeProvider for={boldColumns} /> */}
         <DecimalTypeProvider for={decimalColumns} />
-        <TreeDataState
-          expandedRowIds={expandedRowIds}
-          onExpandedRowIdsChange={setExpandedRowIds}
-        />
-        <CustomTreeData getChildRows={getChildRows} />
+        <SortingState />
+        <GroupingState grouping={grouping} />
         <SearchState onValueChange={delayedCallback} />
         <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
-        <SortingState />
         <IntegratedSorting />
+        <IntegratedGrouping />
         <VirtualTable columnExtensions={columnExtensions} />
         <TableHeaderRow showSortingControls />
-        <TableTreeColumn for='name' cellComponent={CustomCell} />
-        <TableFixedColumns leftColumns={leftFixedColumns} />
+        <TableGroupRow />
+        <TableFixedColumns leftColumns={leftFixedColumns} />        
         <TableColumnVisibility
           defaultHiddenColumnNames={defaultHiddenColumnNames}
           columnExtensions={tableColumnVisibilityColumnExtensions}

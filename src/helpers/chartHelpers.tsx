@@ -108,16 +108,21 @@ export const groupByMaterial = (materials: IMaterialInventory[]) => {
         B4_m: 0.0,
         B4_t: 0.0,
         parentId: null,
-        buildingElementName: "",
+        buildingElementName: value.buildingElementName,
       };
       materialsGrouped.push(res[value.name]);
     }
-
+    
     res[value.name].quantity += value.quantity;
     res[value.name].A1A3 += value.A1A3;
     res[value.name].A4 += value.A4;
     res[value.name].B4_m += value.B4_m;
     res[value.name].B4_t += value.B4_t;
+
+    // Displays ellipses if materials in group don't share the same building element
+    if (res[value.name].buildingElementName !== value.buildingElementName) {
+      res[value.name].buildingElementName = "...";
+    }
     return res;
   }, {});
 
@@ -132,7 +137,7 @@ export const createChildRows = (materials: IMaterialInventory[]) => {
 
   const childRows: IMaterialTableChildRow[] = materials.map((m) => ({
     idmaterialInventory: m.idmaterialInventory,
-    name: String(m.idmaterialInventory),
+    name: ("ID: " + String(m.idmaterialInventory)),
     buildingElementName: m.buildingElementName,
     quantity: m.quantity,
     FU: m.FU,

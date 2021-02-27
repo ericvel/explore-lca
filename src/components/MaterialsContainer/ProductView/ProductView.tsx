@@ -25,6 +25,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 
 import ProductTable from "./ProductTable";
 import ProductChart from "./ProductChart";
+import { groupByMaterial, createChildRows } from "helpers/chartHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,30 +49,23 @@ interface Props {
 const ProductView = (props: Props) => {
   const dispatch = useDispatch();
 
-  const contentType = useSelector(
-    (state: IRootState) => state.materialsGroupBy
-  );
   const displayMode = useSelector((state: IRootState) => state.displayMode);
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
   );
-  const selectedBuildingElement = useSelector(
-    (state: IRootState) => state.selectedBuildingElement
-  );
 
-  const getElementMaterials = (parentElement: IBuildingElement) => {
-    const elementMaterials = materialInventory.filter(
-      (material) =>
-        material.idbuilding_elements === parentElement.idbuilding_elements
+  const [materialData, setMaterialData] = useState<IMaterialTableRow[]>([]);
+
+  useEffect(() => {
+    const groupedMaterials: IMaterialTableRow[] = groupByMaterial(
+      materialInventory
     );
-    if (elementMaterials !== undefined) {
-      return elementMaterials;
-    }
+    const childRows = createChildRows(materialInventory);
 
-    return [];
-  };
+    const treeData: IMaterialTableRow[] = groupedMaterials.concat(childRows);
 
-  const classes = useStyles();
+    setMaterialData(treeData);
+  }, []);
 
   return (
     <div>
@@ -79,7 +73,7 @@ const ProductView = (props: Props) => {
         <Grid item xs>
           {displayMode == "table" ? (
             <Paper>
-              <ProductTable materials={props.materials} />
+              <ProductTable materials={materialData} />
             </Paper>
           ) : (
             <Paper>
