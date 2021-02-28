@@ -170,7 +170,11 @@ const CategoryTable = (props: Props) => {
         return null;
       }
       // Just display string value as "summary"
-      return getValue(rows[0]);
+      const firstRowValue = getValue(rows[0]);
+
+      const allEqual = (arr: any[]) => arr.every((v) => getValue(v) === firstRowValue);
+      if (allEqual(rows)) return firstRowValue
+      else return "...";
     }
     return IntegratedSummary.defaultCalculator(type, rows, getValue);
   };
