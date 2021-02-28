@@ -5,7 +5,6 @@ class ColumnData {
   static readonly columns: Column[] = [
     { name: "name", title: "Name" },
     // { name: "idmaterialInventory", title: "ID" },
-    { name: "buildingElementName", title: "Building element" },
     { name: "quantity", title: "Quantity" },
     { name: "FU", title: "FU" },
     { name: "materialCat", title: "Category" },
@@ -24,6 +23,7 @@ class ColumnData {
     { name: "country", title: "Country" },
     { name: "city", title: "City" },
     { name: "comments", title: "Comments" },
+    // { name: "buildingElementName", title: "Building element" },
   ];
 
   static readonly columnExtensions: Table.ColumnExtension[] = [
@@ -91,12 +91,12 @@ class ColumnData {
       showInGroupFooter: false,
       alignByColumn: true,
     },
-    {
+    /* {
       columnName: "materialCat",
       type: "staticValue",
       showInGroupFooter: false,
       alignByColumn: true,
-    },
+    }, */
     {
       columnName: "RSL_mi",
       type: "avg",

@@ -68,7 +68,7 @@ const CategoryView = (props: Props) => {
     <div>
       <Grid container spacing={3}>
         <Grid item xs>
-          {displayMode == "table" ? (
+          {displayMode === "table" ? (
             <Paper>
               <CategoryTable materials={materialData} />
             </Paper>

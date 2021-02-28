@@ -148,28 +148,63 @@ const CategoryTable = (props: Props) => {
   };
 
   const [grouping] = useState([{ columnName: "materialCat" }]);
+  const [groupSummaryItems] = useState(ColumnData.groupSummaryItems);
 
+  const groupRowSummaryItem = ({ value }: any) => {
+    // Removes summary type label (i.e. "Sum: " or "Count: ")
+    var formattedValue;
+    if (typeof value === "string") {
+      formattedValue = value;
+    } else {
+      // Formats decimal numbers
+      formattedValue =
+        value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
+    }
+
+    return <strong>{formattedValue}</strong>;
+  };
+
+  const staticValueCalculator = (type: string, rows: any[], getValue: any) => {
+    if (type === "staticValue") {
+      if (!rows.length) {
+        return null;
+      }
+      // Just display string value as "summary"
+      return getValue(rows[0]);
+    }
+    return IntegratedSummary.defaultCalculator(type, rows, getValue);
+  };
 
   return (
     <Paper>
       <Grid rows={props.materials} columns={columns} getRowId={getRowId}>
         <DecimalTypeProvider for={decimalColumns} />
-        <SortingState />
-        <GroupingState grouping={grouping} />
         <SearchState onValueChange={delayedCallback} />
         <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
+        <SortingState />
         <IntegratedSorting />
+        <GroupingState grouping={grouping} />
+        <SummaryState groupItems={groupSummaryItems} />
         <IntegratedGrouping />
+        <IntegratedSummary calculator={staticValueCalculator} />
+
         <VirtualTable columnExtensions={columnExtensions} />
         <TableHeaderRow showSortingControls />
-        <TableGroupRow />
-        <TableFixedColumns leftColumns={leftFixedColumns} />        
+        <TableGroupRow
+          cellComponent={GroupCell}
+          summaryCellComponent={SummaryCell}
+          summaryItemComponent={groupRowSummaryItem}
+          // indentColumnWidth={48}
+        />
+        <TableSummaryRow />
+        <TableFixedColumns leftColumns={leftFixedColumns} />
         <TableColumnVisibility
           defaultHiddenColumnNames={defaultHiddenColumnNames}
           columnExtensions={tableColumnVisibilityColumnExtensions}
           onHiddenColumnNamesChange={onHiddenColumnNamesChange}
         />
         <Toolbar />
+        <GroupingPanel showSortingControls />
         <SearchPanel />
         <ColumnChooser />
       </Grid>
