@@ -148,32 +148,30 @@ const ProductTable = (props: Props) => {
   };
 
   return (
-    <Paper>
-      <Grid rows={props.data} columns={columns} getRowId={getRowId}>
-        <DecimalTypeProvider for={decimalColumns} />
-        <TreeDataState
-          expandedRowIds={expandedRowIds}
-          onExpandedRowIdsChange={setExpandedRowIds}
-        />
-        <CustomTreeData getChildRows={getChildRows} />
-        <SearchState onValueChange={delayedCallback} />
-        <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
-        <SortingState />
-        <IntegratedSorting />
-        <VirtualTable columnExtensions={columnExtensions} />
-        <TableHeaderRow showSortingControls />
-        <TableTreeColumn for='name' cellComponent={CustomCell} />
-        <TableFixedColumns leftColumns={leftFixedColumns} />
-        <TableColumnVisibility
-          defaultHiddenColumnNames={defaultHiddenColumnNames}
-          columnExtensions={tableColumnVisibilityColumnExtensions}
-          onHiddenColumnNamesChange={onHiddenColumnNamesChange}
-        />
-        <Toolbar />
-        <SearchPanel />
-        <ColumnChooser />
-      </Grid>
-    </Paper>
+    <Grid rows={props.data} columns={columns} getRowId={getRowId}>
+      <DecimalTypeProvider for={decimalColumns} />
+      <TreeDataState
+        expandedRowIds={expandedRowIds}
+        onExpandedRowIdsChange={setExpandedRowIds}
+      />
+      <CustomTreeData getChildRows={getChildRows} />
+      <SearchState onValueChange={delayedCallback} />
+      <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
+      <SortingState />
+      <IntegratedSorting />
+      <VirtualTable columnExtensions={columnExtensions} />
+      <TableHeaderRow showSortingControls />
+      <TableTreeColumn for='name' cellComponent={CustomCell} />
+      <TableFixedColumns leftColumns={leftFixedColumns} />
+      <TableColumnVisibility
+        defaultHiddenColumnNames={defaultHiddenColumnNames}
+        columnExtensions={tableColumnVisibilityColumnExtensions}
+        onHiddenColumnNamesChange={onHiddenColumnNamesChange}
+      />
+      <Toolbar />
+      <SearchPanel />
+      <ColumnChooser />
+    </Grid>
   );
 };
 

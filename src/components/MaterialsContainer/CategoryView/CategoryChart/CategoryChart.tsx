@@ -4,6 +4,9 @@ import { IRootState } from "redux/reducers";
 import allActions from "redux/actions";
 
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Icon from "@material-ui/core/Icon";
+import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
 
 import {
   Chart,
@@ -32,6 +35,9 @@ const useStyles = makeStyles((theme: Theme) =>
     argumentAxisLabel: {
       fill: "#767676",
     },
+    button: {
+      margin: theme.spacing(1),
+    },
   })
 );
 
@@ -41,7 +47,7 @@ interface Props {
 
 const CategoryChart = (props: Props) => {
   const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
-  const [isFirstLevel, setIsFirstLevel] = useState(true);
+  const [isFirstLevel, setIsFirstLevel] = useState<boolean>(true);
 
   useEffect(() => {
     // const sortedChartData = sortByEE(props.data) as IMaterialChartItem[];
@@ -85,55 +91,72 @@ const CategoryChart = (props: Props) => {
     });
   };
 
+  const handleBackClick = () => {
+    if (!isFirstLevel) {
+      setIsFirstLevel(true);
+      setChartData(filterData(""));
+    }
+  }
+
   const height = 500; //+ chartData.length * 30;
 
   const classes = useStyles();
+  
+  console.log(isFirstLevel)
 
   return (
-    <Chart
-      className={classes.chart}
-      dataSource={chartData}
-      palette='Material'
-      rotated={true}
-      onPointClick={onPointClick}
-      onDrawn={onDrawn}
-    >
-      <Size height={height} />
-      <CommonSeriesSettings
-        argumentField='name'
-        type='stackedBar'
-        barWidth={80}
-        hoverMode='allArgumentPoints'
-      ></CommonSeriesSettings>
-      <Series valueField='A1A3' name='A1-A3' />
-      <Series valueField='A4' name='A4' />
-      <Series valueField='B4_m' name='B4 (m)' />
-      <Series valueField='B4_t' name='B4 (t)' />
-      <ValueAxis>
-        <Title
-          text={"kgCO2e"}
-          font={{
-            size: 14,
-          }}
+    <div>
+      { !isFirstLevel ?
+        (<Button className={classes.button} startIcon={<NavigateBeforeIcon />} onClick={handleBackClick}>
+          {"Back"}
+        </Button>)
+        : <div>wah</div>
+      }
+      <Chart
+        className={classes.chart}
+        dataSource={chartData}
+        palette='Material'
+        rotated={true}
+        onPointClick={onPointClick}
+        onDrawn={onDrawn}
+      >
+        <Size height={height} />
+        <CommonSeriesSettings
+          argumentField='name'
+          type='stackedBar'
+          barWidth={80}
+          hoverMode='allArgumentPoints'
+        ></CommonSeriesSettings>
+        <Series valueField='A1A3' name='A1-A3' />
+        <Series valueField='A4' name='A4' />
+        <Series valueField='B4_m' name='B4 (m)' />
+        <Series valueField='B4_t' name='B4 (t)' />
+        <ValueAxis>
+          <Title
+            text={"kgCO2e"}
+            font={{
+              size: 14,
+            }}
+          />
+        </ValueAxis>
+        <ArgumentAxis>
+          <Label customizeText={wrapArgumentAxisLabel} />
+        </ArgumentAxis>
+        <Legend
+          verticalAlignment='bottom'
+          horizontalAlignment='center'
+          itemTextPosition='top'
         />
-      </ValueAxis>
-      <ArgumentAxis>
-        <Label customizeText={wrapArgumentAxisLabel} />
-      </ArgumentAxis>
-      <Legend
-        verticalAlignment='bottom'
-        horizontalAlignment='center'
-        itemTextPosition='top'
-      />
-      <Tooltip
-        enabled={true}
-        location='edge'
-        customizeTooltip={customizeTooltip}
-        zIndex={1200}
-        arrowLength={6}
-        format='fixedPoint'
-      />
-    </Chart>
+        <Tooltip
+          enabled={true}
+          location='edge'
+          customizeTooltip={customizeTooltip}
+          zIndex={1200}
+          arrowLength={6}
+          format='fixedPoint'
+        />
+      </Chart>
+    </div>
   );
 };
 

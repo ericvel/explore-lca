@@ -172,47 +172,46 @@ const CategoryTable = (props: Props) => {
       // Just display string value as "summary"
       const firstRowValue = getValue(rows[0]);
 
-      const allEqual = (arr: any[]) => arr.every((v) => getValue(v) === firstRowValue);
-      if (allEqual(rows)) return firstRowValue
+      const allEqual = (arr: any[]) =>
+        arr.every((v) => getValue(v) === firstRowValue);
+      if (allEqual(rows)) return firstRowValue;
       else return "...";
     }
     return IntegratedSummary.defaultCalculator(type, rows, getValue);
   };
 
   return (
-    <Paper>
-      <Grid rows={props.materials} columns={columns} getRowId={getRowId}>
-        <DecimalTypeProvider for={decimalColumns} />
-        <SearchState onValueChange={delayedCallback} />
-        <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
-        <SortingState />
-        <IntegratedSorting />
-        <GroupingState grouping={grouping} />
-        <SummaryState groupItems={groupSummaryItems} />
-        <IntegratedGrouping />
-        <IntegratedSummary calculator={staticValueCalculator} />
+    <Grid rows={props.materials} columns={columns} getRowId={getRowId}>
+      <DecimalTypeProvider for={decimalColumns} />
+      <SearchState onValueChange={delayedCallback} />
+      <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
+      <SortingState />
+      <IntegratedSorting />
+      <GroupingState grouping={grouping} />
+      <SummaryState groupItems={groupSummaryItems} />
+      <IntegratedGrouping />
+      <IntegratedSummary calculator={staticValueCalculator} />
 
-        <VirtualTable columnExtensions={columnExtensions} />
-        <TableHeaderRow showSortingControls />
-        <TableGroupRow
-          cellComponent={GroupCell}
-          summaryCellComponent={SummaryCell}
-          summaryItemComponent={groupRowSummaryItem}
-          // indentColumnWidth={48}
-        />
-        <TableSummaryRow />
-        <TableFixedColumns leftColumns={leftFixedColumns} />
-        <TableColumnVisibility
-          defaultHiddenColumnNames={defaultHiddenColumnNames}
-          columnExtensions={tableColumnVisibilityColumnExtensions}
-          onHiddenColumnNamesChange={onHiddenColumnNamesChange}
-        />
-        <Toolbar />
-        <GroupingPanel showSortingControls />
-        <SearchPanel />
-        <ColumnChooser />
-      </Grid>
-    </Paper>
+      <VirtualTable columnExtensions={columnExtensions} />
+      <TableHeaderRow showSortingControls />
+      <TableGroupRow
+        cellComponent={GroupCell}
+        summaryCellComponent={SummaryCell}
+        summaryItemComponent={groupRowSummaryItem}
+        // indentColumnWidth={48}
+      />
+      <TableSummaryRow />
+      <TableFixedColumns leftColumns={leftFixedColumns} />
+      <TableColumnVisibility
+        defaultHiddenColumnNames={defaultHiddenColumnNames}
+        columnExtensions={tableColumnVisibilityColumnExtensions}
+        onHiddenColumnNamesChange={onHiddenColumnNamesChange}
+      />
+      <Toolbar />
+      <GroupingPanel showSortingControls />
+      <SearchPanel />
+      <ColumnChooser />
+    </Grid>
   );
 };
 
