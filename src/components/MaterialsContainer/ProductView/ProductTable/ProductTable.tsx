@@ -58,7 +58,7 @@ import { DecimalTypeProvider } from "./DecimalTypeProvider";
 import allActions from "redux/actions";
 
 interface Props {
-  materials: IMaterialTableRow[];
+  data: IMaterialTableRow[];
 }
 
 const getRowId = (row: any) => row.idmaterialInventory;
@@ -149,7 +149,7 @@ const ProductTable = (props: Props) => {
 
   return (
     <Paper>
-      <Grid rows={props.materials} columns={columns} getRowId={getRowId}>
+      <Grid rows={props.data} columns={columns} getRowId={getRowId}>
         <DecimalTypeProvider for={decimalColumns} />
         <TreeDataState
           expandedRowIds={expandedRowIds}

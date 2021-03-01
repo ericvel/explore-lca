@@ -23,10 +23,10 @@ import {
 } from "devextreme-react/chart";
 
 import {
-  groupByMaterialForChart,
+  createMaterialChartData,
   sortByEE,
   wrapArgumentAxisLabel,
-} from "helpers/chartHelpers";
+} from "helpers/materialHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,24 +40,17 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  materials: IMaterialInventory[];
+  data: IMaterialChartItem[];
 }
 
 const ProductChart = (props: Props) => {
-  const materialInventory = useSelector(
-    (state: IRootState) => state.materialInventory
-  );
 
-  const [chartData, setChartData] = useState<IChartDataItem[]>([]);
+  const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
 
   useEffect(() => {
-    console.log("Props: ", props.materials)
-    const materialsGrouped: IChartDataItem[] = groupByMaterialForChart(
-      props.materials
-    );
-    const sortedChartData = sortByEE(materialsGrouped);
+    const sortedChartData = sortByEE(props.data) as IMaterialChartItem[];
     setChartData(sortedChartData);
-  }, []);
+  }, [props.data]);
 
   const customizeTooltip = (arg: any) => {
     return {

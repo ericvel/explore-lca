@@ -3,11 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
 import allActions from "redux/actions";
 
-import {
-  Theme,
-  createStyles,
-  makeStyles,
-} from "@material-ui/core/styles";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 
 import {
   Chart,
@@ -23,10 +19,10 @@ import {
 } from "devextreme-react/chart";
 
 import {
-  groupByMaterialForChart,
+  createMaterialChartData,
   sortByEE,
   wrapArgumentAxisLabel,
-} from "helpers/chartHelpers";
+} from "helpers/materialHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,24 +36,19 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-  materials: IMaterialInventory[];
+  data: IMaterialChartItem[];
 }
 
 const CategoryChart = (props: Props) => {
-  const materialInventory = useSelector(
-    (state: IRootState) => state.materialInventory
-  );
-
-  const [chartData, setChartData] = useState<IChartDataItem[]>([]);
+  const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
+  const [isFirstLevel, setIsFirstLevel] = useState(true);
 
   useEffect(() => {
-    console.log("Props: ", props.materials)
-    const materialsGrouped: IChartDataItem[] = groupByMaterialForChart(
-      props.materials
-    );
-    const sortedChartData = sortByEE(materialsGrouped);
-    setChartData(sortedChartData);
-  }, []);
+    // const sortedChartData = sortByEE(props.data) as IMaterialChartItem[];
+    // setChartData(props.data);
+
+    setChartData(filterData(""));
+  }, [props.data]);
 
   const customizeTooltip = (arg: any) => {
     return {
@@ -65,23 +56,53 @@ const CategoryChart = (props: Props) => {
     };
   };
 
-  const height = 200 + chartData.length * 30;
+  const onPointClick = (e: any) => {
+    if (isFirstLevel) {
+      setIsFirstLevel(false);
+      setChartData(filterData(e.target.originalArgument));
+    }
+  };
+
+  const onDrawn = (e: any) => {
+    if (isFirstLevel) {
+      // Add pointer cursor to all bar points
+      e.element.querySelectorAll(".dxc-markers rect").forEach((el: any) => {
+        el.style.cursor = "pointer";
+      });
+
+      // Add pointer cursor to argument axis labels
+      e.element
+        .querySelector(".dxc-arg-elements")
+        .childNodes.forEach((el: any) => {
+          el.style.cursor = "pointer";
+        });
+    }
+  };
+
+  const filterData = (name: string) => {
+    return props.data.filter(function (item) {
+      return item.materialCat === name;
+    });
+  };
+
+  const height = 500; //+ chartData.length * 30;
 
   const classes = useStyles();
 
   return (
     <Chart
       className={classes.chart}
-      // title="Embodied emissions"
       dataSource={chartData}
       palette='Material'
       rotated={true}
+      onPointClick={onPointClick}
+      onDrawn={onDrawn}
     >
       <Size height={height} />
       <CommonSeriesSettings
         argumentField='name'
         type='stackedBar'
-        barWidth={40}
+        barWidth={80}
         hoverMode='allArgumentPoints'
       ></CommonSeriesSettings>
       <Series valueField='A1A3' name='A1-A3' />

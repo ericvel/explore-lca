@@ -21,6 +21,11 @@ import ElementsTable from "./ElementsTable";
 import ElementsChart from "./ElementsChart";
 import ProductView from "../ProductView";
 
+import {
+  getChildElements,
+  getElementMaterials
+} from "helpers/materialHelpers";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     breadCrumbs: {
@@ -82,29 +87,6 @@ const BuildingElementsView = (props: any) => {
     }
   }, []);
 
-  const getChildElements = (parentElement: IBuildingElement) => {
-    const childElements = buildingElements.filter(
-      (element) => element.idparent === parentElement.idlevels
-    );
-    if (childElements !== undefined) {
-      return childElements;
-    }
-
-    return [];
-  };
-
-  const getElementMaterials = (parentElement: IBuildingElement) => {
-    const elementMaterials = materialInventory.filter(
-      (material) =>
-        material.idbuilding_elements === parentElement.idbuilding_elements
-    );
-    if (elementMaterials !== undefined) {
-      return elementMaterials;
-    }
-
-    return [];
-  };
-
   const handleBreadcrumbClick = (index: number) => {
     var tempRoute = elementRoute.slice(0, index + 1);
     dispatch(
@@ -115,7 +97,7 @@ const BuildingElementsView = (props: any) => {
     dispatch(allActions.elementAndMaterialActions.setElementRoute(tempRoute));
   };
 
-  const childElements = getChildElements(selectedBuildingElement);
+  const childElements = getChildElements(buildingElements, selectedBuildingElement);
 
   const classes = useStyles();
 
@@ -151,9 +133,7 @@ const BuildingElementsView = (props: any) => {
               </Paper>
             )
           ) : (
-            <ProductView
-              materials={getElementMaterials(selectedBuildingElement)}
-            />
+            <ProductView materials={getElementMaterials(materialInventory, selectedBuildingElement)}/>
           )}
         </Grid>
       </Grid>

@@ -35,8 +35,7 @@ import {
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
-
-interface Props {}
+import { getChildElements } from "helpers/materialHelpers"
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,34 +60,18 @@ const ElementsTable = (props: any) => {
   const selectedBuildingElement = useSelector(
     (state: IRootState) => state.selectedBuildingElement
   );
-  const hoveredBuildingElement = useSelector(
-    (state: IRootState) => state.hoveredBuildingElement
-  );
 
   const [columns] = useState(ColumnData.columns);
   const [columnExtensions] = useState(ColumnData.columnExtensions);
-  const [gwpColumns] = useState(["A1A3", "A4", "B4_t", "B4_m"]);
+  const [decimalColumns] = useState(["A1A3", "A4", "B4_t", "B4_m"]);
   const [tooltipColumns] = useState(["name"]);
   const [boldColumns] = useState(["name"]);
-
-  const getChildElements = (parentElement: IBuildingElement) => {
-    const childElements = buildingElements.filter(
-      (element) => element.idparent === parentElement.idlevels
-    );
-    if (childElements !== undefined) {
-      return childElements;
-    }
-
-    return [];
-  };
 
   const CustomTableRow = ({ row, style, ...props }: any) => (
     <VirtualTable.Row
       {...props}
       id={"tableRow" + row.idbuilding_elements}
       className={useStyles().customRow}
-      onMouseEnter={() => handleMouseEnter(row)}
-      onMouseLeave={() => handleMouseLeave(row)}
       onClick={() => handleRowClick(row)}
     />
   );
@@ -103,14 +86,6 @@ const ElementsTable = (props: any) => {
     <DataTypeProvider formatterComponent={TooltipFormatter} {...props} />
   );
 
-  const handleMouseEnter = (row: IBuildingElement) => {
-    // props.onRowHover(row.name);
-  };
-
-  const handleMouseLeave = (row: IBuildingElement) => {
-    // props.onRowClearHover(row.name);
-  };
-
   const handleRowClick = (row: IBuildingElement) => {
     dispatch(allActions.elementAndMaterialActions.selectBuildingElement(row));
     dispatch(allActions.elementAndMaterialActions.addToElementRoute(row));
@@ -122,14 +97,14 @@ const ElementsTable = (props: any) => {
     <DataTypeProvider formatterComponent={BoldFormatter} {...props} />
   );
 
-  const GWPFormatter = ({ value }: any) =>
+  const DecimalFormatter = ({ value }: any) =>
     value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
 
-  const GWPTypeProvider = (props: any) => (
-    <DataTypeProvider formatterComponent={GWPFormatter} {...props} />
+  const DecimalTypeProvider = (props: any) => (
+    <DataTypeProvider formatterComponent={DecimalFormatter} {...props} />
   );
 
-  const rows = getChildElements(selectedBuildingElement);
+  const rows = getChildElements(buildingElements, selectedBuildingElement);
 
   const height = 232 + rows.length * 50;
 
@@ -137,7 +112,7 @@ const ElementsTable = (props: any) => {
     <Grid rows={rows} columns={columns} getRowId={getRowId}>
       <BoldTypeProvider for={boldColumns} />
       <CellTooltip for={tooltipColumns} />
-      <GWPTypeProvider for={gwpColumns} />
+      <DecimalTypeProvider for={decimalColumns} />
       <SortingState />
       <IntegratedSorting />
       <VirtualTable

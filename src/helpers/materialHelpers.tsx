@@ -1,3 +1,41 @@
+/*
+COMMON FUNCTIONS
+*/
+
+export const getChildElements = (
+  buildingElements: IBuildingElement[],
+  parentElement: IBuildingElement
+) => {
+  const childElements = buildingElements.filter(
+    (element) => element.idparent === parentElement.idlevels
+  );
+  if (childElements !== undefined) {
+    return childElements;
+  }
+
+  return [];
+};
+
+// Get materials associated with a building element
+export const getElementMaterials = (
+  materialInventory: IMaterialInventory[],
+  parentElement: IBuildingElement
+) => {
+  const elementMaterials = materialInventory.filter(
+    (material) =>
+      material.idbuilding_elements === parentElement.idbuilding_elements
+  );
+  if (elementMaterials !== undefined) {
+    return elementMaterials;
+  }
+
+  return [];
+};
+
+/* 
+CHART FUNCTIONS
+*/
+
 // Wraps label over two lines if longer than 15 characters
 export const wrapArgumentAxisLabel = (data: any) => {
   if (data.value.length > 15) {
@@ -16,8 +54,8 @@ export const wrapArgumentAxisLabel = (data: any) => {
 };
 
 // Sorts chart data by the sum of each item's embodied emission values
-export const sortByEE = (chartData: IChartDataItem[]) => {
-  chartData.sort(function (a: IChartDataItem, b: IChartDataItem) {
+export const sortByEE = (chartData: IMaterialChartItem[] | IElementChartItem[]) => {
+  chartData.sort(function (a: any, b: any) {
     const aSum = a.A1A3 + a.A4 + a.B4_m + a.B4_t;
     const bSum = b.A1A3 + b.A4 + b.B4_m + b.B4_t;
     return aSum - bSum;
@@ -26,44 +64,44 @@ export const sortByEE = (chartData: IChartDataItem[]) => {
   return chartData;
 };
 
-// Groups material inventory by material type, sums material inventory embodied emission values
-export const groupByMaterialForChart = (materials: IMaterialInventory[]) => {
-  const materialsGrouped: IChartDataItem[] = [];
-
-  materials.reduce(function (res: any, value: IMaterialInventory) {
-    if (!res[value.name]) {
-      res[value.name] = {
-        name: value.name,
-        A1A3: 0.0,
-        A4: 0.0,
-        B4_m: 0.0,
-        B4_t: 0.0,
-        materialCat: value.materialCat,
-      };
-      materialsGrouped.push(res[value.name]);
-    }
-    res[value.name].A1A3 += value.A1A3;
-    res[value.name].A4 += value.A4;
-    res[value.name].B4_m += value.B4_m;
-    res[value.name].B4_t += value.B4_t;
-    return res;
-  }, {});
-
-  return materialsGrouped;
+// Group material inventory by material type, sum material inventory embodied emission values
+export const createMaterialChartData = (
+  materials: IMaterialTableParentRow[]
+) => {  
+  // Only keep certain attributes from MaterialTableRow
+  const chartData: IMaterialChartItem[] = materials.map(
+    ({
+      idmaterials,
+      sourceType,
+      RSL_mi,
+      source,
+      dataType,
+      dataYear,
+      density,
+      EEf_A1A3,
+      RSL,
+      comments,
+      parentId,
+      ...keepAttrs
+    }) => keepAttrs
+  );
+  
+  return chartData;
 };
 
 // Group material inventory by material category, sum material inventory embodied emission values
-export const groupByCategory = (materials: IMaterialInventory[]) => {
-  const materialsGrouped: IChartDataItem[] = [];
+export const groupByCategory = (materials: IMaterialChartItem[]) => {
+  const materialsGrouped: IMaterialChartItem[] = [];
 
-  materials.reduce(function (res: any, value: IMaterialInventory) {
+  materials.reduce(function (res: any, value: IMaterialChartItem) {
     if (!res[value.materialCat]) {
       res[value.materialCat] = {
-        materialCat: value.materialCat,
+        name: value.materialCat,
         A1A3: 0.0,
         A4: 0.0,
         B4_m: 0.0,
         B4_t: 0.0,
+        materialCat: "",
       };
       materialsGrouped.push(res[value.materialCat]);
     }
@@ -77,30 +115,18 @@ export const groupByCategory = (materials: IMaterialInventory[]) => {
   return materialsGrouped;
 };
 
-export const getElementMaterials = (
-  materialInventory: IMaterialInventory[],
-  parentElement: IBuildingElement
-) => {
-  const elementMaterials = materialInventory.filter(
-    (material) =>
-      material.idbuilding_elements === parentElement.idbuilding_elements
-  );
-  if (elementMaterials !== undefined) {
-    return elementMaterials;
-  }
+/*
+TABLE FUNCTIONS
+*/
 
-  return [];
-};
-
-// Groups material inventory by material type, sums material inventory embodied emission values
+// Group material inventory by material type, sum material inventory embodied emission values
 export const groupByMaterial = (materials: IMaterialInventory[]) => {
-  const materialsGrouped: any[] = [];
+  const materialsGrouped: IMaterialTableParentRow[] = [];
 
   materials.reduce(function (res: any, value: IMaterialInventory) {
     if (!res[value.name]) {
       res[value.name] = {
         ...value,
-        // name: value.name,
         idmaterialInventory: value.parentId,
         quantity: 0.0,
         A1A3: 0.0,
@@ -112,14 +138,14 @@ export const groupByMaterial = (materials: IMaterialInventory[]) => {
       };
       materialsGrouped.push(res[value.name]);
     }
-    
+
     res[value.name].quantity += value.quantity;
     res[value.name].A1A3 += value.A1A3;
     res[value.name].A4 += value.A4;
     res[value.name].B4_m += value.B4_m;
     res[value.name].B4_t += value.B4_t;
 
-    // Displays ellipses if materials in group don't share the same building element
+    // Display ellipses if materials in group don't share the same building element
     if (res[value.name].buildingElementName !== value.buildingElementName) {
       res[value.name].buildingElementName = "...";
     }
@@ -129,22 +155,18 @@ export const groupByMaterial = (materials: IMaterialInventory[]) => {
   return materialsGrouped;
 };
 
-// Groups material inventory by material type, sums material inventory embodied emission values
+// Rows containing the individual material inventory entries
 export const createChildRows = (materials: IMaterialInventory[]) => {
-  /* materials.forEach((material) => {
-    material.name = String(material.idmaterialInventory);
-  }); */
-
   const childRows: IMaterialTableChildRow[] = materials.map((m) => ({
     idmaterialInventory: m.idmaterialInventory,
-    name: ("ID: " + String(m.idmaterialInventory)),
+    name: "ID: " + String(m.idmaterialInventory),
     buildingElementName: m.buildingElementName,
     quantity: m.quantity,
     FU: m.FU,
-    A1A3: m.A1A3,
-    A4: m.A4,
-    B4_m: m.B4_m,
-    B4_t: m.B4_t,
+    A1A3: m.A1A3 || 0.0,
+    A4: m.A4 || 0.0,
+    B4_m: m.B4_m || 0.0,
+    B4_t: m.B4_t || 0.0,
     RSL_mi: m.RSL_mi,
     parentId: m.parentId,
   }));

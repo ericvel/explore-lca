@@ -199,7 +199,7 @@ const MaterialsContainer = (props: any) => {
       ) : groupBy === GroupBy.BuildingElement ? (
         <BuildingElementsView />
       ) : groupBy === GroupBy.Product ? (
-        <ProductView materials={materialInventory} />
+        <ProductView materials={materialInventory}/>
       ) : (
         <CategoryView materials={materialInventory} />
       )}

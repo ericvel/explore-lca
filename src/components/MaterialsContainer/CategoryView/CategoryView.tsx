@@ -25,7 +25,13 @@ import FormLabel from "@material-ui/core/FormLabel";
 
 import CategoryTable from "./CategoryTable";
 import CategoryChart from "./CategoryChart";
-import { groupByMaterial, createChildRows } from "helpers/chartHelpers";
+import {
+  groupByMaterial,
+  createChildRows,
+  createMaterialChartData,
+  groupByCategory,
+  sortByEE,
+} from "helpers/materialHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,14 +60,19 @@ const CategoryView = (props: Props) => {
     (state: IRootState) => state.materialInventory
   );
 
-  const [materialData, setMaterialData] = useState<IMaterialTableRow[]>([]);
+  const [tableData, setTableData] = useState<IMaterialTableRow[]>([]);
+  const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
 
   useEffect(() => {
-    const groupedMaterials: IMaterialTableRow[] = groupByMaterial(
-      materialInventory
-    );
+    const groupedMaterials = groupByMaterial(props.materials);
 
-    setMaterialData(groupedMaterials);
+    const materialChildRows = createMaterialChartData(groupedMaterials);
+    const categoryParentRows = groupByCategory(materialChildRows);
+    const chartData = materialChildRows.concat(categoryParentRows);
+    const sortedChartData = sortByEE(chartData) as IMaterialChartItem[];
+
+    setTableData(groupedMaterials);
+    setChartData(sortedChartData);
   }, []);
 
   return (
@@ -70,11 +81,11 @@ const CategoryView = (props: Props) => {
         <Grid item xs>
           {displayMode === "table" ? (
             <Paper>
-              <CategoryTable materials={materialData} />
+              <CategoryTable materials={tableData} />
             </Paper>
           ) : (
             <Paper>
-              <CategoryChart materials={props.materials} />
+              <CategoryChart data={chartData} />
             </Paper>
           )}
         </Grid>

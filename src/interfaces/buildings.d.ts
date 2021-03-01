@@ -79,10 +79,10 @@ interface IMaterialTableParentRow {
   name: string;
   materialCat: string;
   sourceType: string;
-  A1A3: ?number;
-  A4: ?number;
-  B4_m: ?number;
-  B4_t: ?number;
+  A1A3: number;
+  A4: number;
+  B4_m: number;
+  B4_t: number;
   RSL_mi: ?number;
   source: string;
   dataType: string;
@@ -99,10 +99,10 @@ interface IMaterialTableChildRow {
   name: string;
   quantity: number;
   FU: string;
-  A1A3: ?number;
-  A4: ?number;
-  B4_m: ?number;
-  B4_t: ?number;
+  A1A3: number;
+  A4: number;
+  B4_m: number;
+  B4_t: number;
   RSL_mi: ?number;
   buildingElementName: string;
   parentId: number;
@@ -123,35 +123,21 @@ interface ICompareChartDataItem {
   b4m: number;
   b4t: number;
 }
-/* 
-interface IElementChartDataItem {
+
+interface IChartItem {
   name: string;
-  id: string;
   A1A3: number;
   A4: number;
   B4_m: number;
   B4_t: number;
 }
- */
-/* 
-interface IMaterialChartDataItem {
-  name: string;
-  id: string;
-  A1A3: number;
-  A4: number;
-  B4_m: number;
-  B4_t: number;
+
+interface IMaterialChartItem extends IChartItem {  
   materialCat: string;
 }
- */
-interface IChartDataItem {
-  name: string;
+
+interface IElementChartItem extends IChartItem {  
   id: string;
-  A1A3: number;
-  A4: number;
-  B4_m: number;
-  B4_t: number;
-  materialCat: string;
 }
 
 interface ISimulationData {

@@ -25,7 +25,7 @@ import {
   Label,
 } from "devextreme-react/chart";
 
-import { sortByEE, wrapArgumentAxisLabel } from "helpers/chartHelpers";
+import { sortByEE, wrapArgumentAxisLabel } from "helpers/materialHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,27 +47,26 @@ const ElementsChart = () => {
   const selectedBuildingElement = useSelector(
     (state: IRootState) => state.selectedBuildingElement
   );
-  const [chartData, setChartData] = useState<IChartDataItem[]>([]);
+  const [chartData, setChartData] = useState<IElementChartItem[]>([]);
 
   useEffect(() => {
     const childElements = getChildElements(selectedBuildingElement);
-    const chartData: IChartDataItem[] = [];
+    const chartData: IElementChartItem[] = [];
 
     childElements.forEach((element) => {
-      const dataEntry: IChartDataItem = {
+      const dataEntry: IElementChartItem = {
         name: element.name,
         id: String(element.idbuilding_elements),
         A1A3: Number(element.A1A3) || 0.0,
         A4: Number(element.A4) || 0.0,
         B4_m: Number(element.B4_m) || 0.0,
         B4_t: Number(element.B4_t) || 0.0,
-        materialCat: "",
       };
 
       chartData.push(dataEntry);
     });
 
-    const sortedChartData = sortByEE(chartData);
+    const sortedChartData = sortByEE(chartData) as IElementChartItem[];
 
     setChartData(sortedChartData);
   }, [selectedBuildingElement]);
@@ -86,6 +85,14 @@ const ElementsChart = () => {
   const customizeTooltip = (arg: any) => {
     return {
       text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`,
+    };
+  };
+
+  const customizePoint = (arg: any) => {
+    return {
+      style: {
+        cursor: "pointer",
+      },
     };
   };
 
@@ -113,7 +120,19 @@ const ElementsChart = () => {
     }
   };
 
-  const height = 200 + chartData.length * 50;
+  const onDrawn = (e: any) => {
+    // Add pointer cursor to all bar points
+    e.element.querySelectorAll(".dxc-markers rect").forEach((el: any) => {
+      el.style.cursor = "pointer";
+    });
+
+    // Add pointer cursor to argument axis labels
+    e.element.querySelector(".dxc-arg-elements").childNodes.forEach((el: any) => {
+      el.style.cursor = "pointer";
+    });
+  };
+
+  const height = 500 //+ chartData.length * 50;
 
   const classes = useStyles();
 
@@ -125,7 +144,9 @@ const ElementsChart = () => {
       palette='Material'
       rotated={true}
       onPointClick={onPointClick}
-      onPointHoverChanged={onPointHoverChanged}
+      onDrawn={onDrawn}
+      // customizePoint={customizePoint}
+      // onPointHoverChanged={onPointHoverChanged}
     >
       <Size height={height} />
       <CommonSeriesSettings
