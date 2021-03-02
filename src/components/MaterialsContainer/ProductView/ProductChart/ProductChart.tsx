@@ -70,7 +70,7 @@ const ProductChart = (props: Props) => {
       palette='Material'
       rotated={true}
     >
-      <Size height={height} />
+      <Size height={height > 500 ? height : 500} />
       <CommonSeriesSettings
         argumentField='name'
         type='stackedBar'

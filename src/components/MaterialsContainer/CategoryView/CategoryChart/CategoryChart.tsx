@@ -5,8 +5,9 @@ import allActions from "redux/actions";
 
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Icon from "@material-ui/core/Icon";
+import IconButton from "@material-ui/core/IconButton";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
+import MuiTooltip from "@material-ui/core/Tooltip";
 
 import {
   Chart,
@@ -19,6 +20,9 @@ import {
   Tooltip,
   Size,
   Label,
+  Font,
+  Margin,
+  Subtitle,
 } from "devextreme-react/chart";
 
 import {
@@ -26,17 +30,26 @@ import {
   sortByEE,
   wrapArgumentAxisLabel,
 } from "helpers/materialHelpers";
+import { Grid, Typography } from "@material-ui/core";
+import { grey } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    container: {
+      position: "relative",
+      // padding: theme.spacing(2),
+    },
     chart: {
-      padding: theme.spacing(2),
+      overflowX: "hidden",
+      // padding: theme.spacing(2),
     },
     argumentAxisLabel: {
       fill: "#767676",
     },
     button: {
-      margin: theme.spacing(1),
+      position: "absolute",
+      top: "18px",
+      left: "18px",
     },
   })
 );
@@ -48,11 +61,9 @@ interface Props {
 const CategoryChart = (props: Props) => {
   const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
   const [isFirstLevel, setIsFirstLevel] = useState<boolean>(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   useEffect(() => {
-    // const sortedChartData = sortByEE(props.data) as IMaterialChartItem[];
-    // setChartData(props.data);
-
     setChartData(filterData(""));
   }, [props.data]);
 
@@ -65,6 +76,7 @@ const CategoryChart = (props: Props) => {
   const onPointClick = (e: any) => {
     if (isFirstLevel) {
       setIsFirstLevel(false);
+      setSelectedCategory(e.target.originalArgument);
       setChartData(filterData(e.target.originalArgument));
     }
   };
@@ -94,37 +106,64 @@ const CategoryChart = (props: Props) => {
   const handleBackClick = () => {
     if (!isFirstLevel) {
       setIsFirstLevel(true);
+      setSelectedCategory("");
       setChartData(filterData(""));
     }
-  }
+  };
 
-  const height = 500; //+ chartData.length * 30;
+  const height = 600; //+ chartData.length * 30;
 
   const classes = useStyles();
-  
-  console.log(isFirstLevel)
+
+  console.log(isFirstLevel);
 
   return (
-    <div>
-      { !isFirstLevel ?
-        (<Button className={classes.button} startIcon={<NavigateBeforeIcon />} onClick={handleBackClick}>
-          {"Back"}
-        </Button>)
-        : <div>wah</div>
-      }
+    <div className={classes.container}>
+      <MuiTooltip title='Back'>
+        <IconButton
+          className={classes.button}
+          onClick={handleBackClick}
+          disabled={isFirstLevel}
+        >
+          <NavigateBeforeIcon />
+        </IconButton>
+      </MuiTooltip>
       <Chart
         className={classes.chart}
         dataSource={chartData}
+        // title={selectedCategory}
         palette='Material'
         rotated={true}
         onPointClick={onPointClick}
         onDrawn={onDrawn}
       >
+        {selectedCategory === "" ? (
+          <Title
+            text='Click on a bar to see materials'
+            horizontalAlignment='center'
+            font={{
+              size: 16,
+              color: grey[500],
+              weight: 400,
+            }}
+          ></Title>
+        ) : (
+          <Title
+            text={selectedCategory}
+            horizontalAlignment='center'
+            font={{
+              size: 18,
+              color: "black",
+              weight: 500,
+            }}
+          ></Title>
+        )}
         <Size height={height} />
+        <Margin top={10} bottom={10} left={30} right={30} />
         <CommonSeriesSettings
           argumentField='name'
           type='stackedBar'
-          barWidth={80}
+          barWidth={50}
           hoverMode='allArgumentPoints'
         ></CommonSeriesSettings>
         <Series valueField='A1A3' name='A1-A3' />

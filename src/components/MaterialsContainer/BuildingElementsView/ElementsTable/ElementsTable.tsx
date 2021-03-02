@@ -106,7 +106,7 @@ const ElementsTable = (props: any) => {
 
   const rows = getChildElements(buildingElements, selectedBuildingElement);
 
-  const height = 232 + rows.length * 50;
+  const height = 500// 232 + rows.length * 50;
 
   return (
     <Grid rows={rows} columns={columns} getRowId={getRowId}>

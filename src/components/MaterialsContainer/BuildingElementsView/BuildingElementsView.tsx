@@ -57,6 +57,22 @@ const StyledBreadcrumb = withStyles((theme: Theme) => ({
   },
 }))(Chip) as typeof Chip; // TypeScript only: need a type cast here because https://github.com/Microsoft/TypeScript/issues/26591
 
+const StyledBreadcrumbActive = withStyles((theme: Theme) => ({
+  root: {
+    // backgroundColor: theme.palette.grey[100],
+    height: theme.spacing(3),
+    // color: theme.palette.grey[800],
+    fontWeight: theme.typography.fontWeightRegular,
+    "&:hover, &:focus": {
+      // backgroundColor: theme.palette.grey[300],
+    },
+    "&:active": {
+      boxShadow: theme.shadows[1],
+      // backgroundColor: emphasize(theme.palette.grey[300], 0.12),
+    },
+  },
+}))(Chip) as typeof Chip;
+
 const BuildingElementsView = (props: any) => {
   const dispatch = useDispatch();
   const buildingElements = useSelector(
@@ -107,6 +123,7 @@ const BuildingElementsView = (props: any) => {
         <Grid item xs={12}>
           <Breadcrumbs aria-label='breadcrumb' className={classes.breadCrumbs}>
             {elementRoute.map((element, index) => (
+              index !== elementRoute.length - 1 ?
               <StyledBreadcrumb
                 key={index}
                 label={element.name}
@@ -116,7 +133,21 @@ const BuildingElementsView = (props: any) => {
                     <HomeIcon fontSize='small' />
                   ) : undefined
                 }
+                color={index === elementRoute.length -1 ? "secondary" : "default"} 
                 onClick={() => handleBreadcrumbClick(index)}
+              />
+              :
+              <StyledBreadcrumbActive
+                key={index}
+                label={element.name}
+                variant='default'
+                icon={
+                  element.idlevels === 0 ? (
+                    <HomeIcon fontSize='small' />
+                  ) : undefined
+                }
+                color="secondary" 
+                // onClick={() => handleBreadcrumbClick(index)}
               />
             ))}
           </Breadcrumbs>
