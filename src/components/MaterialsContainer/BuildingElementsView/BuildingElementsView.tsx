@@ -143,18 +143,22 @@ const BuildingElementsView = (props: any) => {
       <Grid container spacing={3} alignItems='center'>
         <Grid item>
           <Tooltip title='Back'>
-            <IconButton
-              size='small'
-              onClick={navigateBack}
-              disabled={elementRoute.length < 2}
-            >
-              <NavigateBeforeIcon />
-            </IconButton>
+            <span>
+              <IconButton
+                size='small'
+                onClick={navigateBack}
+                disabled={elementRoute.length < 2}
+              >
+                <NavigateBeforeIcon />
+              </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title='Forward'>
-            <IconButton size='small' onClick={navigateForward} disabled={true}>
-              <NavigateNextIcon />
-            </IconButton>
+            <span>
+              <IconButton size='small' onClick={navigateForward} disabled={true}>
+                <NavigateNextIcon />
+              </IconButton>
+            </span>
           </Tooltip>
         </Grid>
         <Grid item xs={10}>

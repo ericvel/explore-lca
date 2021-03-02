@@ -127,12 +127,31 @@ const ElementsChart = () => {
     });
 
     // Add pointer cursor to argument axis labels
-    e.element.querySelector(".dxc-arg-elements").childNodes.forEach((el: any) => {
-      el.style.cursor = "pointer";
-    });
+    e.element
+      .querySelector(".dxc-arg-elements")
+      .childNodes.forEach((el: any) => {
+        el.style.cursor = "pointer";
+      });
   };
 
-  const height = 500 //+ chartData.length * 50;
+  const customizeHint = (e: any) => {
+    switch (e.seriesName) {
+      case "A1-A3":
+        return "Blabla yes";
+        break;
+      case "A4":
+        return "Blabla sdfsdf";
+        break;
+      case "B4 (m)":
+        return "324dfdsf";
+        break;
+      case "B4 (t)":
+        return "fwsfsdafdsf";
+        break;
+    }
+  };
+
+  const height = 500; //+ chartData.length * 50;
 
   const classes = useStyles();
 
@@ -174,6 +193,7 @@ const ElementsChart = () => {
         verticalAlignment='bottom'
         horizontalAlignment='center'
         itemTextPosition='top'
+        customizeHint={customizeHint}
       />
       <Tooltip
         enabled={true}

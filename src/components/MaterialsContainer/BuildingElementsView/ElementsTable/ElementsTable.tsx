@@ -98,14 +98,14 @@ const ElementsTable = (props: any) => {
   );
 
   const DecimalFormatter = ({ value }: any) =>
-    value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
+    value && value > 0.0 ? parseFloat(value).toLocaleString("nb-NO") : (0.0).toFixed(1);
 
   const DecimalTypeProvider = (props: any) => (
     <DataTypeProvider formatterComponent={DecimalFormatter} {...props} />
   );
 
   const rows = getChildElements(buildingElements, selectedBuildingElement);
-
+console.log("locale: ", navigator.languages)
   const height = 500// 232 + rows.length * 50;
 
   return (

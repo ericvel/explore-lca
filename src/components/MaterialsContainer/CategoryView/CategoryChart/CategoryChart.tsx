@@ -120,13 +120,15 @@ const CategoryChart = (props: Props) => {
   return (
     <div className={classes.container}>
       <MuiTooltip title='Back'>
-        <IconButton
-          className={classes.button}
-          onClick={handleBackClick}
-          disabled={isFirstLevel}
-        >
-          <NavigateBeforeIcon />
-        </IconButton>
+        <span>
+          <IconButton
+            className={classes.button}
+            onClick={handleBackClick}
+            disabled={isFirstLevel}
+          >
+            <NavigateBeforeIcon />
+          </IconButton>
+        </span>
       </MuiTooltip>
       <Chart
         className={classes.chart}

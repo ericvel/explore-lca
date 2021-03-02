@@ -28,7 +28,7 @@ class ColumnData {
 
   static readonly columnExtensions: Table.ColumnExtension[] = [
     { columnName: "idmaterialInventory", width: 80},
-    { columnName: "name", width: 300, wordWrapEnabled: true },
+    { columnName: "name", width: 270, wordWrapEnabled: true },
     { columnName: "dataType", width: 120 },
     { columnName: "sourceType", width: 120 },
     { columnName: "source", width: 200, wordWrapEnabled: true },
