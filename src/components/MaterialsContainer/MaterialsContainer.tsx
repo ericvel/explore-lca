@@ -145,12 +145,8 @@ const MaterialsContainer = (props: any) => {
         <Grid item>
           <Tooltip title='Select what to display' open={tooltipOpen}>
             <FormControl className={classes.formControl} variant='outlined'>
-              <InputLabel id='demo-simple-select-outlined-label'>
-                Group by
-              </InputLabel>
+              <InputLabel>Group by</InputLabel>
               <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
                 displayEmpty
                 value={groupBy}
                 label='Group by'
@@ -199,7 +195,7 @@ const MaterialsContainer = (props: any) => {
       ) : groupBy === GroupBy.BuildingElement ? (
         <BuildingElementsView />
       ) : groupBy === GroupBy.Product ? (
-        <ProductView materials={materialInventory}/>
+        <ProductView materials={materialInventory} />
       ) : (
         <CategoryView materials={materialInventory} />
       )}

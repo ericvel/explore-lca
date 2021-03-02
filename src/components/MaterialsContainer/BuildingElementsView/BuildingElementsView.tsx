@@ -16,27 +16,21 @@ import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
 import HomeIcon from "@material-ui/icons/Home";
 import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import ElementsTable from "./ElementsTable";
 import ElementsChart from "./ElementsChart";
 import ProductView from "../ProductView";
 
-import {
-  getChildElements,
-  getElementMaterials
-} from "helpers/materialHelpers";
+import { getChildElements, getElementMaterials } from "helpers/materialHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     breadCrumbs: {
-      marginBottom: theme.spacing(2),
-    },
-    chart: {
-      // height: 600,
-      padding: theme.spacing(2),
-    },
-    elementTable: {
-      padding: theme.spacing(2),
+      marginTop: "3px",
     },
   })
 );
@@ -59,7 +53,7 @@ const StyledBreadcrumb = withStyles((theme: Theme) => ({
 
 const StyledBreadcrumbActive = withStyles((theme: Theme) => ({
   root: {
-    // backgroundColor: theme.palette.grey[100],
+    backgroundColor: theme.palette.secondary.light,
     height: theme.spacing(3),
     // color: theme.palette.grey[800],
     fontWeight: theme.typography.fontWeightRegular,
@@ -113,45 +107,93 @@ const BuildingElementsView = (props: any) => {
     dispatch(allActions.elementAndMaterialActions.setElementRoute(tempRoute));
   };
 
-  const childElements = getChildElements(buildingElements, selectedBuildingElement);
+  const [poppedRouteItem, setPoppedRouteItem] = useState<IBuildingElement>();
+
+  const navigateBack = () => {
+    var tempRoute = elementRoute;
+    setPoppedRouteItem(tempRoute.pop());
+    dispatch(
+      allActions.elementAndMaterialActions.selectBuildingElement(
+        tempRoute[tempRoute.length - 1]
+      )
+    );
+    dispatch(allActions.elementAndMaterialActions.setElementRoute(tempRoute));
+  };
+
+  const navigateForward = () => {
+    var tempRoute = elementRoute;
+    if (poppedRouteItem !== undefined) tempRoute.push(poppedRouteItem);
+    dispatch(
+      allActions.elementAndMaterialActions.selectBuildingElement(
+        tempRoute[tempRoute.length - 1]
+      )
+    );
+    dispatch(allActions.elementAndMaterialActions.setElementRoute(tempRoute));
+  };
+
+  const childElements = getChildElements(
+    buildingElements,
+    selectedBuildingElement
+  );
 
   const classes = useStyles();
 
   return (
     <div>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Breadcrumbs aria-label='breadcrumb' className={classes.breadCrumbs}>
-            {elementRoute.map((element, index) => (
-              index !== elementRoute.length - 1 ?
-              <StyledBreadcrumb
-                key={index}
-                label={element.name}
-                variant='default'
-                icon={
-                  element.idlevels === 0 ? (
-                    <HomeIcon fontSize='small' />
-                  ) : undefined
-                }
-                color={index === elementRoute.length -1 ? "secondary" : "default"} 
-                onClick={() => handleBreadcrumbClick(index)}
-              />
-              :
-              <StyledBreadcrumbActive
-                key={index}
-                label={element.name}
-                variant='default'
-                icon={
-                  element.idlevels === 0 ? (
-                    <HomeIcon fontSize='small' />
-                  ) : undefined
-                }
-                color="secondary" 
-                // onClick={() => handleBreadcrumbClick(index)}
-              />
-            ))}
+      <Grid container spacing={3} alignItems='center'>
+        <Grid item>
+          <Tooltip title='Back'>
+            <IconButton
+              size='small'
+              onClick={navigateBack}
+              disabled={elementRoute.length < 2}
+            >
+              <NavigateBeforeIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title='Forward'>
+            <IconButton size='small' onClick={navigateForward} disabled={true}>
+              <NavigateNextIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+        <Grid item xs={10}>
+          <Breadcrumbs>
+            {elementRoute.map((element, index) =>
+              index !== elementRoute.length - 1 ? (
+                <StyledBreadcrumb
+                  className={classes.breadCrumbs}
+                  key={index}
+                  label={element.name}
+                  variant='default'
+                  icon={
+                    element.idlevels === 0 ? (
+                      <HomeIcon fontSize='small' />
+                    ) : undefined
+                  }
+                  color={
+                    index === elementRoute.length - 1 ? "secondary" : "default"
+                  }
+                  onClick={() => handleBreadcrumbClick(index)}
+                />
+              ) : (
+                <StyledBreadcrumbActive
+                  className={classes.breadCrumbs}
+                  key={index}
+                  label={element.name}
+                  variant='default'
+                  icon={
+                    element.idlevels === 0 ? (
+                      <HomeIcon fontSize='small' />
+                    ) : undefined
+                  }
+                  color='secondary'
+                />
+              )
+            )}
           </Breadcrumbs>
         </Grid>
+
         <Grid item xs={12}>
           {childElements?.length ? (
             displayMode == "table" ? (
@@ -164,7 +206,12 @@ const BuildingElementsView = (props: any) => {
               </Paper>
             )
           ) : (
-            <ProductView materials={getElementMaterials(materialInventory, selectedBuildingElement)}/>
+            <ProductView
+              materials={getElementMaterials(
+                materialInventory,
+                selectedBuildingElement
+              )}
+            />
           )}
         </Grid>
       </Grid>
