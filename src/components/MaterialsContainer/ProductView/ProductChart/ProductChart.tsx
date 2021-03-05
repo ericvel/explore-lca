@@ -27,6 +27,7 @@ import {
   sortByEE,
   wrapArgumentAxisLabel,
 } from "helpers/materialHelpers";
+import { customizeHint } from "components/ChartComponents";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -95,7 +96,8 @@ const ProductChart = (props: Props) => {
       <Legend
         verticalAlignment='bottom'
         horizontalAlignment='center'
-        itemTextPosition='top'
+        itemTextPosition='top'        
+        customizeHint={customizeHint}
       />
       <Tooltip
         enabled={true}

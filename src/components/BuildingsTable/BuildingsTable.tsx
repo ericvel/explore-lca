@@ -28,10 +28,7 @@ import {
 import { Template, TemplatePlaceholder } from "@devexpress/dx-react-core";
 import _ from "lodash";
 
-import {
-  DecimalTypeProvider,
-  BoldTypeProvider,
-} from "components/TableComponents";
+import { DecimalTypeProvider, SortLabel } from "components/TableComponents";
 import ColumnData from "./ColumnData";
 import LoadingIndicator from "components/LoadingIndicator";
 
@@ -170,7 +167,7 @@ function BuildingsTable() {
           onSelectionChange={changeSelection}
         />
         <VirtualTable height='auto' columnExtensions={columnExtensions} />
-        <TableHeaderRow showSortingControls />
+        <TableHeaderRow showSortingControls sortLabelComponent={SortLabel} />
         <TableSelection
           selectByRowClick
           highlightRow={true}

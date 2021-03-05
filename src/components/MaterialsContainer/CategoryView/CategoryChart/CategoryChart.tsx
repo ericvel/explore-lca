@@ -25,13 +25,14 @@ import {
   Subtitle,
 } from "devextreme-react/chart";
 
-import {
-  createMaterialChartData,
-  sortByEE,
-  wrapArgumentAxisLabel,
-} from "helpers/materialHelpers";
 import { Grid, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
+
+import {
+  wrapArgumentAxisLabel,
+} from "helpers/materialHelpers";
+import { customizeHint } from "components/ChartComponents";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -188,6 +189,7 @@ const CategoryChart = (props: Props) => {
           verticalAlignment='bottom'
           horizontalAlignment='center'
           itemTextPosition='top'
+          customizeHint={customizeHint}
         />
         <Tooltip
           enabled={true}

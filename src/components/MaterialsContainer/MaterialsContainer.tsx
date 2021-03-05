@@ -49,6 +49,10 @@ const MaterialsContainer = (props: any) => {
   const materialInventory = useSelector(
     (state: IRootState) => state.materialInventory
   );
+  const isSimulationModeActive = useSelector(
+    (state: IRootState) => state.isSimulationModeActive
+  );
+
   const groupBy = useSelector((state: IRootState) => state.materialsGroupBy);
   const displayMode = useSelector((state: IRootState) => state.displayMode);
 
@@ -155,7 +159,10 @@ const MaterialsContainer = (props: any) => {
                 onMouseLeave={() => handleTooltip(false)}
                 onOpen={() => handleTooltip(false)}
               >
-                <MenuItem value={GroupBy.BuildingElement}>
+                <MenuItem
+                  value={GroupBy.BuildingElement}
+                  disabled={isSimulationModeActive}
+                >
                   Building element
                 </MenuItem>
                 <MenuItem value={GroupBy.Product}>Product</MenuItem>

@@ -7,9 +7,6 @@ import {
   Theme,
   createStyles,
   makeStyles,
-  withStyles,
-  WithStyles,
-  emphasize,
 } from "@material-ui/core/styles";
 
 import {
@@ -26,6 +23,7 @@ import {
 } from "devextreme-react/chart";
 
 import { sortByEE, wrapArgumentAxisLabel } from "helpers/materialHelpers";
+import { customizeHint } from "components/ChartComponents";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -88,14 +86,6 @@ const ElementsChart = () => {
     };
   };
 
-  const customizePoint = (arg: any) => {
-    return {
-      style: {
-        cursor: "pointer",
-      },
-    };
-  };
-
   const onPointClick = (e: any) => {
     const point = e.target;
     const clickedElementId = Number(point.data.id);
@@ -112,14 +102,6 @@ const ElementsChart = () => {
     }
   };
 
-  const onPointHoverChanged = (e: any) => {
-    if (e.target.isHovered()) {
-      e.element.style.cursor = "pointer";
-    } else {
-      e.element.style.cursor = "auto";
-    }
-  };
-
   const onDrawn = (e: any) => {
     // Add pointer cursor to all bar points
     e.element.querySelectorAll(".dxc-markers rect").forEach((el: any) => {
@@ -132,23 +114,6 @@ const ElementsChart = () => {
       .childNodes.forEach((el: any) => {
         el.style.cursor = "pointer";
       });
-  };
-
-  const customizeHint = (e: any) => {
-    switch (e.seriesName) {
-      case "A1-A3":
-        return "Blabla yes";
-        break;
-      case "A4":
-        return "Blabla sdfsdf";
-        break;
-      case "B4 (m)":
-        return "324dfdsf";
-        break;
-      case "B4 (t)":
-        return "fwsfsdafdsf";
-        break;
-    }
   };
 
   const height = 500; //+ chartData.length * 50;

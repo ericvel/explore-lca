@@ -37,6 +37,7 @@ import _ from "lodash";
 import {
   DecimalTypeProvider,
   BoldTypeProvider,
+  SortLabel
 } from "components/TableComponents";
 import ColumnData from "./ColumnData";
 import { getChildElements } from "helpers/materialHelpers";
@@ -85,6 +86,8 @@ const ElementsTable = (props: any) => {
     </Tooltip>
   );
 
+  
+
   const CellTooltip = (props: any) => (
     <DataTypeProvider formatterComponent={TooltipFormatter} {...props} />
   );
@@ -98,7 +101,7 @@ const ElementsTable = (props: any) => {
   const height = 500; // 232 + rows.length * 50;
 
   return (
-    <Grid rows={rows} columns={columns} >
+    <Grid rows={rows} columns={columns}>
       <BoldTypeProvider for={boldColumns} />
       <CellTooltip for={tooltipColumns} />
       <DecimalTypeProvider for={decimalColumns} />
@@ -109,7 +112,7 @@ const ElementsTable = (props: any) => {
         rowComponent={CustomTableRow}
         height={height}
       />
-      <TableHeaderRow showSortingControls />
+      <TableHeaderRow showSortingControls sortLabelComponent={SortLabel} />
     </Grid>
   );
 };

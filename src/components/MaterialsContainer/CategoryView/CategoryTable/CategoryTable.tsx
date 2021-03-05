@@ -55,10 +55,7 @@ import _ from "lodash";
 import ColumnData from "./ColumnData";
 import { GroupCell, SummaryCell, LookupEditCell } from "./CustomCells";
 // import { DecimalTypeProvider } from "./DecimalTypeProvider";
-import {
-  DecimalTypeProvider,
-  BoldTypeProvider,
-} from "components/TableComponents";
+import { DecimalTypeProvider, SortLabel } from "components/TableComponents";
 import allActions from "redux/actions";
 
 interface Props {
@@ -122,7 +119,7 @@ const CategoryTable = (props: Props) => {
     } else {
       // Formats decimal numbers
       formattedValue =
-        value && value > 0.0 ? parseFloat(value).toFixed(3) : (0.0).toFixed(1);
+        value && value > 0.0 ? parseFloat(value).toLocaleString() : "0";
     }
 
     return <strong>{formattedValue}</strong>;
@@ -133,9 +130,9 @@ const CategoryTable = (props: Props) => {
       if (!rows.length) {
         return null;
       }
-      // Just display string value as "summary"
       const firstRowValue = getValue(rows[0]);
 
+      // Show ellipses if not all values are equal
       const allEqual = (arr: any[]) =>
         arr.every((v) => getValue(v) === firstRowValue);
       if (allEqual(rows)) return firstRowValue;
@@ -157,7 +154,7 @@ const CategoryTable = (props: Props) => {
       <IntegratedSummary calculator={staticValueCalculator} />
 
       <VirtualTable columnExtensions={columnExtensions} />
-      <TableHeaderRow showSortingControls />
+      <TableHeaderRow showSortingControls sortLabelComponent={SortLabel} />
       <TableGroupRow
         cellComponent={GroupCell}
         summaryCellComponent={SummaryCell}

@@ -55,10 +55,7 @@ import _ from "lodash";
 import ColumnData from "./ColumnData";
 import { GroupCell, SummaryCell, LookupEditCell } from "./CustomCells";
 // import { DecimalTypeProvider } from "./DecimalTypeProvider";
-import {
-  DecimalTypeProvider,
-  BoldTypeProvider,
-} from "components/TableComponents";
+import { DecimalTypeProvider, SortLabel } from "components/TableComponents";
 import allActions from "redux/actions";
 
 interface Props {
@@ -156,7 +153,7 @@ const ProductTable = (props: Props) => {
       <SortingState />
       <IntegratedSorting />
       <VirtualTable columnExtensions={columnExtensions} />
-      <TableHeaderRow showSortingControls />
+      <TableHeaderRow showSortingControls sortLabelComponent={SortLabel} />
       <TableTreeColumn for='name' cellComponent={CustomCell} />
       <TableFixedColumns leftColumns={leftFixedColumns} />
       <TableColumnVisibility
