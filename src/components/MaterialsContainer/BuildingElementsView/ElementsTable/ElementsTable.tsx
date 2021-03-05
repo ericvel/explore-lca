@@ -34,8 +34,12 @@ import {
 } from "@devexpress/dx-react-grid-material-ui";
 import _ from "lodash";
 
+import {
+  DecimalTypeProvider,
+  BoldTypeProvider,
+} from "components/TableComponents";
 import ColumnData from "./ColumnData";
-import { getChildElements } from "helpers/materialHelpers"
+import { getChildElements } from "helpers/materialHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,9 +51,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-
-const getRowId = (row: IBuildingElement) =>
-  "tableRow" + row.idbuilding_elements;
 
 const ElementsTable = (props: any) => {
   const dispatch = useDispatch();
@@ -78,7 +79,9 @@ const ElementsTable = (props: any) => {
 
   const TooltipFormatter = ({ value }: any) => (
     <Tooltip title={<span>Go to sub-elements</span>}>
-      <span><b>{value}</b></span>
+      <span>
+        <b>{value}</b>
+      </span>
     </Tooltip>
   );
 
@@ -91,25 +94,11 @@ const ElementsTable = (props: any) => {
     dispatch(allActions.elementAndMaterialActions.addToElementRoute(row));
   };
 
-  const BoldFormatter = ({ value }: any) => <b>{value}</b>;
-
-  const BoldTypeProvider = (props: any) => (
-    <DataTypeProvider formatterComponent={BoldFormatter} {...props} />
-  );
-
-  const DecimalFormatter = ({ value }: any) =>
-    value && value > 0.0 ? parseFloat(value).toLocaleString("nb-NO") : (0.0).toFixed(1);
-
-  const DecimalTypeProvider = (props: any) => (
-    <DataTypeProvider formatterComponent={DecimalFormatter} {...props} />
-  );
-
   const rows = getChildElements(buildingElements, selectedBuildingElement);
-console.log("locale: ", navigator.languages)
-  const height = 500// 232 + rows.length * 50;
+  const height = 500; // 232 + rows.length * 50;
 
   return (
-    <Grid rows={rows} columns={columns} getRowId={getRowId}>
+    <Grid rows={rows} columns={columns} >
       <BoldTypeProvider for={boldColumns} />
       <CellTooltip for={tooltipColumns} />
       <DecimalTypeProvider for={decimalColumns} />

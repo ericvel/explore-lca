@@ -12,6 +12,7 @@ import {
   SearchState,
   SelectionState,
   IntegratedFiltering,
+  DataTypeProvider,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -27,6 +28,10 @@ import {
 import { Template, TemplatePlaceholder } from "@devexpress/dx-react-core";
 import _ from "lodash";
 
+import {
+  DecimalTypeProvider,
+  BoldTypeProvider,
+} from "components/TableComponents";
 import ColumnData from "./ColumnData";
 import LoadingIndicator from "components/LoadingIndicator";
 
@@ -61,6 +66,15 @@ function BuildingsTable() {
   const multipleSwitchChecked = useSelector(
     (state: IRootState) => state.canSelectMultipleBuildings
   );
+
+  const [decimalColumns] = useState([
+    "A1A3",
+    "A4",
+    "B4_t",
+    "B4_m",
+    "GWP_B6",
+    "GWP_B7",
+  ]);
 
   const handleMultipleSwitchChange = () => {
     dispatch(allActions.uiActions.toggleCanSelectMultiple());
@@ -146,6 +160,7 @@ function BuildingsTable() {
         getRowId={getRowId}
         rootComponent={Root}
       >
+        <DecimalTypeProvider for={decimalColumns} />
         <SearchState onValueChange={delayedCallback} />
         <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
         <SortingState />

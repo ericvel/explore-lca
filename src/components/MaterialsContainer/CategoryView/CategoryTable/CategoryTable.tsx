@@ -54,7 +54,11 @@ import _ from "lodash";
 
 import ColumnData from "./ColumnData";
 import { GroupCell, SummaryCell, LookupEditCell } from "./CustomCells";
-import { DecimalTypeProvider } from "./DecimalTypeProvider";
+// import { DecimalTypeProvider } from "./DecimalTypeProvider";
+import {
+  DecimalTypeProvider,
+  BoldTypeProvider,
+} from "components/TableComponents";
 import allActions from "redux/actions";
 
 interface Props {
@@ -106,46 +110,6 @@ const CategoryTable = (props: Props) => {
   const [expandedRowIds, setExpandedRowIds] = useState<(string | number)[]>([]);
 
   const [leftFixedColumns] = useState(["name"]);
-  const [boldColumns] = useState(["name"]);
-
-  const BoldFormatter = ({ value }: any) => <b>{value}</b>;
-
-  const BoldTypeProvider = (props: any) => {
-    console.log("Type provider props: ", props);
-    return <DataTypeProvider formatterComponent={BoldFormatter} {...props} />;
-  };
-
-  const CustomCell = ({ row, style, ...props }: any) => (
-    <TableTreeColumn.Cell
-      {...props}
-      style={{
-        fontWeight: row.parentId === null ? "bold" : undefined,
-        ...style,
-      }}
-    />
-  );
-
-  const toggleExpandedRow = (rowId: number) => {
-    // console.log("lezgo")
-    let stateCopy = expandedRowIds;
-    var index = expandedRowIds.indexOf(rowId);
-    if (index > -1) {
-      stateCopy.splice(index, 1);
-    } else {
-      stateCopy.push(rowId);
-    }
-    // console.log("State copy: ", stateCopy)
-    setExpandedRowIds(stateCopy);
-  };
-
-  const getChildRows = (row: any, rootRows: any) => {
-    // console.log("row: ", row)
-    // console.log("rootRows: ", rootRows)
-    const childRows = rootRows.filter(
-      (r: any) => r.parentId === (row ? row.idmaterialInventory : null)
-    );
-    return childRows.length ? childRows : null;
-  };
 
   const [grouping] = useState([{ columnName: "materialCat" }]);
   const [groupSummaryItems] = useState(ColumnData.groupSummaryItems);
