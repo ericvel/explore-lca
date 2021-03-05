@@ -53,9 +53,13 @@ import {
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
-import { GroupCell, SummaryCell, LookupEditCell } from "./CustomCells";
+import { GroupCell, SummaryCell, LookupEditCell, EditCell } from "./CustomCells";
 // import { DecimalTypeProvider } from "./DecimalTypeProvider";
-import { DecimalTypeProvider, SortLabel } from "components/TableComponents";
+import {
+  DecimalTypeProvider,
+  SortLabel,
+} from "components/TableUtilities/Formatters";
+import { Popup, PopupEditing } from "components/TableUtilities/EditPlugin";
 import allActions from "redux/actions";
 
 interface Props {
@@ -73,6 +77,10 @@ const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
 const ProductTable = (props: Props) => {
   const dispatch = useDispatch();
 
+  const isSimulationModeActive = useSelector(
+    (state: IRootState) => state.isSimulationModeActive
+  );
+  const [rows, setRows] = useState(props.data);
   const [columns] = useState(ColumnData.columns);
   const [columnExtensions] = useState(ColumnData.columnExtensions);
   const [defaultHiddenColumnNames] = useState(
@@ -108,7 +116,7 @@ const ProductTable = (props: Props) => {
 
   const [leftFixedColumns] = useState(["name"]);
 
-  const CustomCell = ({ row, style, ...props }: any) => (
+  const CustomTreeCell = ({ row, style, ...props }: any) => (
     <TableTreeColumn.Cell
       {...props}
       style={{
@@ -118,19 +126,6 @@ const ProductTable = (props: Props) => {
     />
   );
 
-  const toggleExpandedRow = (rowId: number) => {
-    // console.log("lezgo")
-    let stateCopy = expandedRowIds;
-    var index = expandedRowIds.indexOf(rowId);
-    if (index > -1) {
-      stateCopy.splice(index, 1);
-    } else {
-      stateCopy.push(rowId);
-    }
-    // console.log("State copy: ", stateCopy)
-    setExpandedRowIds(stateCopy);
-  };
-
   const getChildRows = (row: any, rootRows: any) => {
     // console.log("row: ", row)
     // console.log("rootRows: ", rootRows)
@@ -138,6 +133,33 @@ const ProductTable = (props: Props) => {
       (r: any) => r.parentId === (row ? row.idmaterialInventory : null)
     );
     return childRows.length ? childRows : null;
+  };
+
+  const EditButton = ({ onExecute }: any) => (
+    <Tooltip title='Edit material'>
+      <IconButton onClick={onExecute}>
+        <EditIcon />
+      </IconButton>
+    </Tooltip>
+  );
+
+  const commandComponents: any = {
+    edit: EditButton,
+  };
+
+  const Command = ({ id, onExecute }: any) => {
+    const CommandButton = commandComponents[id];
+    return <CommandButton onExecute={onExecute} />;
+  };
+
+  const commitChanges = ({ changed }: any) => {
+    let changedRows: IMaterialTableRow[] = [];
+    if (changed) {
+      changedRows = rows.map((row) =>
+        changed[row.name] ? { ...row, ...changed[row.name] } : row
+      );
+    }
+    setRows(changedRows);
   };
 
   return (
@@ -152,9 +174,17 @@ const ProductTable = (props: Props) => {
       <IntegratedFiltering columnExtensions={filteringColumnExtensions} />
       <SortingState />
       <IntegratedSorting />
+      <EditingState onCommitChanges={commitChanges} />
       <VirtualTable columnExtensions={columnExtensions} />
       <TableHeaderRow showSortingControls sortLabelComponent={SortLabel} />
-      <TableTreeColumn for='name' cellComponent={CustomCell} />
+      <TableTreeColumn for='name' cellComponent={CustomTreeCell} />
+      <TableEditColumn
+        showEditCommand={isSimulationModeActive}
+        commandComponent={Command}
+        cellComponent={EditCell}
+        width={isSimulationModeActive ? 80 : 0.1}
+      />
+      <PopupEditing popupComponent={Popup} />
       <TableFixedColumns leftColumns={leftFixedColumns} />
       <TableColumnVisibility
         defaultHiddenColumnNames={defaultHiddenColumnNames}

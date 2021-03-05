@@ -38,7 +38,7 @@ import {
   DecimalTypeProvider,
   BoldTypeProvider,
   SortLabel
-} from "components/TableComponents";
+} from "components/TableUtilities/Formatters";
 import ColumnData from "./ColumnData";
 import { getChildElements } from "helpers/materialHelpers";
 

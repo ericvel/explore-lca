@@ -39,6 +39,10 @@ const useStyles = makeStyles((theme: Theme) =>
     selectMenu: {
       position: "absolute !important" as "absolute",
     },
+    editCell: {
+      paddingTop: theme.spacing(0),
+      paddingBottom: theme.spacing(0),
+    },
   })
 );
 
@@ -171,3 +175,19 @@ export const LookupEditCell = ({
     </Select>
   </TableCell>
 );
+
+export const EditCell = (props: any) => {
+  // console.log(props)
+  const classes = useStyles();
+  if (props.row.parentId === null) {
+    return (
+      <TableCell
+        {...props}
+        className={classes.editCell}
+        // style={{ paddingTop: "0px", paddingBottom: "0px" }}
+      />
+    );
+  }
+
+  return <TableCell />;
+};

@@ -55,7 +55,7 @@ import _ from "lodash";
 import ColumnData from "./ColumnData";
 import { GroupCell, SummaryCell, LookupEditCell } from "./CustomCells";
 // import { DecimalTypeProvider } from "./DecimalTypeProvider";
-import { DecimalTypeProvider, SortLabel } from "components/TableComponents";
+import { DecimalTypeProvider, SortLabel } from "components/TableUtilities/Formatters";
 import allActions from "redux/actions";
 
 interface Props {

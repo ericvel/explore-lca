@@ -28,7 +28,7 @@ import {
 import { Template, TemplatePlaceholder } from "@devexpress/dx-react-core";
 import _ from "lodash";
 
-import { DecimalTypeProvider, SortLabel } from "components/TableComponents";
+import { DecimalTypeProvider, SortLabel } from "components/TableUtilities/Formatters";
 import ColumnData from "./ColumnData";
 import LoadingIndicator from "components/LoadingIndicator";
 
