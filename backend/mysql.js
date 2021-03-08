@@ -1,12 +1,16 @@
 const mysql = require("mysql2");
-const dbconfig = require("./dbconfig");
 
 const pool = mysql.createPool({
-  host: dbconfig.MYSQL_HOST,
-  user: dbconfig.MYSQL_USER,
-  password: dbconfig.MYSQL_PWD,
-  database: dbconfig.MYSQL_DB,
-  port: dbconfig.MYSQL_PORT,
+  host: process.env.MYSQL_HOST,
+  user: process.env.MYSQL_USER,
+  password: process.env.MYSQL_PWD,
+  database: process.env.MYSQL_DB,
+  port: process.env.MYSQL_PORT,
+  ssl: {
+    ca: Buffer.from(process.env.MYSQL_SSL_CA, "base64").toString("ascii"),
+    key: Buffer.from(process.env.MYSQL_SSL_KEY, "base64").toString("ascii"),
+    cert: Buffer.from(process.env.MYSQL_SSL_CERT, "base64").toString("ascii"),
+  },
   supportBigNumbers: true,
   bigNumberStrings: true,
   typeCast: function (field, next) {
