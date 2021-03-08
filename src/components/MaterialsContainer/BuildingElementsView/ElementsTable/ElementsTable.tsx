@@ -12,6 +12,9 @@ import {
 } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
+import SubdirectoryArrowRightIcon from "@material-ui/icons/SubdirectoryArrowRight";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import IconButton from "@material-ui/core/IconButton";
 
 import {
   SortingState,
@@ -19,6 +22,7 @@ import {
   SearchState,
   SelectionState,
   DataTypeProvider,
+  EditingState,
 } from "@devexpress/dx-react-grid";
 import {
   Grid,
@@ -31,14 +35,16 @@ import {
   TableColumnVisibility,
   TableFixedColumns,
   TableSelection,
+  TableEditColumn,
 } from "@devexpress/dx-react-grid-material-ui";
 import _ from "lodash";
 
 import {
   DecimalTypeProvider,
   BoldTypeProvider,
-  SortLabel
+  SortLabel,
 } from "components/TableUtilities/Formatters";
+import { EditCell } from "components/TableUtilities/CustomCells";
 import ColumnData from "./ColumnData";
 import { getChildElements } from "helpers/materialHelpers";
 
@@ -86,8 +92,6 @@ const ElementsTable = (props: any) => {
     </Tooltip>
   );
 
-  
-
   const CellTooltip = (props: any) => (
     <DataTypeProvider formatterComponent={TooltipFormatter} {...props} />
   );
@@ -97,22 +101,47 @@ const ElementsTable = (props: any) => {
     dispatch(allActions.elementAndMaterialActions.addToElementRoute(row));
   };
 
+  const EditButton = ({ onExecute }: any) => (
+    <Tooltip title='Go to sub-elements'>
+      <IconButton onClick={onExecute}>
+        <ChevronRightIcon />
+      </IconButton>
+    </Tooltip>
+  );
+
+  const commandComponents: any = {
+    edit: EditButton,
+  };
+
+  const Command = ({ id, onExecute }: any) => {
+    const CommandButton = commandComponents[id];
+    return <CommandButton onExecute={onExecute} />;
+  };
+
   const rows = getChildElements(buildingElements, selectedBuildingElement);
   const height = 500; // 232 + rows.length * 50;
 
   return (
     <Grid rows={rows} columns={columns}>
       <BoldTypeProvider for={boldColumns} />
-      <CellTooltip for={tooltipColumns} />
+      {/* <CellTooltip for={tooltipColumns} /> */}
       <DecimalTypeProvider for={decimalColumns} />
       <SortingState />
       <IntegratedSorting />
+      <EditingState onCommitChanges={() => {}} />
       <VirtualTable
         columnExtensions={columnExtensions}
         rowComponent={CustomTableRow}
         height={height}
       />
       <TableHeaderRow showSortingControls sortLabelComponent={SortLabel} />
+      <TableEditColumn
+        // showEditCommand={isSimulationModeActive}
+        showEditCommand
+        commandComponent={Command}
+        // cellComponent={EditCell}
+        width={80}
+      />
     </Grid>
   );
 };

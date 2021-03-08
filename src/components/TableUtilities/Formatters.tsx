@@ -43,6 +43,12 @@ export const SortLabel = ({ getMessage, column, ...restProps }: any) => {
     case "FU":
       message = "Functional unit";
       break;
+    case "RSL_mi":
+      message = "Reference service life";
+      break;
+    case "RSL":
+      message = "Reference service life";
+      break;
     default:
       message = `Sort by ${column.name}`;
       break;

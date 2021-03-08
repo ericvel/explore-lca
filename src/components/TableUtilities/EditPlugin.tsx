@@ -34,7 +34,7 @@ export const Popup = ({
     onClose={onCancelChanges}
     aria-labelledby='form-dialog-title'
   >
-    <DialogTitle id='form-dialog-title'>Employee Details</DialogTitle>
+    <DialogTitle id='form-dialog-title'>Material details</DialogTitle>
     <DialogContent>
       <MuiGrid container spacing={3}>
         <MuiGrid item xs={6}>

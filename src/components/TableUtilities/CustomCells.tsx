@@ -176,13 +176,13 @@ export const LookupEditCell = ({
   </TableCell>
 );
 
-export const EditCell = (props: any) => {
+export const EditCell = ({ tableColumn, tableRow, ...restProps }: any) => {
   // console.log(props)
   const classes = useStyles();
-  if (props.row.parentId === null) {
+  if (restProps.row.parentId === null) {
     return (
       <TableCell
-        {...props}
+        {...restProps}
         className={classes.editCell}
         // style={{ paddingTop: "0px", paddingBottom: "0px" }}
       />

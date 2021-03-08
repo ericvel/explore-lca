@@ -53,7 +53,7 @@ import {
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
-import { GroupCell, SummaryCell, LookupEditCell, EditCell } from "./CustomCells";
+import { GroupCell, SummaryCell, LookupEditCell, EditCell } from "components/TableUtilities/CustomCells";
 // import { DecimalTypeProvider } from "./DecimalTypeProvider";
 import {
   DecimalTypeProvider,
