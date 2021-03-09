@@ -1,3 +1,5 @@
+import firebase from "firebase/app";
+
 export const SET_BUILDINGS = "SET_BUILDINGS";
 
 export const SELECT_BUILDINGS = "SELECT_BUILDINGS";
@@ -22,8 +24,9 @@ export const SET_DISPLAY_MODE = "SET_DISPLAY_MODE";
 export const SET_EE_METRIC = "SET_EE_METRIC";
 
 export const TOGGLE_SIMULATION_MODE = "TOGGLE_SIMULATION_MODE";
-
 export const SET_SIMULATION_DATA = "SET_SIMULATION_DATA";
+
+export const SET_CURRENT_USER = "SET_CURRENT_USER";
 
 interface SetBuildingsAction {
   type: typeof SET_BUILDINGS;
@@ -102,9 +105,14 @@ interface ToggleSimulationModeAction {
   type: typeof TOGGLE_SIMULATION_MODE;
 }
 
-interface SetSimulationData {
+interface SetSimulationDataAction {
   type: typeof SET_SIMULATION_DATA;
   payload: ISimulationData[];
+}
+
+interface SetCurrentUserAction {
+  type: typeof SET_CURRENT_USER;
+  payload: firebase.User | null;
 }
 
 export type BuildingActionTypes = SetBuildingsAction;
@@ -124,4 +132,5 @@ export type DisplayModeActionTypes = SetDisplayModeAction;
 export type CanSelectMultipleActionTypes = ToggleCanSelectMultipleAction;
 export type EEMetricActionTypes = SetEEMetricAction;
 export type SimulationModeActionTypes = ToggleSimulationModeAction;
-export type SimulationDataActionTypes = SetSimulationData;
+export type SimulationDataActionTypes = SetSimulationDataAction;
+export type CurrentUserActionTypes = SetCurrentUserAction;

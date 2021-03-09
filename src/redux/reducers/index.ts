@@ -16,6 +16,7 @@ import {
   isSimulationModeActive,
 } from "./ui";
 import { EEMetric } from "./settings";
+import { currentUser } from "./user";
 
 const rootReducer = combineReducers({
   buildings,
@@ -31,7 +32,8 @@ const rootReducer = combineReducers({
   canSelectMultipleBuildings,
   isSimulationModeActive,
   EEMetric,
-  simulationData
+  simulationData,
+  currentUser
 });
 
 export default rootReducer;

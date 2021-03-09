@@ -10,12 +10,28 @@ import "firebase/firestore";
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
+export const auth = firebase.auth();
+export const firestore = firebase.firestore();
 const db = firebase.firestore();
 
-export const authenticateAnonymously = () => {
+export function authenticateAnonymously() {
   return firebase.auth().signInAnonymously();
-};
+}
+
+export function signInWithEmailPassword(email: string, password: string) {
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Signed in
+      var user = userCredential.user;
+      // ...
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+    });
+}
 
 export function getSimulationFromDb(buildingId: string) {
   var docRef = db

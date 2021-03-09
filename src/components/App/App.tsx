@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import allActions from "redux/actions";
 import { IRootState } from "redux/reducers";
 
+import { Router, Link } from "@reach/router";
+
 import "devextreme/dist/css/dx.common.css";
 import "devextreme/dist/css/dx.material.blue.light.css";
 
@@ -15,6 +17,9 @@ import BuildingsTable from "../BuildingsTable";
 import BuildingDetails from "../BuildingDetails";
 import HelpButton from "../HelpButton";
 import SettingsButton from "../SettingsButton";
+
+import HomePage from "components/HomePage";
+import SignIn from "components/SignIn";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,45 +37,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function App() {
-  const classes = useStyles();
-
-  return (
-    <Container maxWidth='xl'>
-      <Grid
-        container
-        spacing={3}
-        justify='center'
-        className={classes.container}
-      >
-        <Grid container className={classes.mainContent}>
-          <Grid
-            container
-            item
-            alignItems='center'
-            justify='space-around'
-            spacing={2}
-            className={classes.titleBar}
-          >
-            <Grid item xs={10}>
-              <Typography variant='h2'>bLCAd Tool - GUI</Typography>
-            </Grid>
-
-            <Grid item xs={1}>
-              <HelpButton alertContentId='main' iconSize='large' />
-            </Grid>
-            <Grid item xs={1}>
-              <SettingsButton iconSize='large' />
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12}>
-            <BuildingsTable />
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <BuildingDetails />
-    </Container>
+  const currentUser = useSelector((state: IRootState) => state.currentUser);
+  console.log("Current user: ", currentUser)
+  const user = currentUser;
+  return user ? (
+    <HomePage />
+  ) : (
+    // <Router>
+      <SignIn path='/' />
+    // </Router>
   );
 }
 
