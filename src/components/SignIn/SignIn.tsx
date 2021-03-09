@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SignIn(props: RouteComponentProps) {
+function SignIn() {
   const dispatch = useDispatch();
   
   const [email, setEmail] = useState("");

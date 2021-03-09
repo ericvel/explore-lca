@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import allActions from "redux/actions";
 import { IRootState } from "redux/reducers";
 
+import firebase from "firebase/app";
+
 import { Router, Link } from "@reach/router";
 
 import "devextreme/dist/css/dx.common.css";
@@ -21,31 +23,25 @@ import SettingsButton from "../SettingsButton";
 import HomePage from "components/HomePage";
 import SignIn from "components/SignIn";
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    container: {
-      width: "50vw",
-      marginTop: theme.spacing(2),
-    },
-    mainContent: {
-      width: "90%",
-    },
-    titleBar: {
-      marginBottom: theme.spacing(2),
-    },
-  })
-);
-
 function App() {
-  const currentUser = useSelector((state: IRootState) => state.currentUser);
-  console.log("Current user: ", currentUser)
-  const user = currentUser;
-  return user ? (
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+      // User is signed in.
+      setIsAuthenticated(true);
+    } else {
+      // No user is signed in.
+      setIsAuthenticated(false)
+    }
+  });
+
+  // const currentUser = useSelector((state: IRootState) => state.currentUser);
+  // const user = currentUser;
+  return isAuthenticated ? (
     <HomePage />
   ) : (
-    // <Router>
-      <SignIn path='/' />
-    // </Router>
+    <SignIn />
   );
 }
 
