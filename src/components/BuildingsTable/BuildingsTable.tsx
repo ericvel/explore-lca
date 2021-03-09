@@ -94,7 +94,10 @@ function BuildingsTable() {
           setLoading(false);
           console.log("Fetched rows: ", buildings);
         })
-        .catch(() => setLoading(false));
+        .catch((error) => {
+          console.log("Error getting building data:", error);
+          setLoading(false);
+        });
     }
   };
 

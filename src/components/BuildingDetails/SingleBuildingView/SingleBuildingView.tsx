@@ -61,7 +61,7 @@ const initialBuildingState: IBuilding = {
   B4_t: null,
 };
 
-const SingleBuildingView = (props: any) => {
+function SingleBuildingView() {
   const dispatch = useDispatch();
 
   const selectedBuildings = useSelector(

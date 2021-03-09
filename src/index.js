@@ -3,6 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./components/App";
+import SignIn from "./components/SignIn";
 import * as serviceWorker from "./serviceWorker";
 import "fontsource-roboto";
 
@@ -17,7 +18,8 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    {/* <App /> */}
+    <SignIn />
   </Provider>,
   document.getElementById("root")
 );
