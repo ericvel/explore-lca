@@ -92,6 +92,7 @@ interface IMaterialTableParentRow {
   RSL: ?number;
   comments: ?string;
   parentId: ?number;
+  simulated?: boolean;
 }
 
 interface IMaterialTableChildRow {
