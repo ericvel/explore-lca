@@ -178,30 +178,6 @@ export const LookupEditCell = ({
   </TableCell>
 );
 
-/* export const EditCell = ({
-  tableColumn,
-  tableRow,
-  style,
-  className,
-  ...restProps
-}: any) => {
-  // console.log(props)
-  const classes = useStyles();
-  if (restProps.row.parentId === null) {
-    console.log("Rest props: ", restProps);
-    return (
-      <VirtualTable.Cell
-        {...restProps}
-        className={className}
-        style={{ paddingTop: "0px", paddingBottom: "0px", ...style }}
-      />
-    );
-  }
-  console.log("Rest props: ", restProps);
-  return <VirtualTable.Cell {...restProps} children={() => {}} className={className} style={style} />;
-  // return <VirtualTable.Cell className={className} style={style} />;
-}; */
-
 export const EditCell = ({ children, style, ...restProps }: any) => {
   return (
     <VirtualTable.Cell
