@@ -16,6 +16,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
 import { Router, RouteComponentProps, Link } from "@reach/router";
+import firebase from "firebase/app";
 import { auth } from "services/firebase";
 import allActions from "redux/actions";
 
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SignIn() {
   const dispatch = useDispatch();
-  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -65,12 +66,17 @@ function SignIn() {
     password: string
   ) => {
     event.preventDefault();
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then((data) => {
-        console.log("Signed in: ", data);
-        setError(null);
-        dispatch(allActions.userActions.setCurrentUser(data.user));
+
+    firebase
+      .auth()
+      .setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(() => {
+        // Existing and future Auth states are now persisted in the current
+        // session only. Closing the window would clear any existing state even
+        // if a user forgets to sign out.
+        // ...
+        // New sign-in will be persisted with session persistence.
+        return firebase.auth().signInWithEmailAndPassword(email, password);
       })
       .catch((error) => {
         switch (error.code) {
@@ -99,10 +105,6 @@ function SignIn() {
       setPassword(value);
     }
   };
-
-  function validateForm() {
-    return email.length > 0 && password.length > 0;
-  }
 
   function handleSubmit(event: any) {
     event.preventDefault();

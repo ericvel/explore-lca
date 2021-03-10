@@ -10,6 +10,8 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Input from "@material-ui/core/Input";
 
+import { VirtualTable } from "@devexpress/dx-react-grid-material-ui";
+
 import {
   Theme,
   createStyles,
@@ -176,18 +178,36 @@ export const LookupEditCell = ({
   </TableCell>
 );
 
-export const EditCell = ({ tableColumn, tableRow, ...restProps }: any) => {
+/* export const EditCell = ({
+  tableColumn,
+  tableRow,
+  style,
+  className,
+  ...restProps
+}: any) => {
   // console.log(props)
   const classes = useStyles();
   if (restProps.row.parentId === null) {
+    console.log("Rest props: ", restProps);
     return (
-      <TableCell
+      <VirtualTable.Cell
         {...restProps}
-        className={classes.editCell}
-        // style={{ paddingTop: "0px", paddingBottom: "0px" }}
+        className={className}
+        style={{ paddingTop: "0px", paddingBottom: "0px", ...style }}
       />
     );
   }
+  console.log("Rest props: ", restProps);
+  return <VirtualTable.Cell {...restProps} children={() => {}} className={className} style={style} />;
+  // return <VirtualTable.Cell className={className} style={style} />;
+}; */
 
-  return <TableCell />;
+export const EditCell = ({ children, style, ...restProps }: any) => {
+  return (
+    <VirtualTable.Cell
+      {...restProps}
+      children={restProps.row.parentId === null ? children : null}
+      style={{ paddingTop: "0px", paddingBottom: "0px", ...style }}
+    />
+  );
 };

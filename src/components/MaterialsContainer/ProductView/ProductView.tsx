@@ -35,7 +35,7 @@ const ProductView = (props: Props) => {
       props.materials
     );
     const childRows = createChildRows(props.materials);
-    const treeData = (groupedMaterials as IMaterialTableRow[]).concat(childRows);
+    const treeData = (groupedMaterials as IMaterialTableRow[]).concat(childRows as IMaterialTableRow[]);
 
     const chartData = createMaterialChartData(groupedMaterials);
     setTableData(treeData);

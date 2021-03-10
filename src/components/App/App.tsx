@@ -36,8 +36,6 @@ function App() {
     }
   });
 
-  // const currentUser = useSelector((state: IRootState) => state.currentUser);
-  // const user = currentUser;
   return isAuthenticated ? (
     <HomePage />
   ) : (

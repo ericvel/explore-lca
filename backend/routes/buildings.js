@@ -97,7 +97,7 @@ router.get("/", (req, res) => {
         ON b.idbuildings = be.idbuildings
         WHERE be.idlevels = 0`;
 
-  console.log("Query: " + query);
+  console.log("Get buildings");
   pool.query(query, (err, result) => {
     if (err) {
       res.send(err);

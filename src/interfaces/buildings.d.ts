@@ -91,7 +91,7 @@ interface IMaterialTableParentRow {
   EEf_A1A3: number;
   RSL: ?number;
   comments: ?string;
-  parentId: null;
+  parentId: ?number;
 }
 
 interface IMaterialTableChildRow {
@@ -108,7 +108,9 @@ interface IMaterialTableChildRow {
   parentId: number;
 }
 
-type IMaterialTableRow = IMaterialTableParentRow | IMaterialTableChildRow;
+type IMaterialTableRow = IMaterialTableParentRow & IMaterialTableChildRow;
+
+// interface IMaterialTableRow extends IMaterialTableParentRow, IMaterialTableChildRow {}
 
 interface ISingleChartDataItem {
   lcaPhase: string;

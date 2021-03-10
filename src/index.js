@@ -10,6 +10,7 @@ import "fontsource-roboto";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import rootReducer from "./redux/reducers";
+import HomePage from "components/HomePage";
 require("dotenv").config();
 const store = createStore(
   rootReducer,
@@ -18,8 +19,8 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
-    {/* <SignIn /> */}
+    {/* <App /> */}
+    <HomePage />
   </Provider>,
   document.getElementById("root")
 );

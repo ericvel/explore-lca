@@ -71,7 +71,7 @@ const CategoryView = (props: Props) => {
     const chartData = materialChildRows.concat(categoryParentRows);
     const sortedChartData = sortByEE(chartData) as IMaterialChartItem[];
 
-    setTableData(groupedMaterials);
+    setTableData(groupedMaterials as IMaterialTableRow[]);
     setChartData(sortedChartData);
   }, []);
 

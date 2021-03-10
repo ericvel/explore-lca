@@ -63,9 +63,12 @@ const CategoryChart = (props: Props) => {
   const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
   const [isFirstLevel, setIsFirstLevel] = useState<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [chartHeight, setChartHeight] = useState(0);
 
   useEffect(() => {
-    setChartData(filterData(""));
+    const parentRows = filterData("");
+    setChartData(parentRows);
+    setChartHeight((parentRows.length * 30) + 200)
   }, [props.data]);
 
   const customizeTooltip = (arg: any) => {
@@ -112,11 +115,8 @@ const CategoryChart = (props: Props) => {
     }
   };
 
-  const height = 600; //+ chartData.length * 30;
-
+  const minHeight = 600;
   const classes = useStyles();
-
-  console.log(isFirstLevel);
 
   return (
     <div className={classes.container}>
@@ -162,7 +162,7 @@ const CategoryChart = (props: Props) => {
             }}
           ></Title>
         )}
-        <Size height={height} />
+        <Size height={chartHeight > minHeight ? chartHeight : minHeight} />
         <Margin top={10} bottom={10} left={30} right={30} />
         <CommonSeriesSettings
           argumentField='name'

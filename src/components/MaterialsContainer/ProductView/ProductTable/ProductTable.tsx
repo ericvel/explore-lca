@@ -53,7 +53,12 @@ import {
 import _ from "lodash";
 
 import ColumnData from "./ColumnData";
-import { GroupCell, SummaryCell, LookupEditCell, EditCell } from "components/TableUtilities/CustomCells";
+import {
+  GroupCell,
+  SummaryCell,
+  LookupEditCell,
+  EditCell,
+} from "components/TableUtilities/CustomCells";
 // import { DecimalTypeProvider } from "./DecimalTypeProvider";
 import {
   DecimalTypeProvider,
@@ -80,7 +85,7 @@ const ProductTable = (props: Props) => {
   const isSimulationModeActive = useSelector(
     (state: IRootState) => state.isSimulationModeActive
   );
-  const [rows, setRows] = useState(props.data);
+  const [rows, setRows] = useState<IMaterialTableRow[]>([]);
   const [columns] = useState(ColumnData.columns);
   const [columnExtensions] = useState(ColumnData.columnExtensions);
   const [defaultHiddenColumnNames] = useState(
@@ -91,6 +96,11 @@ const ProductTable = (props: Props) => {
   );
 
   const [decimalColumns] = useState(ColumnData.decimalColumns);
+
+  useEffect(() => {
+    // console.log("Useeffect, props: ", props.data)
+    setRows(props.data);
+  }, [props.data]);
 
   const [searchTerm, setSearchTerm] = useState<string>();
 
@@ -114,7 +124,7 @@ const ProductTable = (props: Props) => {
 
   const [expandedRowIds, setExpandedRowIds] = useState<(string | number)[]>([]);
 
-  const [leftFixedColumns] = useState(["name"]);
+  const [leftFixedColumns] = useState([TableEditColumn.COLUMN_TYPE, "name"]);
 
   const CustomTreeCell = ({ row, style, ...props }: any) => (
     <TableTreeColumn.Cell
@@ -154,16 +164,20 @@ const ProductTable = (props: Props) => {
 
   const commitChanges = ({ changed }: any) => {
     let changedRows: IMaterialTableRow[] = [];
+    console.log("Changed: ", changed);
     if (changed) {
+      console.log("Rows: ", rows);
       changedRows = rows.map((row) =>
-        changed[row.name] ? { ...row, ...changed[row.name] } : row
+        changed[row.idmaterialInventory]
+          ? { ...row, ...changed[row.idmaterialInventory] }
+          : row
       );
     }
     setRows(changedRows);
   };
 
   return (
-    <Grid rows={props.data} columns={columns} getRowId={getRowId}>
+    <Grid rows={rows} columns={columns} getRowId={getRowId}>
       <DecimalTypeProvider for={decimalColumns} />
       <TreeDataState
         expandedRowIds={expandedRowIds}
@@ -182,10 +196,10 @@ const ProductTable = (props: Props) => {
         showEditCommand={isSimulationModeActive}
         commandComponent={Command}
         cellComponent={EditCell}
-        width={isSimulationModeActive ? 80 : 0.1}
+        width={isSimulationModeActive ? 70 : 0.1}
       />
-      <PopupEditing popupComponent={Popup} />
       <TableFixedColumns leftColumns={leftFixedColumns} />
+      <PopupEditing popupComponent={Popup} />
       <TableColumnVisibility
         defaultHiddenColumnNames={defaultHiddenColumnNames}
         columnExtensions={tableColumnVisibilityColumnExtensions}
