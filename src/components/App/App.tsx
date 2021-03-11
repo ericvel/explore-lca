@@ -10,15 +10,8 @@ import { Router, Link } from "@reach/router";
 import "devextreme/dist/css/dx.common.css";
 import "devextreme/dist/css/dx.material.blue.light.css";
 
-import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-
-import BuildingsTable from "../BuildingsTable";
-import BuildingDetails from "../BuildingDetails";
-import HelpButton from "../HelpButton";
-import SettingsButton from "../SettingsButton";
+import { ThemeProvider } from "@material-ui/styles";
+import { theme } from "styles/theme";
 
 import HomePage from "components/HomePage";
 import SignIn from "components/SignIn";
@@ -32,15 +25,20 @@ function App() {
       setIsAuthenticated(true);
     } else {
       // No user is signed in.
-      setIsAuthenticated(false)
+      setIsAuthenticated(false);
     }
   });
 
   return isAuthenticated ? (
-    <HomePage />
+    <ThemeProvider theme={theme}>
+      <HomePage />
+    </ThemeProvider>
   ) : (
     <SignIn />
   );
+  /*  <ThemeProvider theme={theme}>
+      {isAuthenticated ? <HomePage /> : <SignIn />}
+    </ThemeProvider> */
 }
 
 export default App;

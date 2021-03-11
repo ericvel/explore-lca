@@ -92,7 +92,7 @@ interface IMaterialTableParentRow {
   RSL: ?number;
   comments: ?string;
   parentId: ?number;
-  simulated?: boolean;
+  simulated?: string[];
 }
 
 interface IMaterialTableChildRow {
