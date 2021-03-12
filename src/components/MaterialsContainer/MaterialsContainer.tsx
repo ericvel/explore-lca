@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
 import allActions from "redux/actions";
-import { getSimulationFromDb } from "services/firebase";
+import { getSimulatedDataFromDb } from "services/firebase";
 
 import ReactDOM from "react-dom";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
@@ -25,7 +25,10 @@ import BuildingElementsView from "./BuildingElementsView";
 import ProductView from "./ProductView";
 import CategoryView from "./CategoryView";
 import { GroupBy } from "interfaces/enums";
-import { groupByMaterial, combineSimulatedData } from "helpers/materialHelpers";
+import {
+  groupByMaterial,
+  mergeSimulatedDataIntoMaterialProducts,
+} from "helpers/materialHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,25 +92,17 @@ const MaterialsContainer = (props: any) => {
           Promise.all(responses.map((response) => response.json()))
         )
         .then((data) => {
-          getSimulationFromDb(String(buildingId))
+          getSimulatedDataFromDb(String(buildingId))
             .then((doc) => {
               let simulatedData: ISimulatedData = {};
               if (doc.exists) {
-                console.log("Simulation data: ", doc.data());
                 simulatedData = doc.data() ?? {};
-                // simulatedData.push(doc.data());
-                /* for (let [key, value] of Object.entries(doc.data()!)) {
-                  simulatedData.push({
-                    rowId: Number(key),
-                    simulatedFields: value,
-                  });
-                } */
               }
 
               const buildingElements = data[0];
               const materialInventory = data[1];
               const materialProducts = groupByMaterial(materialInventory);
-              const simulatedMaterialProducts = combineSimulatedData(
+              const simulatedMaterialProducts = mergeSimulatedDataIntoMaterialProducts(
                 materialProducts as IMaterialTableRow[],
                 simulatedData
               );
@@ -129,6 +124,11 @@ const MaterialsContainer = (props: any) => {
                   )
                 );
                 dispatch(
+                  allActions.elementAndMaterialActions.setSimulatedData(
+                    simulatedData
+                  )
+                );
+                dispatch(
                   allActions.elementAndMaterialActions.setSimulatedMaterialProducts(
                     simulatedMaterialProducts
                   )
@@ -143,7 +143,7 @@ const MaterialsContainer = (props: any) => {
         })
         .catch(() => setLoading(false));
     }
-    getSimulationFromDb(String(buildingId));
+    getSimulatedDataFromDb(String(buildingId));
   };
 
   const classes = useStyles();

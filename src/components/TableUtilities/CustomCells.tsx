@@ -12,15 +12,13 @@ import Input from "@material-ui/core/Input";
 
 import { VirtualTable } from "@devexpress/dx-react-grid-material-ui";
 
-import {
-  Theme,
-  createStyles,
-  makeStyles,
-  withStyles,
-  emphasize,
-} from "@material-ui/core/styles";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import theme from "styles/theme";
 
-const useStyles = makeStyles((theme: Theme) =>
+import { useSelector } from "react-redux";
+import { IRootState } from "redux/reducers";
+
+const useStyles = makeStyles((/* theme: Theme */) =>
   createStyles({
     cell: {
       padding: theme.spacing(1),
@@ -45,8 +43,11 @@ const useStyles = makeStyles((theme: Theme) =>
       paddingTop: theme.spacing(0),
       paddingBottom: theme.spacing(0),
     },
-  })
-);
+    simulatedField: {
+      color: theme.palette.simulated.main,
+      // fontWeight: "bolder",
+    },
+  }));
 
 export const GroupCell = ({
   style,
@@ -186,4 +187,36 @@ export const EditCell = ({ children, style, ...restProps }: any) => {
       style={{ paddingTop: "0px", paddingBottom: "0px", ...style }}
     />
   );
+};
+
+/* const simulatedData = useSelector((state: IRootState) => state.simulatedData);
+const isSimulationModeActive = useSelector(
+  (state: IRootState) => state.isSimulationModeActive
+); */
+
+const SimulatedFieldCell = ({ value, style, ...restProps }: any) => (
+  <VirtualTable.Cell
+    {...restProps}
+    style={{
+      backgroundColor: value < 5000 ? "red" : undefined,
+      ...style,
+    }}
+  >
+    <span
+      style={{
+        color: value < 5000 ? "white" : undefined,
+      }}
+    >
+      {value}
+    </span>
+  </VirtualTable.Cell>
+);
+
+export const MaterialProductCell = (props: any) => {
+  const { column, row } = props;
+
+  if (column.name === "amount") {
+    return <SimulatedFieldCell {...props} />;
+  }
+  return <VirtualTable.Cell {...props} />;
 };

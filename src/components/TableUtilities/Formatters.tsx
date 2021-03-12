@@ -2,6 +2,16 @@ import React from "react";
 import { DataTypeProvider } from "@devexpress/dx-react-grid";
 import { LCAPhaseTooltip } from "interfaces/enums";
 import { TableHeaderRow } from "@devexpress/dx-react-grid-material-ui";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import theme from "styles/theme";
+
+const useStyles = makeStyles((/* theme: Theme */) =>
+  createStyles({
+    simulatedField: {
+      color: theme.palette.simulated.main,
+      // fontWeight: "bolder",
+    },
+  }));
 
 const DecimalFormatter = ({ value }: any) =>
   value && value > 0.0 ? parseFloat(value).toLocaleString() : "0";
@@ -14,6 +24,15 @@ const BoldFormatter = ({ value }: any) => <b>{value}</b>;
 
 export const BoldTypeProvider = (props: any) => (
   <DataTypeProvider formatterComponent={BoldFormatter} {...props} />
+);
+
+const SimulatedFieldFormatter = ({ value, row }: any) => {
+  console.log("Row: ", row)
+  return <b className={useStyles().simulatedField}>{value}</b>;
+};
+
+export const SimulatedFieldTypeProvider = (props: any) => (
+  <DataTypeProvider formatterComponent={SimulatedFieldFormatter} {...props} />
 );
 
 export const SortLabel = ({ getMessage, column, ...restProps }: any) => {

@@ -7,7 +7,7 @@ import {
   selectedBuildingElement,
   buildingElementRoute,
   hoveredBuildingElement,
-  simulationData,
+  simulatedData,
   materialProducts,
   simulatedMaterialProducts,
 } from "./elementsAndMaterials";
@@ -34,7 +34,7 @@ const rootReducer = combineReducers({
   canSelectMultipleBuildings,
   isSimulationModeActive,
   EEMetric,
-  simulationData,
+  simulatedData,
   currentUser,
   materialProducts,
   simulatedMaterialProducts,

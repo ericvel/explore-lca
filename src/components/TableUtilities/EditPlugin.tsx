@@ -29,8 +29,6 @@ import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import theme from "styles/theme";
 
 import { reduceEmissionNumber } from "./SimulationHelpers";
-import { blue } from "@material-ui/core/colors";
-import sdsfd from "styles/types";
 
 const useStyles = makeStyles((/* theme: Theme */) =>
   createStyles({

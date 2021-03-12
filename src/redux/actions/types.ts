@@ -24,7 +24,7 @@ export const SET_DISPLAY_MODE = "SET_DISPLAY_MODE";
 export const SET_EE_METRIC = "SET_EE_METRIC";
 
 export const TOGGLE_SIMULATION_MODE = "TOGGLE_SIMULATION_MODE";
-export const SET_SIMULATION_DATA = "SET_SIMULATION_DATA";
+export const SET_SIMULATED_DATA = "SET_SIMULATED_DATA";
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 
@@ -108,9 +108,9 @@ interface ToggleSimulationModeAction {
   type: typeof TOGGLE_SIMULATION_MODE;
 }
 
-interface SetSimulationDataAction {
-  type: typeof SET_SIMULATION_DATA;
-  payload: ISimulatedData[];
+interface SetSimulatednDataAction {
+  type: typeof SET_SIMULATED_DATA;
+  payload: ISimulatedData;
 }
 
 interface SetCurrentUserAction {
@@ -145,7 +145,7 @@ export type DisplayModeActionTypes = SetDisplayModeAction;
 export type CanSelectMultipleActionTypes = ToggleCanSelectMultipleAction;
 export type EEMetricActionTypes = SetEEMetricAction;
 export type SimulationModeActionTypes = ToggleSimulationModeAction;
-export type SimulationDataActionTypes = SetSimulationDataAction;
+export type SimulatedDataActionTypes = SetSimulatednDataAction;
 export type CurrentUserActionTypes = SetCurrentUserAction;
 export type MaterialProductsActionTypes = SetMaterialProductsAction;
 export type SimulatedMaterialProductsActionTypes = SetSimulatedMaterialProductsAction;

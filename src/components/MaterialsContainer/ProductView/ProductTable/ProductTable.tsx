@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
-import { writeSimulationToDb } from "services/firebase";
+import { writeSimulatedDataToDb } from "services/firebase";
 
 import {
   Theme,
@@ -58,14 +58,16 @@ import {
   SummaryCell,
   LookupEditCell,
   EditCell,
+  MaterialProductCell,
 } from "components/TableUtilities/CustomCells";
-// import { DecimalTypeProvider } from "./DecimalTypeProvider";
 import {
   DecimalTypeProvider,
   SortLabel,
+  SimulatedFieldTypeProvider,
 } from "components/TableUtilities/Formatters";
 import { Popup, PopupEditing } from "components/TableUtilities/EditPlugin";
 import allActions from "redux/actions";
+import { mergeSimulatedDataIntoMaterialProducts } from "helpers/materialHelpers";
 
 interface Props {
   data: IMaterialTableRow[];
@@ -79,12 +81,47 @@ const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
     predicate: () => false,
   }));
 
+const EditButton = ({ onExecute }: any) => (
+  <Tooltip title='Edit material'>
+    <IconButton onClick={onExecute}>
+      <EditIcon />
+    </IconButton>
+  </Tooltip>
+);
+
+const commandComponents: any = {
+  edit: EditButton,
+};
+
+const Command = ({ id, onExecute }: any) => {
+  const CommandButton = commandComponents[id];
+  return <CommandButton onExecute={onExecute} />;
+};
+
+const CustomTreeCell = ({ row, style, ...props }: any) => (
+  <TableTreeColumn.Cell
+    {...props}
+    style={{
+      fontWeight: row.parentId === null ? "bold" : undefined,
+      ...style,
+    }}
+  />
+);
+
 const ProductTable = (props: Props) => {
   const dispatch = useDispatch();
 
+  const selectedBuildings = useSelector(
+    (state: IRootState) => state.selectedBuildings
+  );
+  const materialProducts = useSelector(
+    (state: IRootState) => state.materialProducts
+  );
+  const simulatedData = useSelector((state: IRootState) => state.simulatedData);
   const isSimulationModeActive = useSelector(
     (state: IRootState) => state.isSimulationModeActive
   );
+
   const [rows, setRows] = useState<IMaterialTableRow[]>([]);
   const [columns] = useState(ColumnData.columns);
   const [columnExtensions] = useState(ColumnData.columnExtensions);
@@ -126,59 +163,43 @@ const ProductTable = (props: Props) => {
 
   const [leftFixedColumns] = useState([TableEditColumn.COLUMN_TYPE, "name"]);
 
-  const CustomTreeCell = ({ row, style, ...props }: any) => (
-    <TableTreeColumn.Cell
-      {...props}
-      style={{
-        fontWeight: row.parentId === null ? "bold" : undefined,
-        ...style,
-      }}
-    />
-  );
-
   const getChildRows = (row: any, rootRows: any) => {
-    // console.log("row: ", row)
-    // console.log("rootRows: ", rootRows)
     const childRows = rootRows.filter(
       (r: any) => r.parentId === (row ? row.idmaterialInventory : null)
     );
     return childRows.length ? childRows : null;
   };
 
-  const EditButton = ({ onExecute }: any) => (
-    <Tooltip title='Edit material'>
-      <IconButton onClick={onExecute}>
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
-  );
-
-  const commandComponents: any = {
-    edit: EditButton,
-  };
-
-  const Command = ({ id, onExecute }: any) => {
-    const CommandButton = commandComponents[id];
-    return <CommandButton onExecute={onExecute} />;
-  };
-
   const commitChanges = ({ changed }: any) => {
-    let changedRows: IMaterialTableRow[] = [];
     console.log("Changed: ", changed);
-    if (changed) {
-      console.log("Rows: ", rows);
-      changedRows = rows.map((row) =>
-        changed[row.idmaterialInventory]
-          ? { ...row, ...changed[row.idmaterialInventory] }
-          : row
-      );
-    }
-    setRows(changedRows);
+    const updatedSimulatedData = {
+      ...simulatedData,
+      ...changed,
+    };
+    const updatedSimulatedMaterialProducts = mergeSimulatedDataIntoMaterialProducts(
+      materialProducts as IMaterialTableRow[],
+      updatedSimulatedData
+    );
+
+    const selectedBuildingId = String(selectedBuildings[0].idbuildings);
+    writeSimulatedDataToDb(selectedBuildingId, updatedSimulatedData);
+    dispatch(
+      allActions.elementAndMaterialActions.setSimulatedData(
+        updatedSimulatedData
+      )
+    );
+    dispatch(
+      allActions.elementAndMaterialActions.setSimulatedMaterialProducts(
+        updatedSimulatedMaterialProducts
+      )
+    );
+    setRows(updatedSimulatedMaterialProducts);
   };
 
   return (
     <Grid rows={rows} columns={columns} getRowId={getRowId}>
       <DecimalTypeProvider for={decimalColumns} />
+      {/* <SimulatedFieldTypeProvider for={decimalColumns} /> */}
       <TreeDataState
         expandedRowIds={expandedRowIds}
         onExpandedRowIdsChange={setExpandedRowIds}
@@ -189,7 +210,10 @@ const ProductTable = (props: Props) => {
       <SortingState />
       <IntegratedSorting />
       <EditingState onCommitChanges={commitChanges} />
-      <VirtualTable columnExtensions={columnExtensions} />
+      <VirtualTable
+        columnExtensions={columnExtensions}
+        cellComponent={isSimulationModeActive ? MaterialProductCell : (props) => <VirtualTable.Cell {...props} /> }
+      />
       <TableHeaderRow showSortingControls sortLabelComponent={SortLabel} />
       <TableTreeColumn for='name' cellComponent={CustomTreeCell} />
       <TableEditColumn

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
-import { writeSimulationToDb } from "services/firebase";
+import { writeSimulatedDataToDb } from "services/firebase";
 
 import {
   Theme,

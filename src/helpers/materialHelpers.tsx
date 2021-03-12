@@ -180,13 +180,13 @@ export const createChildRows = (materials: IMaterialInventory[]) => {
 SIMULATION MODE
 */
 
-export const combineSimulatedData = (
-  materialProducts: IMaterialTableRow[],
-  simulatedData: any
+export const mergeSimulatedDataIntoMaterialProducts = (
+  materialRows: IMaterialTableRow[],
+  simulatedData: ISimulatedData
 ) => {
   let changedRows: IMaterialTableRow[] = [];
   if (simulatedData) {
-    changedRows = materialProducts.map((row) =>
+    changedRows = materialRows.map((row) =>
       simulatedData[row.idmaterialInventory]
         ? { ...row, ...simulatedData[row.idmaterialInventory] }
         : row

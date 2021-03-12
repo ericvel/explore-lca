@@ -33,7 +33,7 @@ export function signInWithEmailPassword(email: string, password: string) {
     });
 }
 
-export function getSimulationFromDb(buildingId: string) {
+export function getSimulatedDataFromDb(buildingId: string) {
   var docRef = db
     .collection("users")
     .doc("ericv")
@@ -43,12 +43,12 @@ export function getSimulationFromDb(buildingId: string) {
   return docRef.get();
 }
 
-export function writeSimulationToDb(buildingId: string, inventoryChanges: any) {
+export function writeSimulatedDataToDb(buildingId: string, simulatedData: any) {
   db.collection("users")
     .doc("ericv")
-    .collection("simulations")
+    .collection("simulatedData")
     .doc(buildingId)
-    .set(inventoryChanges, { merge: true })
+    .set(simulatedData, { merge: true })
     .then(() => {
       console.log("Document successfully written!");
     })
