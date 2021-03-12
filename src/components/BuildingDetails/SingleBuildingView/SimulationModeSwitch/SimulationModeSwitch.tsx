@@ -5,8 +5,25 @@ import allActions from "redux/actions";
 
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { purple } from "@material-ui/core/colors";
 
 import { GroupBy } from "interfaces/enums";
+import theme from "styles/theme";
+
+const CustomSwitch = withStyles({
+  switchBase: {
+    // color: theme.palette.simulated.light,
+    "&$checked": {
+      color: theme.palette.simulated.main,
+    },
+    "&$checked + $track": {
+      backgroundColor: theme.palette.simulated.main,
+    },
+  },
+  checked: {},
+  track: {},
+})(Switch);
 
 const SimulationModeSwitch = () => {
   const dispatch = useDispatch();
@@ -28,7 +45,7 @@ const SimulationModeSwitch = () => {
   return (
     <FormControlLabel
       control={
-        <Switch
+        <CustomSwitch
           checked={isSimulationModeActive}
           onChange={handleSimulationModeChanged}
           name='simulationChecked'

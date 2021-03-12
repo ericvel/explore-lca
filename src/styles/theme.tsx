@@ -1,9 +1,14 @@
+import orange from "@material-ui/core/colors/orange";
 import { createMuiTheme } from "@material-ui/core/styles";
 
-export const theme = createMuiTheme({
+const theme = createMuiTheme({
   palette: {
     simulated: {
-      main: "orange",
+      main: "#c1185b",
+      light: "#f95688",
+      dark: "#8b0032",
     },
   },
 });
+
+export default theme;

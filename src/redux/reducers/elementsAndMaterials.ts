@@ -5,6 +5,8 @@ import {
   ElementRouteActionTypes,
   HoverBuildingElementActionTypes,
   SimulationDataActionTypes,
+  MaterialProductsActionTypes,
+  SimulatedMaterialProductsActionTypes,
   SET_BUILDING_ELEMENTS,
   SET_MATERIAL_INVENTORY,
   SELECT_BUILDING_ELEMENT,
@@ -12,7 +14,9 @@ import {
   SET_BUILDING_ELEMENT_ROUTE,
   HOVER_BUILDING_ELEMENT,
   STOP_HOVER_BUILDING_ELEMENT,
-  SET_SIMULATION_DATA
+  SET_SIMULATION_DATA,
+  SET_MATERIAL_PRODUCTS,
+  SET_SIMULATED_MATERIAL_PRODUCTS,
 } from "../actions/types";
 
 export const buildingElements = (
@@ -92,11 +96,35 @@ export const hoveredBuildingElement = (
 };
 
 export const simulationData = (
-  state: ISimulationData[] = [],
+  state: ISimulatedData[] = [],
   action: SimulationDataActionTypes
 ) => {
   switch (action.type) {
     case SET_SIMULATION_DATA:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export const materialProducts = (
+  state: IMaterialTableParentRow[] = [],
+  action: MaterialProductsActionTypes
+) => {
+  switch (action.type) {
+    case SET_MATERIAL_PRODUCTS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export const simulatedMaterialProducts = (
+  state: IMaterialTableParentRow[] = [],
+  action: SimulatedMaterialProductsActionTypes
+) => {
+  switch (action.type) {
+    case SET_SIMULATED_MATERIAL_PRODUCTS:
       return action.payload;
     default:
       return state;

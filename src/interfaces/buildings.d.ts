@@ -69,8 +69,8 @@ interface IMaterialInventory {
   density: ?number;
   EEf_A1A3: number;
   RSL: ?number;
-  country: string?;
-  city: string?;
+  country: ?string;
+  city: ?string;
   comments: ?string;
 }
 
@@ -135,15 +135,20 @@ interface IChartItem {
   B4_t: number;
 }
 
-interface IMaterialChartItem extends IChartItem {  
+interface IMaterialChartItem extends IChartItem {
   materialCat: string;
 }
 
-interface IElementChartItem extends IChartItem {  
+interface IElementChartItem extends IChartItem {
   id: string;
 }
 
-interface ISimulationData {
-  inventoryId: number;
+interface ISimulatedData2 {
+  rowId: number;
   simulatedFields: { fieldName: string; simulatedValue: string | number }[];
+}
+
+interface ISimulatedData {
+  /** An associative array that stores changes made to existing data. Each array item specifies changes made to a row. The item's key specifies the associated row's ID. */
+  [key: string]: any;
 }

@@ -1,4 +1,4 @@
-declare module "@material-ui/core/styles/createPalette" {
+export declare module "@material-ui/core/styles/createPalette" {
   interface Palette {
     simulated: Palette["primary"];
   }
@@ -6,5 +6,3 @@ declare module "@material-ui/core/styles/createPalette" {
     simulated: PaletteOptions["primary"];
   }
 }
-
-export {}

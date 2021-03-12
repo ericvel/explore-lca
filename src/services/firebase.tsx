@@ -37,7 +37,7 @@ export function getSimulationFromDb(buildingId: string) {
   var docRef = db
     .collection("users")
     .doc("ericv")
-    .collection("simulations")
+    .collection("simulatedData")
     .doc(buildingId);
 
   return docRef.get();

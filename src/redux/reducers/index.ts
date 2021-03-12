@@ -8,6 +8,8 @@ import {
   buildingElementRoute,
   hoveredBuildingElement,
   simulationData,
+  materialProducts,
+  simulatedMaterialProducts,
 } from "./elementsAndMaterials";
 import {
   materialsGroupBy,
@@ -33,7 +35,9 @@ const rootReducer = combineReducers({
   isSimulationModeActive,
   EEMetric,
   simulationData,
-  currentUser
+  currentUser,
+  materialProducts,
+  simulatedMaterialProducts,
 });
 
 export default rootReducer;

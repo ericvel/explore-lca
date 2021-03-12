@@ -54,7 +54,9 @@ export const wrapArgumentAxisLabel = (data: any) => {
 };
 
 // Sorts chart data by the sum of each item's embodied emission values
-export const sortByEE = (chartData: IMaterialChartItem[] | IElementChartItem[]) => {
+export const sortByEE = (
+  chartData: IMaterialChartItem[] | IElementChartItem[]
+) => {
   chartData.sort(function (a: any, b: any) {
     const aSum = a.A1A3 + a.A4 + a.B4_m + a.B4_t;
     const bSum = b.A1A3 + b.A4 + b.B4_m + b.B4_t;
@@ -67,7 +69,7 @@ export const sortByEE = (chartData: IMaterialChartItem[] | IElementChartItem[]) 
 // Group material inventory by material type, sum material inventory embodied emission values
 export const createMaterialChartData = (
   materials: IMaterialTableParentRow[]
-) => {  
+) => {
   // Only keep certain attributes from MaterialTableRow
   const chartData: IMaterialChartItem[] = materials.map(
     ({
@@ -85,7 +87,7 @@ export const createMaterialChartData = (
       ...keepAttrs
     }) => keepAttrs
   );
-  
+
   return chartData;
 };
 
@@ -172,4 +174,24 @@ export const createChildRows = (materials: IMaterialInventory[]) => {
   }));
 
   return childRows;
+};
+
+/*
+SIMULATION MODE
+*/
+
+export const combineSimulatedData = (
+  materialProducts: IMaterialTableRow[],
+  simulatedData: any
+) => {
+  let changedRows: IMaterialTableRow[] = [];
+  if (simulatedData) {
+    changedRows = materialProducts.map((row) =>
+      simulatedData[row.idmaterialInventory]
+        ? { ...row, ...simulatedData[row.idmaterialInventory] }
+        : row
+    );
+  }
+
+  return changedRows;
 };

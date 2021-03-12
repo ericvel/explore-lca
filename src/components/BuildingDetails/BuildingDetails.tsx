@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
       // padding: theme.spacing(2),
       // marginBottom: theme.spacing(2),
       width: drawerWidth,
+      overflowY: "scroll"
     },
     content: {
       // margin: theme.spacing(1),

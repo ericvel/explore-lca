@@ -7,12 +7,16 @@ import {
   HOVER_BUILDING_ELEMENT,
   STOP_HOVER_BUILDING_ELEMENT,
   SET_SIMULATION_DATA,
+  SET_MATERIAL_PRODUCTS,
+  SET_SIMULATED_MATERIAL_PRODUCTS,
   BuildingElementActionTypes,
   MaterialInventoryActionTypes,
   SelectBuildingElementAction,
   ElementRouteActionTypes,
   HoverBuildingElementActionTypes,
   SimulationDataActionTypes,
+  MaterialProductsActionTypes,
+  SimulatedMaterialProductsActionTypes
 } from "./types";
 
 const setBuildingElements = (
@@ -78,11 +82,29 @@ const stopHoverBuildingElement = (
 };
 
 const setSimulationData = (
-  simulationData: ISimulationData[]
+  simulationData: ISimulatedData[]
 ): SimulationDataActionTypes => {
   return {
     type: SET_SIMULATION_DATA,
     payload: simulationData,
+  };
+};
+
+const setMaterialProducts = (
+  materialProducts: IMaterialTableParentRow[]
+): MaterialProductsActionTypes => {
+  return {
+    type: SET_MATERIAL_PRODUCTS,
+    payload: materialProducts,
+  };
+};
+
+const setSimulatedMaterialProducts = (
+  simulatedMaterialProducts: IMaterialTableParentRow[]
+): SimulatedMaterialProductsActionTypes => {
+  return {
+    type: SET_SIMULATED_MATERIAL_PRODUCTS,
+    payload: simulatedMaterialProducts,
   };
 };
 
@@ -95,4 +117,6 @@ export default {
   hoverBuildingElement,
   stopHoverBuildingElement,
   setSimulationData,
+  setMaterialProducts,
+  setSimulatedMaterialProducts
 };

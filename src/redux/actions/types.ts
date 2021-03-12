@@ -28,6 +28,9 @@ export const SET_SIMULATION_DATA = "SET_SIMULATION_DATA";
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 
+export const SET_MATERIAL_PRODUCTS = "SET_MATERIAL_PRODUCTS";
+export const SET_SIMULATED_MATERIAL_PRODUCTS = "SET_MATERIAL_PRODUCTS";
+
 interface SetBuildingsAction {
   type: typeof SET_BUILDINGS;
   payload: IBuilding[];
@@ -107,12 +110,22 @@ interface ToggleSimulationModeAction {
 
 interface SetSimulationDataAction {
   type: typeof SET_SIMULATION_DATA;
-  payload: ISimulationData[];
+  payload: ISimulatedData[];
 }
 
 interface SetCurrentUserAction {
   type: typeof SET_CURRENT_USER;
   payload: firebase.User | null;
+}
+
+interface SetMaterialProductsAction {
+  type: typeof SET_MATERIAL_PRODUCTS;
+  payload: IMaterialTableParentRow[];
+}
+
+interface SetSimulatedMaterialProductsAction {
+  type: typeof SET_SIMULATED_MATERIAL_PRODUCTS;
+  payload: IMaterialTableParentRow[];
 }
 
 export type BuildingActionTypes = SetBuildingsAction;
@@ -134,3 +147,5 @@ export type EEMetricActionTypes = SetEEMetricAction;
 export type SimulationModeActionTypes = ToggleSimulationModeAction;
 export type SimulationDataActionTypes = SetSimulationDataAction;
 export type CurrentUserActionTypes = SetCurrentUserAction;
+export type MaterialProductsActionTypes = SetMaterialProductsAction;
+export type SimulatedMaterialProductsActionTypes = SetSimulatedMaterialProductsAction;

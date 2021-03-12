@@ -26,27 +26,24 @@ import EditIcon from "@material-ui/icons/Edit";
 import Typography from "@material-ui/core/Typography";
 
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import theme from "styles/theme";
 
 import { reduceEmissionNumber } from "./SimulationHelpers";
 import { blue } from "@material-ui/core/colors";
-import classes from "*.module.sass";
+import sdsfd from "styles/types";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((/* theme: Theme */) =>
   createStyles({
-    simulatedField: {
-      backgroundColor: blue[600],
-    },
     labelAsterisk: {
-      color: "blue",//theme.palette.simulated.main,
+      color: theme.palette.simulated.main,
       fontWeight: "bolder",
       fontSize: "large",
     },
     subtitleAsterisk: {
-      color: "blue",
+      color: theme.palette.simulated.main,
       fontWeight: "bolder",
     },
-  })
-);
+  }));
 
 const sourceTypes = [
   "Test source",
@@ -110,9 +107,14 @@ export const Popup = ({
         <Typography variant='h6' component='h2'>
           Simulate material details
         </Typography>
-        <Typography variant='subtitle2' color='textSecondary'>
+        <Typography variant='subtitle2' component='h3' color='textSecondary'>
           Simulated fields are marked with{" "}
-          <Typography variant='subtitle2' display='inline' className={classes.subtitleAsterisk}>
+          <Typography
+            variant='subtitle2'
+            component='span'
+            display='inline'
+            className={classes.subtitleAsterisk}
+          >
             *
           </Typography>
         </Typography>

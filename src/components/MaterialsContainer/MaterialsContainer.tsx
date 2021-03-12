@@ -5,11 +5,7 @@ import allActions from "redux/actions";
 import { getSimulationFromDb } from "services/firebase";
 
 import ReactDOM from "react-dom";
-import {
-  Theme,
-  createStyles,
-  makeStyles,
-} from "@material-ui/core/styles";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Switch from "@material-ui/core/Switch";
@@ -29,6 +25,7 @@ import BuildingElementsView from "./BuildingElementsView";
 import ProductView from "./ProductView";
 import CategoryView from "./CategoryView";
 import { GroupBy } from "interfaces/enums";
+import { groupByMaterial, combineSimulatedData } from "helpers/materialHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -94,31 +91,46 @@ const MaterialsContainer = (props: any) => {
         .then((data) => {
           getSimulationFromDb(String(buildingId))
             .then((doc) => {
-              let simulationData: ISimulationData[] = [];
+              let simulatedData: ISimulatedData = {};
               if (doc.exists) {
-                for (let [key, value] of Object.entries(doc.data()!)) {
-                  simulationData.push({
-                    inventoryId: Number(key),
+                console.log("Simulation data: ", doc.data());
+                simulatedData = doc.data() ?? {};
+                // simulatedData.push(doc.data());
+                /* for (let [key, value] of Object.entries(doc.data()!)) {
+                  simulatedData.push({
+                    rowId: Number(key),
                     simulatedFields: value,
                   });
-                }
-                console.log("Simulation data: ", simulationData);
+                } */
               }
+
+              const buildingElements = data[0];
+              const materialInventory = data[1];
+              const materialProducts = groupByMaterial(materialInventory);
+              const simulatedMaterialProducts = combineSimulatedData(
+                materialProducts as IMaterialTableRow[],
+                simulatedData
+              );
 
               ReactDOM.unstable_batchedUpdates(() => {
                 dispatch(
                   allActions.elementAndMaterialActions.setBuildingElements(
-                    data[0]
+                    buildingElements
                   )
                 );
                 dispatch(
                   allActions.elementAndMaterialActions.setMaterialInventory(
-                    data[1]
+                    materialInventory
                   )
                 );
                 dispatch(
-                  allActions.elementAndMaterialActions.setSimulationData(
-                    simulationData
+                  allActions.elementAndMaterialActions.setMaterialProducts(
+                    materialProducts
+                  )
+                );
+                dispatch(
+                  allActions.elementAndMaterialActions.setSimulatedMaterialProducts(
+                    simulatedMaterialProducts
                   )
                 );
                 setLoading(false);
@@ -192,11 +204,7 @@ const MaterialsContainer = (props: any) => {
         </Grid>
       </Grid>
       {loading || props.parentIsLoading ? (
-        <div>
-          <Skeleton height={120} />
-          <Skeleton height={120} />
-          <Skeleton height={120} />
-        </div>
+        <Skeleton style={{ marginTop: "65px" }} variant='rect' height={350} />
       ) : groupBy === GroupBy.BuildingElement ? (
         <BuildingElementsView />
       ) : groupBy === GroupBy.Product ? (

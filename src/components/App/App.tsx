@@ -5,13 +5,11 @@ import { IRootState } from "redux/reducers";
 
 import firebase from "firebase/app";
 
-import { Router, Link } from "@reach/router";
-
 import "devextreme/dist/css/dx.common.css";
 import "devextreme/dist/css/dx.material.blue.light.css";
 
-import { ThemeProvider } from "@material-ui/styles";
-import { theme } from "styles/theme";
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "styles/theme";
 
 import HomePage from "components/HomePage";
 import SignIn from "components/SignIn";
