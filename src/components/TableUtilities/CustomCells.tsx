@@ -125,7 +125,6 @@ export const SummaryCell = ({
 }: any) => {
   const styles = useStyles();
   const handleClick = () => onToggle();
-  //   console.log("Children: ", children)
   var tooltipTitle: string = "";
   switch (children.props.columnSummaries[0].type) {
     case "sum":
@@ -189,34 +188,35 @@ export const EditCell = ({ children, style, ...restProps }: any) => {
   );
 };
 
-/* const simulatedData = useSelector((state: IRootState) => state.simulatedData);
-const isSimulationModeActive = useSelector(
-  (state: IRootState) => state.isSimulationModeActive
-); */
-
 const SimulatedFieldCell = ({ value, style, ...restProps }: any) => (
   <VirtualTable.Cell
     {...restProps}
     style={{
-      backgroundColor: value < 5000 ? "red" : undefined,
       ...style,
     }}
   >
     <span
       style={{
-        color: value < 5000 ? "white" : undefined,
+        color: theme.palette.simulated.main,
+        fontWeight: "bold"
       }}
     >
-      {value}
+      {typeof value === "number" ? value.toLocaleString() : value}
     </span>
   </VirtualTable.Cell>
 );
 
-export const MaterialProductCell = (props: any) => {
+export const MaterialProductCell = (
+  props: any,
+  simulatedData: ISimulatedData
+) => {
   const { column, row } = props;
 
-  if (column.name === "amount") {
-    return <SimulatedFieldCell {...props} />;
+  if (row.idmaterialInventory in simulatedData) {
+    if (column.name in simulatedData[row.idmaterialInventory]) {
+      return <SimulatedFieldCell {...props} />;
+    }
   }
+
   return <VirtualTable.Cell {...props} />;
 };

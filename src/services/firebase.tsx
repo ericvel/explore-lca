@@ -48,7 +48,7 @@ export function writeSimulatedDataToDb(buildingId: string, simulatedData: any) {
     .doc("ericv")
     .collection("simulatedData")
     .doc(buildingId)
-    .set(simulatedData, { merge: true })
+    .set(simulatedData)
     .then(() => {
       console.log("Document successfully written!");
     })

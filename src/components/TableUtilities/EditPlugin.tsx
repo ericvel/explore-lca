@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { IRootState } from "redux/reducers";
+import allActions from "redux/actions";
+
 import Paper from "@material-ui/core/Paper";
 import {
   Plugin,
@@ -70,14 +74,25 @@ export const Popup = ({
   open,
 }: PopupProps) => {
   const [originalRow, setOriginalRow] = useState<IMaterialTableRow>(row);
-  const [sourceType, setSourceType] = useState<string>("");
-  const [simulatedA1A3, setSimulatedA1A3] = useState<number>(0);
+  const [sourceType, setSourceType] = useState<string>(row.sourceType);
+  const [A1A3, setA1A3] = useState<number>(row.A1A3);
+
+  const materialProducts = useSelector(
+    (state: IRootState) => state.materialProducts
+  );
+  const simulatedMaterialProducts = useSelector(
+    (state: IRootState) => state.simulatedMaterialProducts
+  );
 
   useEffect(() => {
-    setOriginalRow(row);
-    setSourceType(row.sourceType);
-    setSimulatedA1A3(row.A1A3);
-    console.log("Original row: ", originalRow);
+    const nonSimulatedRow = (materialProducts as IMaterialTableRow[]).find(
+      (product) => product.idmaterialInventory === row.idmaterialInventory
+    );
+    if (nonSimulatedRow !== undefined) {
+      setOriginalRow(nonSimulatedRow);
+      setSourceType(row.sourceType);
+      setA1A3(row.A1A3);
+    }
   }, [row.idmaterialInventory]);
 
   const handleSourceTypeChange = (
@@ -86,13 +101,17 @@ export const Popup = ({
     setSourceType(event.target.value);
     if (event.target.value === "Test source") {
       const simulatedValue = reduceEmissionNumber(originalRow.A1A3);
-      setSimulatedA1A3(simulatedValue);
+      setA1A3(simulatedValue);
       const textFieldEvent = {
         target: { name: "A1A3", value: simulatedValue },
       };
       onChange(textFieldEvent);
-    } else {
-      setSimulatedA1A3(originalRow.A1A3);
+    } else if (event.target.value === originalRow.sourceType) {
+      setA1A3(originalRow.A1A3);
+      const textFieldEvent = {
+        target: { name: "A1A3", value: originalRow.A1A3 },
+      };
+      onChange(textFieldEvent);
     }
     onChange(event);
   };
@@ -123,7 +142,7 @@ export const Popup = ({
             <FormGroup>
               <TextField
                 select
-                required={row.sourceType !== originalRow?.sourceType}
+                required={sourceType !== originalRow.sourceType}
                 margin='normal'
                 name='sourceType'
                 label='Source type'
@@ -140,8 +159,10 @@ export const Popup = ({
                     key={option}
                     value={option}
                     disabled={
-                      option !== originalRow?.sourceType &&
-                      option !== "Test source"
+                      !(
+                        option === originalRow.sourceType ||
+                        option === "Test source"
+                      )
                     }
                   >
                     {option}
@@ -161,11 +182,11 @@ export const Popup = ({
           <Grid item xs={6}>
             <FormGroup>
               <TextField
-                required={simulatedA1A3 !== originalRow?.A1A3}
+                required={A1A3 !== originalRow.A1A3}
                 margin='normal'
                 name='A1A3'
                 label='A1-A3'
-                value={simulatedA1A3 || ""}
+                value={A1A3 || ""}
                 onChange={onChange}
                 disabled
                 InputLabelProps={{

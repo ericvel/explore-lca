@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
 import { writeSimulatedDataToDb } from "services/firebase";
 
+import { getKeyValue } from "get-key-value";
+
 import {
   Theme,
   createStyles,
@@ -50,7 +52,7 @@ import {
   TableTreeColumn,
 } from "@devexpress/dx-react-grid-material-ui";
 
-import _ from "lodash";
+import _, { update } from "lodash";
 
 import ColumnData from "./ColumnData";
 import {
@@ -117,6 +119,9 @@ const ProductTable = (props: Props) => {
   const materialProducts = useSelector(
     (state: IRootState) => state.materialProducts
   );
+  const simulatedMaterialProducts = useSelector(
+    (state: IRootState) => state.simulatedMaterialProducts
+  );
   const simulatedData = useSelector((state: IRootState) => state.simulatedData);
   const isSimulationModeActive = useSelector(
     (state: IRootState) => state.isSimulationModeActive
@@ -172,33 +177,58 @@ const ProductTable = (props: Props) => {
 
   const commitChanges = ({ changed }: any) => {
     console.log("Changed: ", changed);
-    const updatedSimulatedData = {
-      ...simulatedData,
-      ...changed,
-    };
-    const updatedSimulatedMaterialProducts = mergeSimulatedDataIntoMaterialProducts(
-      materialProducts as IMaterialTableRow[],
-      updatedSimulatedData
+    const changedRowId = Object.keys(changed)[0];
+    const originalRow = (materialProducts as IMaterialTableRow[]).find(
+      (row) => String(row.idmaterialInventory) === changedRowId
     );
 
-    const selectedBuildingId = String(selectedBuildings[0].idbuildings);
-    writeSimulatedDataToDb(selectedBuildingId, updatedSimulatedData);
-    dispatch(
-      allActions.elementAndMaterialActions.setSimulatedData(
+    if (Object.values(changed)[0] !== undefined && originalRow !== undefined) {
+      const updatedSimulatedData: ISimulatedData = {
+        ...simulatedData,
+        ...changed,
+      };
+
+      for (const [key, value] of Object.entries(
+        updatedSimulatedData[changedRowId]
+      )) {
+        const originalValue = getKeyValue<
+          keyof IMaterialTableRow,
+          IMaterialTableRow
+        >(key as any, originalRow);
+        // Remove field from simulated data if has been reset to original value
+        if (value === originalValue) {
+          delete updatedSimulatedData[changedRowId][key];
+        }
+      }
+
+      // Remove simulated data row if all fields havs been removed it
+      if (Object.keys(updatedSimulatedData[changedRowId]).length === 0) {
+        delete updatedSimulatedData[changedRowId];
+      }
+
+      const updatedSimulatedMaterialProducts = mergeSimulatedDataIntoMaterialProducts(
+        materialProducts as IMaterialTableRow[],
         updatedSimulatedData
-      )
-    );
-    dispatch(
-      allActions.elementAndMaterialActions.setSimulatedMaterialProducts(
-        updatedSimulatedMaterialProducts
-      )
-    );
-    setRows(updatedSimulatedMaterialProducts);
+      );
+
+      const selectedBuildingId = String(selectedBuildings[0].idbuildings);
+      writeSimulatedDataToDb(selectedBuildingId, updatedSimulatedData);
+      dispatch(
+        allActions.elementAndMaterialActions.setSimulatedData(
+          updatedSimulatedData
+        )
+      );
+      dispatch(
+        allActions.elementAndMaterialActions.setSimulatedMaterialProducts(
+          updatedSimulatedMaterialProducts
+        )
+      );
+      setRows(updatedSimulatedMaterialProducts);
+    }
   };
 
   return (
     <Grid rows={rows} columns={columns} getRowId={getRowId}>
-      <DecimalTypeProvider for={decimalColumns} />
       {/* <SimulatedFieldTypeProvider for={decimalColumns} /> */}
       <TreeDataState
         expandedRowIds={expandedRowIds}
@@ -212,8 +242,14 @@ const ProductTable = (props: Props) => {
       <EditingState onCommitChanges={commitChanges} />
       <VirtualTable
         columnExtensions={columnExtensions}
-        cellComponent={isSimulationModeActive ? MaterialProductCell : (props) => <VirtualTable.Cell {...props} /> }
+        cellComponent={
+          isSimulationModeActive
+            ? (props) => MaterialProductCell(props, simulatedData)
+            : (props) => <VirtualTable.Cell {...props} />
+        }
       />
+
+      <DecimalTypeProvider for={decimalColumns} />
       <TableHeaderRow showSortingControls sortLabelComponent={SortLabel} />
       <TableTreeColumn for='name' cellComponent={CustomTreeCell} />
       <TableEditColumn
