@@ -28,11 +28,13 @@ import {
 import { Template, TemplatePlaceholder } from "@devexpress/dx-react-core";
 import _ from "lodash";
 
-import { DecimalTypeProvider, SortLabel } from "components/TableUtilities/Formatters";
+import {
+  DecimalTypeProvider,
+  SortLabel,
+} from "components/TableUtilities/Formatters";
 import ColumnData from "./ColumnData";
 import LoadingIndicator from "components/LoadingIndicator";
 
-const URL = "/buildings";
 const getRowId = (row: any) => row[Object.keys(row)[0]];
 const Root = (props: any) => (
   <Grid.Root {...props} style={{ height: "100%" }} />
@@ -87,6 +89,9 @@ function BuildingsTable() {
     if (!loading) {
       setLoading(true);
 
+      var URL = process.env.REACT_APP_API_URI + "/buildings";
+      
+      console.log("URL: ", URL);
       fetch(URL)
         .then((response) => response.json())
         .then((data) => {

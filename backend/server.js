@@ -2,23 +2,32 @@ require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const app = express();
+const cors = require("cors");
 const port = 8000;
 var buildings = require("./routes/buildings.js");
 var building_elements = require("./routes/building_elements.js");
 var material_inventory = require("./routes/material_inventory.js");
 
-app.use(express.static(path.join(__dirname, "../build")));
+var corsOptions = {
+  origin: "http://localhost:5000"
+};
 
-app.get("/", function (req, res) {
+app.use(cors(corsOptions));
+console.log(process.env.NODE_ENV) 
+app.use("/api/buildings", buildings);
+app.use("/api/building_elements", building_elements);
+app.use("/api/material_inventory", material_inventory);
+
+// Serve any static files
+app.use(express.static(path.join(__dirname, "../build")));
+// Handle React routing, return all requests to React app
+app.get("/*", function (req, res) {
   res.sendFile(path.join(__dirname, "../build", "index.html"));
 });
+if (process.env.NODE_ENV === "production") {
+  
+}
 
-app.listen(port, () => {
-  console.log("Path: ", path.join(__dirname, "../build", "index.html"));
-  console.log("User env: ", process.env.MYSQL_USER);
-  console.log(`⚡ Express server now listening on port ${port}`);
-});
-
-app.use("/buildings", buildings);
-app.use("/building_elements", building_elements);
-app.use("/material_inventory", material_inventory);
+app.listen(port, () =>
+  console.log(`⚡ Express server now listening on port ${port}`)
+);
