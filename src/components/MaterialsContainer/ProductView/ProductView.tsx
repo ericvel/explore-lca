@@ -35,10 +35,11 @@ const ProductView = (props: Props) => {
   const isSimulationModeActive = useSelector(
     (state: IRootState) => state.isSimulationModeActive
   );
+  const simulatedData = useSelector((state: IRootState) => state.simulatedData);
 
   const [tableData, setTableData] = useState<IMaterialTableRow[]>([]);
   const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
-
+  
   useEffect(() => {
     let groupedMaterials;
     if (isSimulationModeActive) {
@@ -56,7 +57,7 @@ const ProductView = (props: Props) => {
     const chartData = createMaterialChartData(groupedMaterials);
     setTableData(treeData);
     setChartData(chartData);
-  }, [isSimulationModeActive]);
+  }, [isSimulationModeActive, simulatedData]);
 
   return (
     <div>

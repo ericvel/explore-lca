@@ -4,6 +4,7 @@ import { IRootState } from "redux/reducers";
 import { writeSimulatedDataToDb } from "services/firebase";
 
 import { getKeyValue } from "get-key-value";
+import theme from "styles/theme";
 
 import {
   Theme,

@@ -34,9 +34,16 @@ export function signInWithEmailPassword(email: string, password: string) {
 }
 
 export function getSimulatedDataFromDb(buildingId: string) {
+  let username = "anonymous";
+  const user = firebase.auth().currentUser;
+  if (user) {
+    // User is signed in.
+    if (user.email !== null) username = user.email;
+  }
+
   var docRef = db
     .collection("users")
-    .doc("ericv")
+    .doc(username)
     .collection("simulatedData")
     .doc(buildingId);
 
@@ -44,8 +51,15 @@ export function getSimulatedDataFromDb(buildingId: string) {
 }
 
 export function writeSimulatedDataToDb(buildingId: string, simulatedData: any) {
+  let username = "anonymous";
+  const user = firebase.auth().currentUser;
+  if (user) {
+    // User is signed in.
+    if (user.email !== null) username = user.email;
+  }
+  
   db.collection("users")
-    .doc("ericv")
+    .doc(username)
     .collection("simulatedData")
     .doc(buildingId)
     .set(simulatedData)

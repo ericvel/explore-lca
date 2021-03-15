@@ -3,11 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
 import allActions from "redux/actions";
 
-import {
-  Theme,
-  createStyles,
-  makeStyles,
-} from "@material-ui/core/styles";
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import theme from "styles/theme";
 
 import {
   Chart,
@@ -45,8 +42,14 @@ interface Props {
 }
 
 const ProductChart = (props: Props) => {
-
   const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
+  const isSimulationModeActive = useSelector(
+    (state: IRootState) => state.isSimulationModeActive
+  );
+  const simulatedData = useSelector((state: IRootState) => state.simulatedData);
+  const simulatedMaterialProducts = useSelector(
+    (state: IRootState) => state.simulatedMaterialProducts
+  );
 
   useEffect(() => {
     const sortedChartData = sortByEE(props.data) as IMaterialChartItem[];
@@ -57,6 +60,39 @@ const ProductChart = (props: Props) => {
     return {
       text: `<b>${arg.seriesName}</b>\n ${arg.valueText}`,
     };
+  };
+
+  const labelToMaterialId = (label: string): number => {
+    return (
+      (simulatedMaterialProducts as IMaterialTableRow[]).find((material) => material.name === label)
+        ?.idmaterialInventory || 0
+    );
+  };
+
+  const onDrawn = (e: any) => {
+    if (isSimulationModeActive) {
+      // Color emission series if contains simulated values
+      e.element
+        .querySelector(".dxc-arg-elements")
+        .childNodes.forEach((el: any) => {
+          // const fieldName = labelToFieldname(el.innerHTML);
+          var labelText = "";
+          if (el.childNodes.length > 1) {
+            let spans: string[] = [];
+            el.childNodes.forEach((subEl: any) => {
+              spans.push(subEl.innerHTML);
+            });
+            labelText = spans.join(" ");
+          } else {
+            labelText = el.innerHTML;
+          }
+
+          if (labelToMaterialId(labelText) in simulatedData) {
+            el.style.fill = theme.palette.simulated.main;
+            el.style.fontWeight = 500;
+          }
+        });
+    }
   };
 
   const height = 200 + chartData.length * 30;
@@ -70,6 +106,7 @@ const ProductChart = (props: Props) => {
       dataSource={chartData}
       palette='Material'
       rotated={true}
+      onDrawn={onDrawn}
     >
       <Size height={height > 500 ? height : 500} />
       <CommonSeriesSettings
@@ -96,7 +133,7 @@ const ProductChart = (props: Props) => {
       <Legend
         verticalAlignment='bottom'
         horizontalAlignment='center'
-        itemTextPosition='top'        
+        itemTextPosition='top'
         customizeHint={customizeHint}
       />
       <Tooltip

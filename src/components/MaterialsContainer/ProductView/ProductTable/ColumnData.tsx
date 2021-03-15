@@ -12,7 +12,7 @@ class ColumnData {
     { name: "A4", title: "A4" },
     { name: "B4_m", title: "B4 (m)" },
     { name: "B4_t", title: "B4 (t)" },
-    { name: "RSL_mi", title: "RSL (Inventory)" },
+    { name: "RSL_mi", title: "RSL (inventory)" },
     { name: "materialCat", title: "Category" },
     { name: "buildingElementName", title: "Building element" },
     { name: "RSL", title: "RSL" },

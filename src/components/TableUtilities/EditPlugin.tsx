@@ -33,6 +33,7 @@ import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import theme from "styles/theme";
 
 import { reduceEmissionNumber } from "./SimulationHelpers";
+import { LCAPhaseTooltip } from "interfaces/enums";
 
 const useStyles = makeStyles((/* theme: Theme */) =>
   createStyles({
@@ -48,7 +49,7 @@ const useStyles = makeStyles((/* theme: Theme */) =>
   }));
 
 const sourceTypes = [
-  "Test source",
+  "TestSource",
   "EPD",
   "Ecoinvent",
   "Other",
@@ -99,7 +100,7 @@ export const Popup = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSourceType(event.target.value);
-    if (event.target.value === "Test source") {
+    if (event.target.value === "TestSource") {
       const simulatedValue = reduceEmissionNumber(originalRow.A1A3);
       setA1A3(simulatedValue);
       const textFieldEvent = {
@@ -124,19 +125,22 @@ export const Popup = ({
         <Typography variant='h6' component='h2'>
           Simulate material details
         </Typography>
-        <Typography variant='subtitle2' component='h3' color='textSecondary'>
+        <Typography noWrap variant='subtitle2' component='h3'>
+          {row.name}
+        </Typography>
+      </DialogTitle>
+      <DialogContent>
+        {/* <Typography variant='body2' component='p' color='textSecondary'>
           Simulated fields are marked with{" "}
           <Typography
-            variant='subtitle2'
+            variant='body1'
             component='span'
             display='inline'
             className={classes.subtitleAsterisk}
           >
             *
           </Typography>
-        </Typography>
-      </DialogTitle>
-      <DialogContent>
+        </Typography> */}
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <FormGroup>
@@ -146,7 +150,7 @@ export const Popup = ({
                 margin='normal'
                 name='sourceType'
                 label='Source type'
-                value={sourceType || ""}
+                value={sourceType || " "}
                 onChange={handleSourceTypeChange}
                 InputLabelProps={{
                   classes: {
@@ -161,7 +165,7 @@ export const Popup = ({
                     disabled={
                       !(
                         option === originalRow.sourceType ||
-                        option === "Test source"
+                        option === "TestSource"
                       )
                     }
                   >
@@ -173,7 +177,30 @@ export const Popup = ({
                 margin='normal'
                 name='materialCat'
                 label='Category'
-                value={row.materialCat || ""}
+                value={row.materialCat || " "}
+                onChange={onChange}
+                disabled
+              />
+              <TextField
+                margin='normal'
+                name='quantity'
+                label='Quantity'
+                value={row.quantity || "0"}
+                onChange={onChange}
+                disabled
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      {row.FU || ""}
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <TextField
+                margin='normal'
+                name='RSL_mi'
+                label='RSL (inventory)'
+                value={row.RSL_mi || "0"}
                 onChange={onChange}
                 disabled
               />
@@ -181,28 +208,52 @@ export const Popup = ({
           </Grid>
           <Grid item xs={6}>
             <FormGroup>
-              <TextField
-                required={A1A3 !== originalRow.A1A3}
-                margin='normal'
-                name='A1A3'
-                label='A1-A3'
-                value={A1A3 || ""}
-                onChange={onChange}
-                disabled
-                InputLabelProps={{
-                  classes: {
-                    asterisk: classes.labelAsterisk,
-                  },
-                }}
-              />
-              <TextField
-                margin='normal'
-                name='quantity'
-                label='Quantity'
-                value={row.quantity || ""}
-                onChange={onChange}
-                disabled
-              />
+              <Tooltip enterDelay={500} placement="bottom" title={LCAPhaseTooltip.A1A3}>
+                <TextField
+                  required={A1A3 !== originalRow.A1A3}
+                  margin='normal'
+                  name='A1A3'
+                  label='A1-A3'
+                  value={A1A3 || "0"}
+                  onChange={onChange}
+                  disabled
+                  InputLabelProps={{
+                    classes: {
+                      asterisk: classes.labelAsterisk,
+                    },
+                  }}
+                />
+              </Tooltip>
+              <Tooltip enterDelay={500} placement="bottom" title={LCAPhaseTooltip.A4}>
+                <TextField
+                  margin='normal'
+                  name='A4'
+                  label='A4'
+                  value={row.A4 || "0"}
+                  onChange={onChange}
+                  disabled
+                />
+              </Tooltip>
+              <Tooltip enterDelay={500} placement="bottom" title={LCAPhaseTooltip.B4m}>
+                <TextField
+                  margin='normal'
+                  name='B4_m'
+                  label='B4 (m)'
+                  value={row.B4_m || "0"}
+                  onChange={onChange}
+                  disabled
+                />
+              </Tooltip>
+              <Tooltip enterDelay={500} placement="bottom" title={LCAPhaseTooltip.B4t}>
+                <TextField
+                  margin='normal'
+                  name='B4_t'
+                  label='B4 (t)'
+                  value={row.B4_t || "0"}
+                  onChange={onChange}
+                  disabled
+                />
+              </Tooltip>
             </FormGroup>
           </Grid>
         </Grid>

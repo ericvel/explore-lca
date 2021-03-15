@@ -195,14 +195,16 @@ const SimulatedFieldCell = ({ value, style, ...restProps }: any) => (
       ...style,
     }}
   >
-    <span
-      style={{
-        color: theme.palette.simulated.main,
-        fontWeight: "bold"
-      }}
-    >
-      {typeof value === "number" ? value.toLocaleString() : value}
-    </span>
+    <Tooltip title="Simulated value">
+      <span
+        style={{
+          color: theme.palette.simulated.main,
+          fontWeight: "bold"
+        }}
+      >
+        {typeof value === "number" ? value.toLocaleString() : value}
+      </span>
+    </Tooltip>
   </VirtualTable.Cell>
 );
 

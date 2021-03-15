@@ -69,10 +69,18 @@ const SingleBuildingChart = () => {
     var simulatedValues = {};
 
     if (isSimulationModeActive) {
-      A1A3 = isSeriesSimulated("A1A3") ? sumMaterialEmissions("A1A3") : nonSimulatedValues.A1A3;
-      A4 = isSeriesSimulated("A4") ? sumMaterialEmissions("A4") : nonSimulatedValues.A4;
-      B4_m = isSeriesSimulated("B4_m") ? sumMaterialEmissions("B4_m") : nonSimulatedValues.B4_m;
-      B4_t = isSeriesSimulated("B4_t") ? sumMaterialEmissions("B4_t") : nonSimulatedValues.B4_t;
+      A1A3 = isSeriesSimulated("A1A3")
+        ? sumMaterialEmissions("A1A3")
+        : nonSimulatedValues.A1A3;
+      A4 = isSeriesSimulated("A4")
+        ? sumMaterialEmissions("A4")
+        : nonSimulatedValues.A4;
+      B4_m = isSeriesSimulated("B4_m")
+        ? sumMaterialEmissions("B4_m")
+        : nonSimulatedValues.B4_m;
+      B4_t = isSeriesSimulated("B4_t")
+        ? sumMaterialEmissions("B4_t")
+        : nonSimulatedValues.B4_t;
     } else {
       A1A3 = Number(selectedBuildings[0].A1A3) || 0.0;
       A4 = Number(selectedBuildings[0].A4) || 0.0;
@@ -134,9 +142,10 @@ const SingleBuildingChart = () => {
         .querySelector(".dxc-arg-elements")
         .childNodes.forEach((el: any) => {
           const fieldName = labelToFieldname(el.innerHTML);
-          if (isSeriesSimulated(fieldName))
+          if (isSeriesSimulated(fieldName)) {
             el.style.fill = theme.palette.simulated.main;
-          el.style.fontWeight = 500;
+            el.style.fontWeight = 500;
+          }
         });
     }
   };

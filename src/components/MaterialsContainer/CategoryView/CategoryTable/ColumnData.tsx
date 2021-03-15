@@ -9,7 +9,7 @@ class ColumnData {
     { name: "FU", title: "FU" },
     { name: "materialCat", title: "Category" },
     { name: "sourceType", title: "Source type" },
-    { name: "RSL_mi", title: "RSL (Inventory)" },
+    { name: "RSL_mi", title: "RSL (inventory)" },
     { name: "A1A3", title: "A1-A3" },
     { name: "A4", title: "A4" },
     { name: "B4_m", title: "B4 (m)" },

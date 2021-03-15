@@ -157,7 +157,13 @@ const MaterialsContainer = (props: any) => {
           </Typography>
         </Grid>
         <Grid item>
-          <Tooltip title='Select what to display' open={tooltipOpen}>
+          <Tooltip
+            title='Disable simulation mode to select different grouping'
+            // open={tooltipOpen}
+            disableFocusListener={!isSimulationModeActive}
+            disableHoverListener={!isSimulationModeActive}
+            disableTouchListener={!isSimulationModeActive}
+          >
             <FormControl className={classes.formControl} variant='outlined'>
               <InputLabel>Group by</InputLabel>
               <Select
@@ -176,7 +182,12 @@ const MaterialsContainer = (props: any) => {
                   Building element
                 </MenuItem>
                 <MenuItem value={GroupBy.Product}>Product</MenuItem>
-                <MenuItem value={GroupBy.Category}>Category</MenuItem>
+                <MenuItem
+                  value={GroupBy.Category}
+                  disabled={isSimulationModeActive}
+                >
+                  Category
+                </MenuItem>
               </Select>
             </FormControl>
           </Tooltip>
