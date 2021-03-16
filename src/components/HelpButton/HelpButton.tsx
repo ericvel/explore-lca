@@ -117,7 +117,7 @@ function HelpButton() {
                 its <b>materials</b> and <b>building elements</b>.
               </li>
               <li>
-                Turn on <b>simulation mode</b> to edit a building's materials
+                Turn on <b>simulation mode</b> (<i>top-right in building details</i>) to edit a building's materials
                 and see how the changes affect the rest of the building.
               </li>
               <li>
