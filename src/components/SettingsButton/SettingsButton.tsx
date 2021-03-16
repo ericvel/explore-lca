@@ -17,6 +17,13 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Checkbox from "@material-ui/core/Checkbox";
 import Tooltip from "@material-ui/core/Tooltip";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import Switch from "@material-ui/core/Switch";
 
 interface Props {
   iconSize?: "small" | "inherit" | "large" | "default" | undefined;
@@ -24,6 +31,11 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    root: {
+      width: "100%",
+      maxWidth: 360,
+      minWidth: 220,
+    },
     content: {
       width: 350,
       padding: theme.spacing(2),
@@ -63,13 +75,45 @@ function SettingsButton(props: Props) {
 
   return (
     <div>
-      <Tooltip title="Settings">
+      <Tooltip title='Settings'>
         <IconButton aria-label='help' onClick={handleClickOpen}>
           <SettingsIcon fontSize={props.iconSize} />
         </IconButton>
       </Tooltip>
       <Drawer anchor='right' open={open} onClose={handleClose}>
-        <Grid container spacing={3} className={classes.content}>
+        <Grid container className={classes.content}>
+          <Typography variant='h4' color='textPrimary' gutterBottom>
+            Settings
+          </Typography>
+          <List
+            subheader={<ListSubheader>Embodied emissions metric</ListSubheader>}
+            className={classes.root}
+          >
+            <ListItem>
+              <ListItemText id='switch-list-label-sqm' primary={"Per m\xB2"} />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge='end'
+                  checked={perSqM}
+                  onChange={handleEEMetricChange}
+                  name='perSqM'
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+            <ListItem>
+              <ListItemText id='switch-list-label-year' primary='Per year' />
+              <ListItemSecondaryAction>
+                <Switch
+                  edge='end'
+                  checked={perYear}
+                  onChange={handleEEMetricChange}
+                  name='perYear'
+                />
+              </ListItemSecondaryAction>
+            </ListItem>
+          </List>
+        </Grid>
+        {/* <Grid container spacing={3} className={classes.content}>
           <Grid item xs={12}>
             <Typography variant='h4' color='textPrimary' gutterBottom>
               Settings
@@ -102,7 +146,7 @@ function SettingsButton(props: Props) {
               </FormGroup>
             </FormControl>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Drawer>
     </div>
   );

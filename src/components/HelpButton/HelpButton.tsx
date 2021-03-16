@@ -127,18 +127,17 @@ function HelpButton() {
             </ul>
           </Typography>
           <Typography variant='h6'>Terminology</Typography>
-          {/* <Typography variant='subtitle2' gutterBottom>
-            LCA phases
-          </Typography> */}
           <List>
             {terminologyDictionary.map((entry, index) => (
               <ListItem divider={index < terminologyDictionary.length - 1}>
-                <Grid item container spacing={1}>
+                <Grid container spacing={1} alignItems='center'>
                   <Grid item xs={2}>
-                    <Typography variant="body1">{entry.term}</Typography>
+                    <Typography variant='body1'>
+                      <b>{entry.term}</b>
+                    </Typography>
                   </Grid>
                   <Grid item xs={10}>
-                    <Typography variant="body2">{entry.definition}</Typography>
+                    <Typography variant='body1'>{entry.definition}</Typography>
                   </Grid>
                 </Grid>
               </ListItem>

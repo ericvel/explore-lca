@@ -112,7 +112,7 @@ const SingleBuildingChart = () => {
     ];
 
     setChartData(chartData);
-  }, [selectedBuildings[0], isSimulationModeActive, simulatedData]);
+  }, [selectedBuildings[0], isSimulationModeActive, simulatedData, checkedEEMetrics]);
 
   const isSeriesSimulated = (series: string): boolean => {
     return Object.values(simulatedData).some(function (value: any) {
