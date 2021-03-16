@@ -1,0 +1,10 @@
+.sliding-pane-overlay {
+  background-color: transparent !important;
+  width: 40%;
+  left: auto;
+  z-index: 500;
+}
+
+.sliding-pane {
+  transition: transform 0.3s;
+}

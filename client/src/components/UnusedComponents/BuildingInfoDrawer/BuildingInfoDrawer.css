@@ -1,0 +1,11 @@
+.sliding-pane-overlay {
+  background-color: transparent !important;
+  width: 30%;
+  left: auto;
+  z-index: 500;
+}
+
+.sliding-pane {
+  transition: transform 0.3s;
+  /* width: 100%; */
+}
