@@ -199,7 +199,7 @@ export const Popup = ({
               <TextField
                 margin='normal'
                 name='RSL_mi'
-                label='RSL (inventory)'
+                label='RSL'
                 value={row.RSL_mi || "0"}
                 onChange={onChange}
                 disabled

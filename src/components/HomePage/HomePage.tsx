@@ -56,7 +56,7 @@ function HomePage() {
             </Grid>
 
             <Grid item xs={1}>
-              <HelpButton alertContentId='main' iconSize='large' />
+              <HelpButton />
             </Grid>
             <Grid item xs={1}>
               <SettingsButton iconSize='large' />

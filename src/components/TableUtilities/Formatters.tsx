@@ -14,7 +14,7 @@ const useStyles = makeStyles((/* theme: Theme */) =>
   }));
 
 const DecimalFormatter = ({ value }: any) =>
-  value ? parseFloat(value).toLocaleString() : "0";
+  value ? parseFloat(value).toLocaleString() : 0;
 
 export const DecimalTypeProvider = (props: any) => (
   <DataTypeProvider formatterComponent={DecimalFormatter} {...props} />

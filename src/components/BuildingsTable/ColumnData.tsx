@@ -16,8 +16,8 @@ class ColumnData {
     { name: "main_data_source", title: "Data source" },
     { name: "study_type", title: "Study type" },
     { name: "study_year", title: "Study year" },
-    { name: "lifetime", title: "Lifetime" },
     { name: "floor_area", title: "Floor area (m\xB2)" },
+    { name: "lifetime", title: "Lifetime" },
     { name: "A1A3", title: "A1-A3" },
     { name: "A4", title: "A4" },
     { name: "B4_m", title: "B4 (m)" },
@@ -34,7 +34,7 @@ class ColumnData {
   ];
 
   static readonly columnExtensions: Table.ColumnExtension[] = [
-    { columnName: "building_identifier", width: 100 },
+    { columnName: "building_identifier", width: 80 },
     { columnName: "building_name", width: 200, wordWrapEnabled: true },
     { columnName: "project", width: 120 },
     { columnName: "country", width: 110 },
@@ -46,7 +46,7 @@ class ColumnData {
     { columnName: "calculation_method", width: 170 },
     { columnName: "main_data_source", width: 120 },
     { columnName: "study_type", width: 160 },
-    { columnName: "study_year", width: 120 },
+    { columnName: "study_year", width: 110 },
     { columnName: "lifetime", width: 100 },
     { columnName: "floor_area", width: 150 },
     { columnName: "heated_volume", width: 150 },
@@ -64,7 +64,7 @@ class ColumnData {
     "energy_ambition_level",
     "main_data_source",
     "calculation_method",
-    "lifetime",
+    // "lifetime",
     "heated_volume",
     "area_footprint",
     "area_roof",

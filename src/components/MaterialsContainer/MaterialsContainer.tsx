@@ -175,13 +175,13 @@ const MaterialsContainer = (props: any) => {
                 onMouseLeave={() => handleTooltip(false)}
                 onOpen={() => handleTooltip(false)}
               >
+                <MenuItem value={GroupBy.Product}>Product</MenuItem>
                 <MenuItem
                   value={GroupBy.BuildingElement}
                   disabled={isSimulationModeActive}
                 >
                   Building element
                 </MenuItem>
-                <MenuItem value={GroupBy.Product}>Product</MenuItem>
                 <MenuItem
                   value={GroupBy.Category}
                   disabled={isSimulationModeActive}

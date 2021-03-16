@@ -10,11 +10,13 @@ import {
   withStyles,
   emphasize,
 } from "@material-ui/core/styles";
+import { palette } from "@material-ui/system";
 import Grid from "@material-ui/core/Grid";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Typography from "@material-ui/core/Typography";
 import Chip from "@material-ui/core/Chip";
 import HomeIcon from "@material-ui/icons/Home";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
@@ -31,6 +33,15 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     breadCrumbs: {
       marginTop: "3px",
+    },
+    infoIcon: {
+      color: theme.palette.text.secondary,
+    },
+    infoContainer: {
+      marginBottom: theme.spacing(1),
+    },
+    infoIconGridItem: {
+      height: "28px",
     },
   })
 );
@@ -155,7 +166,11 @@ const BuildingElementsView = (props: any) => {
           </Tooltip>
           <Tooltip title='Forward'>
             <span>
-              <IconButton size='small' onClick={navigateForward} disabled={true}>
+              <IconButton
+                size='small'
+                onClick={navigateForward}
+                disabled={true}
+              >
                 <NavigateNextIcon />
               </IconButton>
             </span>
@@ -200,10 +215,35 @@ const BuildingElementsView = (props: any) => {
 
         <Grid item xs={12}>
           {childElements?.length ? (
-            displayMode == "table" ? (
-              <Paper>
-                <ElementsTable />
-              </Paper>
+            displayMode === "table" ? (
+              <React.Fragment>
+                <Grid
+                  container
+                  alignItems='center'
+                  justify='center'
+                  spacing={1}
+                  className={classes.infoContainer}
+                >
+                  <Grid item className={classes.infoIconGridItem}>
+                    <InfoOutlinedIcon
+                      className={classes.infoIcon}
+                      fontSize='small'
+                    />
+                  </Grid>
+                  <Grid item>
+                    <Typography
+                      variant='body2'
+                      color='textSecondary'
+                      align='center'
+                    >
+                      Click on a building element to see its sub-elements
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Paper>
+                  <ElementsTable />
+                </Paper>
+              </React.Fragment>
             ) : (
               <Paper>
                 <ElementsChart />

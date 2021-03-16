@@ -12,7 +12,7 @@ import {
 import { GroupBy } from "interfaces/enums";
  
 export const materialsGroupBy = (
-  state = GroupBy.BuildingElement,
+  state = GroupBy.Product,
   action: MaterialsGroupByActionTypes
 ) => {
   switch (action.type) {

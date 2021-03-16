@@ -15,12 +15,16 @@ class HelpStrings {
             </Typography> */}
       <ul>
         <li>
-          Click on a row to see more details about the building, including its{" "}
-          <b>building elements</b> and <b>materials</b>.
+          <Typography >
+            Click on a row to see more details about the building, including its{" "}
+            <b>materials</b> and <b>building elements</b>.
+          </Typography>
         </li>
         <li>
-          Select multiple rows to compare buildings and calculate average
-          values.
+          Turn on <b>simulation mode</b> to edit a building's materials and see how the changes affect the rest of the building.
+        </li>
+        <li>
+          Select multiple rows to <b>compare</b> the emission values of different buildings.
         </li>
       </ul>
     </div>

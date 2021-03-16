@@ -37,7 +37,7 @@ const SimulationModeSwitch = () => {
 
   const handleSimulationModeChanged = () => {
     dispatch(allActions.uiActions.toggleSimulationMode());
-    if (materialsGroupBy === GroupBy.BuildingElement) {
+    if (materialsGroupBy !== GroupBy.Product) {
       dispatch(allActions.uiActions.setMaterialsGroupBy(GroupBy.Product));
     }
   };

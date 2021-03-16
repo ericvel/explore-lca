@@ -12,10 +12,10 @@ class ColumnData {
     { name: "A4", title: "A4" },
     { name: "B4_m", title: "B4 (m)" },
     { name: "B4_t", title: "B4 (t)" },
-    { name: "RSL_mi", title: "RSL (inventory)" },
+    { name: "RSL_mi", title: "RSL" },
     { name: "materialCat", title: "Category" },
     { name: "buildingElementName", title: "Building element" },
-    { name: "RSL", title: "RSL" },
+    // { name: "RSL", title: "RSL" },
     { name: "source", title: "Source" },
     { name: "dataType", title: "Data type" },
     { name: "dataYear", title: "Data year" },
@@ -35,11 +35,11 @@ class ColumnData {
     { columnName: "dataYear", width: 100 },
     { columnName: "FU", width: 70 },
     { columnName: "EEf_A1A3", width: 110 },
-    { columnName: "RSL", width: 80 },
+    // { columnName: "RSL", width: 80 },
     { columnName: "comments", width: 400 },
     { columnName: "materialCat", width: 150 },
     { columnName: "quantity", width: 110 },
-    { columnName: "RSL_mi", width: 140 },
+    { columnName: "RSL_mi", width: 80 },
     { columnName: "A1A3", width: 130 },
     { columnName: "A4", width: 130 },
     { columnName: "B4_m", width: 130 },
@@ -49,7 +49,7 @@ class ColumnData {
 
   static readonly defaultHiddenColumnNames: string[] = [
     "source",
-    "RSL",
+    // "RSL",
     "dataType",
     "dataYear",
     "comments",
@@ -70,6 +70,7 @@ class ColumnData {
     "A4",
     "B4_t",
     "B4_m",
+    "RSL_mi"
   ];
 
   static readonly groupSummaryItems = [
@@ -136,7 +137,7 @@ class ColumnData {
     // { columnName: "quantity", editingEnabled: false},
     { columnName: "FU", editingEnabled: false },
     // { columnName: "sourceType", editingEnabled: false},
-    { columnName: "RSL", editingEnabled: false },
+    // { columnName: "RSL", editingEnabled: false },
     { columnName: "materialCat", editingEnabled: false },
     { columnName: "RSL_mi", editingEnabled: false },
     // { columnName: "EEf_A1A3", editingEnabled: false},
