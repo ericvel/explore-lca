@@ -9,23 +9,22 @@ var building_elements = require("./routes/building_elements.js");
 var material_inventory = require("./routes/material_inventory.js");
 
 var corsOptions = {
-  origin: "http://localhost:5000"
+  origin: "http://localhost:5000",
 };
 
 app.use(cors(corsOptions));
-console.log(process.env.NODE_ENV) 
+console.log(process.env.NODE_ENV);
 app.use("/api/buildings", buildings);
 app.use("/api/building_elements", building_elements);
 app.use("/api/material_inventory", material_inventory);
 
-// Serve any static files
-app.use(express.static(path.join(__dirname, "../build")));
-// Handle React routing, return all requests to React app
-app.get("/*", function (req, res) {
-  res.sendFile(path.join(__dirname, "../build", "index.html"));
-});
 if (process.env.NODE_ENV === "production") {
-  
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, "../build")));
+  // Handle React routing, return all requests to React app
+  app.get("/*", function (req, res) {
+    res.sendFile(path.join(__dirname, "../build", "index.html"));
+  });
 }
 
 app.listen(port, () =>

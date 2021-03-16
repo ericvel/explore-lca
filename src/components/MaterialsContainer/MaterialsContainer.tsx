@@ -81,9 +81,9 @@ const MaterialsContainer = (props: any) => {
 
   const loadData = () => {
     const buildingId = selectedBuildings[0].idbuildings;
-
-    const elementQuery = `/building_elements/${buildingId}`;
-    const inventoryQuery = `/material_inventory/${buildingId}`;
+    const URL = process.env.REACT_APP_API_URI;
+    const elementQuery = `${URL}/building_elements/${buildingId}`;
+    const inventoryQuery = `${URL}/material_inventory/${buildingId}`;
 
     if (!loading) {
       setLoading(true);
