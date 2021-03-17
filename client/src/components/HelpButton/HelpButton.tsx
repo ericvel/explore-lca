@@ -129,7 +129,7 @@ function HelpButton() {
           <Typography variant='h6'>Terminology</Typography>
           <List>
             {terminologyDictionary.map((entry, index) => (
-              <ListItem divider={index < terminologyDictionary.length - 1}>
+              <ListItem key={index} divider={index < terminologyDictionary.length - 1}>
                 <Grid container spacing={1} alignItems='center'>
                   <Grid item xs={2}>
                     <Typography variant='body1'>

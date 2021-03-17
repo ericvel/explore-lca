@@ -13,7 +13,8 @@ node_modules/
 
 # config and credentials
 dbconfig.js
-
+.runtimeconfig.json
+firebase_config_secret.js
 # misc
 .DS_Store
 .env.local

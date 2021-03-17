@@ -16,7 +16,6 @@ import SignIn from "components/SignIn";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       // User is signed in.
