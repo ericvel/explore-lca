@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.js
 
@@ -13,7 +13,9 @@
 
 # config and credentials
 dbconfig.js
-
+.runtimeconfig.json
+firebase_config.js
+firebase_config_secret.js
 # misc
 .DS_Store
 .env.local
@@ -27,3 +29,8 @@ yarn-debug.log*
 yarn-error.log*
 
 debug.log
+"node_modules/"  
+
+# Compiled JavaScript files
+lib/**/*.js
+lib/**/*.js.map
