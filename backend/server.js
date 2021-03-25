@@ -17,7 +17,7 @@ console.log(process.env.NODE_ENV);
 app.use("/api/buildings", buildings);
 app.use("/api/building_elements", building_elements);
 app.use("/api/material_inventory", material_inventory);
-/* 
+
 if (process.env.NODE_ENV === "production") {
   // Serve any static files
   app.use(express.static(path.join(__dirname, "../client/build")));
@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === "production") {
   app.get("/*", function (req, res) {
     res.sendFile(path.join(__dirname, "../client/build", "index.html"));
   });
-} */
+}
 
 app.listen(port, () =>
   console.log(`⚡ Express server now listening on port ${port}`)
