@@ -3,7 +3,7 @@ import { Table } from "@devexpress/dx-react-grid-material-ui";
 
 class ColumnData {
   static readonly columns: Column[] = [
-    // { name: 'idbuilding_elements', title: 'ID' },
+    { name: "idlevels", title: "Code" },
     { name: "name", title: "Name" },
     { name: "A1A3", title: "A1-A3" },
     { name: "A4", title: "A4" },
@@ -12,7 +12,7 @@ class ColumnData {
   ];
 
   static readonly columnExtensions: Table.ColumnExtension[] = [
-    // { columnName: 'idbuilding_elements', width: 90 },
+    { columnName: "idlevels", width: 80, /* align: "right" */ },
     { columnName: "name", width: 180, wordWrapEnabled: true },
     { columnName: "A1A3", width: 130 },
     { columnName: "A4", width: 130 },

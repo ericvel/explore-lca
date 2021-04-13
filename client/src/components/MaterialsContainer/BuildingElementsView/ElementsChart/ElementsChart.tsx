@@ -53,7 +53,7 @@ const ElementsChart = () => {
 
     childElements.forEach((element) => {
       const dataEntry: IElementChartItem = {
-        name: element.name,
+        name: element.idlevels + " - " + element.name,
         id: String(element.idbuilding_elements),
         A1A3: Number(element.A1A3) || 0.0,
         A4: Number(element.A4) || 0.0,

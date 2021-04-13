@@ -183,7 +183,7 @@ const BuildingElementsView = (props: any) => {
                 <StyledBreadcrumb
                   className={classes.breadCrumbs}
                   key={index}
-                  label={element.name}
+                  label={element.idlevels + " - " + element.name}
                   variant='default'
                   icon={
                     element.idlevels === 0 ? (
@@ -199,7 +199,7 @@ const BuildingElementsView = (props: any) => {
                 <StyledBreadcrumbActive
                   className={classes.breadCrumbs}
                   key={index}
-                  label={element.name}
+                  label={element.idlevels + " - " + element.name}
                   variant='default'
                   icon={
                     element.idlevels === 0 ? (
