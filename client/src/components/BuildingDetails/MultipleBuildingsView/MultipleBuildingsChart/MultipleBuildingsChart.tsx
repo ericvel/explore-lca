@@ -27,6 +27,8 @@ import {
   Label,
 } from "devextreme-react/chart";
 
+import { customizeHint } from "components/ChartComponents";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     chart: {
@@ -35,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const GWPCompareChart = () => {
+const MultipleBuildingsChart = () => {
   const selectedBuildings = useSelector(
     (state: IRootState) => state.selectedBuildings
   );
@@ -144,6 +146,7 @@ const GWPCompareChart = () => {
           verticalAlignment='bottom'
           horizontalAlignment='center'
           itemTextPosition='top'
+          customizeHint={customizeHint}
         />
         <Tooltip
           enabled={true}
@@ -151,11 +154,13 @@ const GWPCompareChart = () => {
           customizeTooltip={customizeTooltip}
           zIndex={1200}
           arrowLength={6}
-          format='fixedPoint'
+          format={{
+            format: (value: string) => parseFloat(value).toLocaleString(),
+          }}
         />
       </Chart>
     </Paper>
   );
 };
 
-export default GWPCompareChart;
+export default MultipleBuildingsChart;

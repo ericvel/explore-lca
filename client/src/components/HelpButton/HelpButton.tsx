@@ -117,8 +117,10 @@ function HelpButton() {
                 its <b>materials</b> and <b>building elements</b>.
               </li>
               <li>
-                Turn on <b>simulation mode</b> (<i>top-right in building details</i>) to edit a building's materials
-                and see how the changes affect the rest of the building.
+                Turn on <b>simulation mode</b> (
+                <i>top-right in building details</i>) to edit a building's
+                materials and see how the changes affect the rest of the
+                building.
               </li>
               <li>
                 Select multiple rows to <b>compare</b> the emission values of
@@ -129,11 +131,14 @@ function HelpButton() {
           <Typography variant='h6'>Terminology</Typography>
           <List>
             {terminologyDictionary.map((entry, index) => (
-              <ListItem key={index} divider={index < terminologyDictionary.length - 1}>
+              <ListItem
+                key={index}
+                divider={index < terminologyDictionary.length - 1}
+              >
                 <Grid container spacing={1} alignItems='center'>
                   <Grid item xs={2}>
-                    <Typography variant='body1'>
-                      <b>{entry.term}</b>
+                    <Typography variant='body1' color='textSecondary'>
+                      {entry.term}
                     </Typography>
                   </Grid>
                   <Grid item xs={10}>

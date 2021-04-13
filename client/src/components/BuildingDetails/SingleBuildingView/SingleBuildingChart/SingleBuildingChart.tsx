@@ -112,7 +112,12 @@ const SingleBuildingChart = () => {
     ];
 
     setChartData(chartData);
-  }, [selectedBuildings[0], isSimulationModeActive, simulatedData, checkedEEMetrics]);
+  }, [
+    selectedBuildings[0],
+    isSimulationModeActive,
+    simulatedData,
+    checkedEEMetrics,
+  ]);
 
   const isSeriesSimulated = (series: string): boolean => {
     return Object.values(simulatedData).some(function (value: any) {
@@ -215,7 +220,9 @@ const SingleBuildingChart = () => {
           enabled={true}
           zIndex={1200}
           arrowLength={6}
-          format='fixedPoint'
+          format={{
+            format: (value: string) => parseFloat(value).toLocaleString(),
+          }}
           interactive
         />
       </Chart>

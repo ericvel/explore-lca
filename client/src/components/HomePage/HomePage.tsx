@@ -47,19 +47,16 @@ function HomePage() {
             container
             item
             alignItems='center'
-            justify='space-around'
+            justify='space-between'
             spacing={2}
             className={classes.titleBar}
           >
-            <Grid item xs={10}>
+            <Grid item>
               <Typography variant='h2'>bLCAd Tool - GUI</Typography>
             </Grid>
 
             <Grid item xs={1}>
               <HelpButton />
-            </Grid>
-            <Grid item xs={1}>
-              <SettingsButton iconSize='large' />
             </Grid>
           </Grid>
 
