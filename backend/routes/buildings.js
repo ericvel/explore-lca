@@ -3,9 +3,6 @@
 var express = require("express");
 var router = express.Router();
 const pool = require("../mysql");
-// var timeout = require('connect-timeout');
-
-// router.use(timeout('5s'));
 
 router.get("/", (req, res) => {
   const query = `SELECT b.idbuildings, building_identifier, building_name, country, city, typology, construction_type, built_status, energy_ambition_level, A1A3, A4, B4_m, B4_t, project, calculation_method, main_data_source, study_type, study_year, lifetime, floor_area, heated_volume, area_footprint, area_roof, area_wall, area_windowAndDoor, heatloss_number, uval_walls, uval_windows, uval_doors, uval_ground, uval_roof, thermal_bridges, GWP_B6, GWP_B7, storiesAB, storiesBG, occupants, comments
@@ -26,8 +23,6 @@ router.get("/", (req, res) => {
 
   console.log("Get buildings");
   pool.query(query, (err, result) => {
-    // console.log("Error: ", err);
-    // console.log("Result: ", result);
     if (err) {
       switch (err.code) {
         case "ETIMEDOUT":
