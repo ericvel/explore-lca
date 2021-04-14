@@ -39,7 +39,7 @@ const ProductView = (props: Props) => {
 
   const [tableData, setTableData] = useState<IMaterialTableRow[]>([]);
   const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
-  
+
   useEffect(() => {
     let groupedMaterials;
     if (isSimulationModeActive) {
@@ -68,9 +68,7 @@ const ProductView = (props: Props) => {
               <ProductTable data={tableData} />
             </Paper>
           ) : (
-            <Paper>
-              <ProductChart data={chartData} />
-            </Paper>
+            <ProductChart data={chartData} />
           )}
         </Grid>
       </Grid>

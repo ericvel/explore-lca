@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
 import allActions from "redux/actions";
@@ -38,6 +38,35 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const MultipleBuildingsChart = () => {
+  const chartRef = useRef<Chart>(null);
+
+  var renderOptions = {
+    force: true, // forces redrawing
+    animate: true, // redraws the UI component with animation
+  };
+
+  const resizeObserver = useRef<ResizeObserver>(
+    new ResizeObserver((entries: ResizeObserverEntry[]) => {
+      // your code to handle the size change
+      console.log("Size changed");
+      chartRef?.current?.instance.render(renderOptions);
+    })
+  );
+
+  const resizedContainerRef = useCallback(
+    (container: HTMLDivElement) => {
+      if (container !== null) {
+        resizeObserver.current.observe(container);
+      }
+      // When element is unmounted, ref callback is called with a null argument
+      // => best time to cleanup the observer
+      else {
+        if (resizeObserver.current) resizeObserver.current.disconnect();
+      }
+    },
+    [resizeObserver.current]
+  );
+
   const selectedBuildings = useSelector(
     (state: IRootState) => state.selectedBuildings
   );
@@ -114,12 +143,13 @@ const MultipleBuildingsChart = () => {
   const classes = useStyles();
 
   return (
-    <Paper>
+    <Paper ref={resizedContainerRef}>
       <Chart
         className={classes.chart}
         dataSource={chartData}
         palette='Material'
         rotated
+        ref={chartRef}
       >
         <Size height={500} />
         <CommonSeriesSettings

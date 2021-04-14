@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
       // padding: theme.spacing(2),
       // marginBottom: theme.spacing(2),
       width: drawerWidth,
-      overflowY: "scroll"
+      overflowY: "scroll",
     },
     content: {
       // margin: theme.spacing(1),
@@ -66,14 +66,15 @@ const BuildingDetails = () => {
   const classes = useStyles();
 
   return (
-    <Drawer
-      className={classes.drawer}
-      variant='permanent'
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      anchor='right'
-    >
+    // <Drawer
+    //   className={classes.drawer}
+    //   variant='permanent'
+    //   classes={{
+    //     paper: classes.drawerPaper,
+    //   }}
+    //   anchor='right'
+    // >
+    <div>
       {selectedBuildings.length ? (
         canSelectMultipleBuildings ? (
           <MultipleBuildingsView />
@@ -94,7 +95,8 @@ const BuildingDetails = () => {
           </Grid>
         </Grid>
       )}
-    </Drawer>
+    </div>
+    // </Drawer>
   );
 };
 

@@ -170,7 +170,7 @@ function BuildingsTable() {
   }
 
   return (
-    <Paper style={{ height: "600px" }}>
+    <Paper style={{ height: "100%" }}>
       <Grid
         rows={buildings}
         columns={columns}

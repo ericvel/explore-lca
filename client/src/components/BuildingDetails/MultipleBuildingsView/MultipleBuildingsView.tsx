@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(2),
     },
     heading: {
-      marginBottom: theme.spacing(1)
+      marginBottom: theme.spacing(1),
     },
   })
 );
@@ -37,21 +37,22 @@ const MultipleBuildingsView = () => {
 
   return (
     <div className={classes.content}>
-      <Grid container>
-        <Grid item xs={12}>
-          <Grid container alignItems='center' justify='space-between' className={classes.heading}>
-            <Grid item>
-              <Typography variant='h5' color='textSecondary'>
-                Embodied emissions
-              </Typography>
-            </Grid>
-            <Grid item>
-              <SettingsButton iconSize='default' />
-            </Grid>
-          </Grid>
-          <MultipleBuildingsChart />
+      <Grid
+        container
+        alignItems='center'
+        justify='space-between'
+        className={classes.heading}
+      >
+        <Grid item>
+          <Typography variant='h5' color='textSecondary'>
+            Embodied emissions
+          </Typography>
+        </Grid>
+        <Grid item>
+          <SettingsButton iconSize='default' />
         </Grid>
       </Grid>
+      <MultipleBuildingsChart />
     </div>
   );
 };

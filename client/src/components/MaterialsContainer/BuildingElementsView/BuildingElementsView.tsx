@@ -245,9 +245,7 @@ const BuildingElementsView = (props: any) => {
                 </Paper>
               </React.Fragment>
             ) : (
-              <Paper>
-                <ElementsChart />
-              </Paper>
+              <ElementsChart />
             )
           ) : (
             <ProductView

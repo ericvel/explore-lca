@@ -6,6 +6,9 @@ import { IRootState } from "redux/reducers";
 import "devextreme/dist/css/dx.common.css";
 import "devextreme/dist/css/dx.material.blue.light.css";
 
+import "react-reflex/styles.css";
+import { ReflexContainer, ReflexSplitter, ReflexElement } from "react-reflex";
+
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -19,55 +22,56 @@ import SettingsButton from "../SettingsButton";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      width: "50vw",
-      marginTop: theme.spacing(2),
-    },
-    mainContent: {
-      width: "90%",
+      height: "100vh",
     },
     titleBar: {
       marginBottom: theme.spacing(2),
+    },
+    content: {
+      padding: theme.spacing(2),
+      boxSizing: "border-box",
+      // maxHeight: "100vh"
     },
   })
 );
 
 function HomePage() {
+  
   const classes = useStyles();
 
   return (
-    <Container maxWidth='xl'>
-      <Grid
-        container
-        spacing={3}
-        justify='center'
-        className={classes.container}
-      >
-        <Grid container className={classes.mainContent}>
-          <Grid
-            container
-            item
-            alignItems='center'
-            justify='space-between'
-            spacing={2}
-            className={classes.titleBar}
-          >
-            <Grid item>
-              <Typography variant='h2'>bLCAd Tool - GUI</Typography>
-            </Grid>
-
-            <Grid item xs={1}>
-              <HelpButton />
-            </Grid>
+    <ReflexContainer className={classes.container} orientation='vertical'>
+      <ReflexElement className={classes.content} minSize={400}>
+        <Grid
+          container
+          alignItems='center'
+          justify='space-between'
+          spacing={2}
+          className={classes.titleBar}
+        >
+          <Grid item>
+            <Typography variant='h2'>bLCAd Tool - GUI</Typography>
           </Grid>
 
-          <Grid item xs={12}>
-            <BuildingsTable />
+          <Grid item>
+            <HelpButton />
           </Grid>
         </Grid>
-      </Grid>
 
-      <BuildingDetails />
-    </Container>
+        {/* TODO: use flexbox or something to make height stretch all the way to bottom of viewport */}
+        <div style={{ height: "80vh" }}>
+          <BuildingsTable />
+        </div>
+      </ReflexElement>
+
+      <ReflexSplitter />
+
+      <ReflexElement minSize={400}>
+        <div>
+          <BuildingDetails />
+        </div>
+      </ReflexElement>
+    </ReflexContainer>
   );
 }
 

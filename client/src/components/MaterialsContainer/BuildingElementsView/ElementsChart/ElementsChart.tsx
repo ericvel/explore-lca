@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
 import allActions from "redux/actions";
+
+import Paper from "@material-ui/core/Paper";
 
 import {
   Theme,
@@ -37,6 +39,35 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const ElementsChart = () => {
+  const chartRef = useRef<Chart>(null);
+
+  var renderOptions = {
+    force: true, // forces redrawing
+    animate: true, // redraws the UI component with animation
+  };
+
+  const resizeObserver = useRef<ResizeObserver>(
+    new ResizeObserver((entries: ResizeObserverEntry[]) => {
+      // your code to handle the size change
+      console.log("Size changed");
+      chartRef?.current?.instance.render(renderOptions);
+    })
+  );
+
+  const resizedContainerRef = useCallback(
+    (container: HTMLDivElement) => {
+      if (container !== null) {
+        resizeObserver.current.observe(container);
+      }
+      // When element is unmounted, ref callback is called with a null argument
+      // => best time to cleanup the observer
+      else {
+        if (resizeObserver.current) resizeObserver.current.disconnect();
+      }
+    },
+    [resizeObserver.current]
+  );
+
   const dispatch = useDispatch();
 
   const buildingElements = useSelector(
@@ -121,55 +152,55 @@ const ElementsChart = () => {
   const classes = useStyles();
 
   return (
-    <Chart
-      className={classes.chart}
-      // title="Embodied emissions"
-      dataSource={chartData}
-      palette='Material'
-      rotated={true}
-      onPointClick={onPointClick}
-      onDrawn={onDrawn}
-      // customizePoint={customizePoint}
-      // onPointHoverChanged={onPointHoverChanged}
-    >
-      <Size height={height} />
-      <CommonSeriesSettings
-        argumentField='name'
-        type='stackedBar'
-        barWidth={40}
-        hoverMode='allArgumentPoints'
-      ></CommonSeriesSettings>
-      <Series valueField='A1A3' name='A1-A3' />
-      <Series valueField='A4' name='A4' />
-      <Series valueField='B4_m' name='B4 (m)' />
-      <Series valueField='B4_t' name='B4 (t)' />
-      <ValueAxis>
-        <Title
-          text={"kgCO2e"}
-          font={{
-            size: 14,
-          }}
+    <Paper ref={resizedContainerRef}>
+      <Chart
+        className={classes.chart}
+        dataSource={chartData}
+        palette='Material'
+        rotated={true}
+        onPointClick={onPointClick}
+        onDrawn={onDrawn}
+        ref={chartRef}
+      >
+        <Size height={height} />
+        <CommonSeriesSettings
+          argumentField='name'
+          type='stackedBar'
+          barWidth={40}
+          hoverMode='allArgumentPoints'
+        ></CommonSeriesSettings>
+        <Series valueField='A1A3' name='A1-A3' />
+        <Series valueField='A4' name='A4' />
+        <Series valueField='B4_m' name='B4 (m)' />
+        <Series valueField='B4_t' name='B4 (t)' />
+        <ValueAxis>
+          <Title
+            text={"kgCO2e"}
+            font={{
+              size: 14,
+            }}
+          />
+        </ValueAxis>
+        <ArgumentAxis>
+          <Label customizeText={wrapArgumentAxisLabel} />
+        </ArgumentAxis>
+        <Legend
+          verticalAlignment='bottom'
+          horizontalAlignment='center'
+          itemTextPosition='top'
+          customizeHint={customizeHint}
         />
-      </ValueAxis>
-      <ArgumentAxis>
-        <Label customizeText={wrapArgumentAxisLabel} />
-      </ArgumentAxis>
-      <Legend
-        verticalAlignment='bottom'
-        horizontalAlignment='center'
-        itemTextPosition='top'
-        customizeHint={customizeHint}
-      />
-      <Tooltip
-        enabled={true}
-        location='edge'
-        customizeTooltip={customizeTooltip}
-        zIndex={1200}
-        arrowLength={6}
-        format='fixedPoint'
-        interactive
-      />
-    </Chart>
+        <Tooltip
+          enabled={true}
+          location='edge'
+          customizeTooltip={customizeTooltip}
+          zIndex={1200}
+          arrowLength={6}
+          format='fixedPoint'
+          interactive
+        />
+      </Chart>
+    </Paper>
   );
 };
 

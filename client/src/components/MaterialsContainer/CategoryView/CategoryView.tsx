@@ -84,9 +84,7 @@ const CategoryView = (props: Props) => {
               <CategoryTable materials={tableData} />
             </Paper>
           ) : (
-            <Paper>
-              <CategoryChart data={chartData} />
-            </Paper>
+            <CategoryChart data={chartData} />
           )}
         </Grid>
       </Grid>
