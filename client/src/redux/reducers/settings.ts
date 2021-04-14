@@ -1,7 +1,7 @@
 import { SET_EE_METRIC, EEMetricActionTypes } from "../actions/types";
 
 const initialEEMetric: IEEMetric = {
-  perSqM: false,
+  perSqM: true,
   perYear: false,
 };
 

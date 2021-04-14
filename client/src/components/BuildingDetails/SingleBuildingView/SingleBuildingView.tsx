@@ -21,6 +21,7 @@ import Switch from "@material-ui/core/Switch";
 import MaterialsContainer from "components/MaterialsContainer";
 import SingleBuildingChart from "./SingleBuildingChart";
 import SimulationModeSwitch from "./SimulationModeSwitch";
+import SettingsButton from "components/SettingsButton";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,11 +31,14 @@ const useStyles = makeStyles((theme: Theme) =>
     divider: {
       marginBottom: theme.spacing(2),
     },
-    elementSection: {
+    materialSection: {
       marginTop: theme.spacing(2),
     },
     buildingInfoLabels: {
       fontWeight: "bold",
+    },
+    heading: {
+      marginBottom: theme.spacing(1)
     },
     content: {
       // margin: theme.spacing(1),
@@ -108,9 +112,13 @@ function SingleBuildingView() {
           </Grid>
         </Grid>
         <Grid item xs={6}>
-          <Typography variant='h5' color='textSecondary' gutterBottom>
-            General info
-          </Typography>
+          <Grid container alignItems='center' justify='space-between' className={classes.heading}>
+            <Grid item>
+              <Typography variant='h5' color='textSecondary'>
+                General info
+              </Typography>
+            </Grid>
+          </Grid>
           <div>
             <TextField
               key={project || "project"}
@@ -167,9 +175,16 @@ function SingleBuildingView() {
           </div>
         </Grid>
         <Grid item xs={6}>
-          <Typography variant='h5' color='textSecondary' gutterBottom>
-            Embodied emissions
-          </Typography>
+          <Grid container alignItems='center' justify='space-between' className={classes.heading}>
+            <Grid item>
+              <Typography variant='h5' color='textSecondary'>
+                Embodied emissions
+              </Typography>
+            </Grid>
+            <Grid item>
+              <SettingsButton iconSize='default' />
+            </Grid>
+          </Grid>
           <SingleBuildingChart />
         </Grid>
       </Grid>
@@ -182,6 +197,6 @@ function SingleBuildingView() {
       </Grid>
     </div>
   );
-};
+}
 
 export default SingleBuildingView;

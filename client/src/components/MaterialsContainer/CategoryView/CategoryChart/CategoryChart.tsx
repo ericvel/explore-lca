@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IRootState } from "redux/reducers";
 import allActions from "redux/actions";
 
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
@@ -28,11 +29,8 @@ import {
 import { Grid, Typography } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 
-import {
-  wrapArgumentAxisLabel,
-} from "helpers/materialHelpers";
+import { wrapArgumentAxisLabel } from "helpers/materialHelpers";
 import { customizeHint } from "components/ChartComponents";
-
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,6 +58,35 @@ interface Props {
 }
 
 const CategoryChart = (props: Props) => {
+  const chartRef = useRef<Chart>(null);
+
+  var renderOptions = {
+    force: true, // forces redrawing
+    animate: true, // redraws the UI component with animation
+  };
+
+  const resizeObserver = useRef<ResizeObserver>(
+    new ResizeObserver((entries: ResizeObserverEntry[]) => {
+      // your code to handle the size change
+      console.log("Size changed");
+      chartRef?.current?.instance.render(renderOptions);
+    })
+  );
+
+  const resizedContainerRef = useCallback(
+    (container: HTMLDivElement) => {
+      if (container !== null) {
+        resizeObserver.current.observe(container);
+      }
+      // When element is unmounted, ref callback is called with a null argument
+      // => best time to cleanup the observer
+      else {
+        if (resizeObserver.current) resizeObserver.current.disconnect();
+      }
+    },
+    [resizeObserver.current]
+  );
+
   const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
   const [isFirstLevel, setIsFirstLevel] = useState<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -68,7 +95,7 @@ const CategoryChart = (props: Props) => {
   useEffect(() => {
     const parentRows = filterData("");
     setChartData(parentRows);
-    setChartHeight((parentRows.length * 30) + 200)
+    setChartHeight(parentRows.length * 30 + 200);
   }, [props.data]);
 
   const customizeTooltip = (arg: any) => {
@@ -119,7 +146,7 @@ const CategoryChart = (props: Props) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.container}>
+    <Paper className={classes.container} ref={resizedContainerRef}>
       <MuiTooltip title='Back'>
         <span>
           <IconButton
@@ -139,6 +166,7 @@ const CategoryChart = (props: Props) => {
         rotated={true}
         onPointClick={onPointClick}
         onDrawn={onDrawn}
+        ref={chartRef}
       >
         {selectedCategory === "" ? (
           <Title
@@ -158,7 +186,8 @@ const CategoryChart = (props: Props) => {
               size: 18,
               color: "black",
               weight: 500,
-              family: 'Roboto, "Segoe UI Light", "Helvetica Neue Light", "Segoe UI", "Helvetica Neue", "Trebuchet MS", Verdana, sans-serif'
+              family:
+                'Roboto, "Segoe UI Light", "Helvetica Neue Light", "Segoe UI", "Helvetica Neue", "Trebuchet MS", Verdana, sans-serif',
             }}
           ></Title>
         )}
@@ -197,10 +226,13 @@ const CategoryChart = (props: Props) => {
           customizeTooltip={customizeTooltip}
           zIndex={1200}
           arrowLength={6}
-          format='fixedPoint'
+          format={{
+            format: (value: string) => parseFloat(value).toLocaleString(),
+          }}
+          interactive
         />
       </Chart>
-    </div>
+    </Paper>
   );
 };
 

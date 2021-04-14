@@ -1,5 +1,5 @@
 const functions = require("firebase-functions");
-const mysql = require("mysql2");
+const mysql = require("mysql");
 
 const pool = mysql.createPool({
   host: functions.config().mysql.host,
@@ -15,6 +15,8 @@ const pool = mysql.createPool({
       "ascii"
     ),
   },
+  connectTimeout: 5000, // 5 seconds
+  acquireTimeout: 5000,
   supportBigNumbers: true,
   bigNumberStrings: true,
   typeCast: function (field, next) {
@@ -25,7 +27,5 @@ const pool = mysql.createPool({
     return next();
   },
 });
-
-pool.config.connectionConfig.namedPlaceholders = true;
 
 module.exports = pool;
