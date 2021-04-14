@@ -2,10 +2,13 @@
   "name": "backend",
   "main": "server.js",
   "dependencies": {
+    "@7digital/mysql2-timeout": "^2.0.0",
+    "body-parser": "^1.19.0",
+    "connect-timeout": "^1.9.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
+    "mysql": "^2.18.1",
     "mysql2": "^2.2.5"
   },
   "scripts": {

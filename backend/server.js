@@ -13,7 +13,7 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-console.log(process.env.NODE_ENV);
+console.log("Node ENV: ", process.env.NODE_ENV);
 app.use("/api/buildings", buildings);
 app.use("/api/building_elements", building_elements);
 app.use("/api/material_inventory", material_inventory);

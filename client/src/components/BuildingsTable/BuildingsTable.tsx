@@ -6,6 +6,7 @@ import { IRootState } from "redux/reducers";
 import Paper from "@material-ui/core/Paper";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+
 import {
   SortingState,
   IntegratedSorting,
@@ -34,6 +35,7 @@ import {
 } from "components/TableUtilities/Formatters";
 import ColumnData from "./ColumnData";
 import LoadingIndicator from "components/LoadingIndicator";
+import AlertSnackbar from "components/AlertSnackbar";
 
 const getRowId = (row: any) => row[Object.keys(row)[0]];
 const Root = (props: any) => (
@@ -53,6 +55,7 @@ function BuildingsTable() {
   const [columns] = useState(ColumnData.columns);
   const [columnExtensions] = useState(ColumnData.columnExtensions);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
   const [searchTerm, setSearchTerm] = useState<string>();
 
   const [defaultHiddenColumnNames] = useState(
@@ -85,14 +88,22 @@ function BuildingsTable() {
     loadData();
   }, []);
 
+  function handleErrors(response: Response) {
+    if (!response.ok) {
+      throw Error(response.statusText);
+    }
+    return response;
+  }
+
   const loadData = () => {
     if (!loading) {
       setLoading(true);
 
       var URL = process.env.REACT_APP_API_URI + "/buildings";
-      
+
       console.log("URL: ", URL);
       fetch(URL)
+        .then(handleErrors)
         .then((response) => response.json())
         .then((data) => {
           dispatch(allActions.buildingActions.setBuildings(data));
@@ -101,6 +112,7 @@ function BuildingsTable() {
         })
         .catch((error) => {
           console.log("Error getting building data:", error);
+          setError(error);
           setLoading(false);
         });
     }
@@ -206,6 +218,12 @@ function BuildingsTable() {
         <ColumnChooser />
       </Grid>
       {loading && <LoadingIndicator />}
+      {error && (
+        <AlertSnackbar
+          message="Couldn't load data, the server may be down."
+          severity='error'
+        />
+      )}
     </Paper>
   );
 }
