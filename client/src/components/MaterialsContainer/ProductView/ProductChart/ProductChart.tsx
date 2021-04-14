@@ -174,8 +174,11 @@ const ProductChart = (props: Props) => {
           location='edge'
           customizeTooltip={customizeTooltip}
           zIndex={1200}
-          arrowLength={6}
-          format='fixedPoint'
+          arrowLength={6}          
+          format={{
+            format: (value: string) => parseFloat(value).toLocaleString(),
+          }}
+          interactive
         />
       </Chart>
     </Paper>

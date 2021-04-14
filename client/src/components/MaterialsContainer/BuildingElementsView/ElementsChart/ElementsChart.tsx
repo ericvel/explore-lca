@@ -196,7 +196,9 @@ const ElementsChart = () => {
           customizeTooltip={customizeTooltip}
           zIndex={1200}
           arrowLength={6}
-          format='fixedPoint'
+          format={{
+            format: (value: string) => parseFloat(value).toLocaleString(),
+          }}
           interactive
         />
       </Chart>
