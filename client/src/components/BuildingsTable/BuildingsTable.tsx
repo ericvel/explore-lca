@@ -43,18 +43,31 @@ import AlertSnackbar from "components/AlertSnackbar";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     selected: {
-      backgroundColor: "#D4D4D4",
+      backgroundColor: "#DEDEDE",
     },
     customRow: {
-      "&:hover": {
-        cursor: "pointer",
-        "& > *": {
-          backdropFilter: "brightness(95%)",
-        },
-        "& .buildingTableFixedCell": {
-          filter: "brightness(95%)",
+      "@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none)": {
+        "&:hover": {
+          cursor: "pointer",
+          "& > *": {
+            backdropFilter: "brightness(95%)",
+          },
+          "& .buildingTableFixedCell": {
+            filter: "brightness(95%)",
+          },
         },
       },
+      // fallback for Firefox (not supporting backdrop-filter)
+      "@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none))": {
+        "&:hover": {
+          cursor: "pointer",
+          backgroundColor: "#F1F1F1",
+          "& .buildingTableFixedCell": {
+            backgroundColor: "#F1F1F1",
+            // filter: "brightness(95%)",
+          },
+        },
+      }
     },
   })
 );
