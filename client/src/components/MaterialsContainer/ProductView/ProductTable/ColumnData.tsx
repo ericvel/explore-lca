@@ -7,7 +7,7 @@ class ColumnData {
     // { name: "idmaterialInventory", title: "ID" },
     { name: "quantity", title: "Quantity" },
     { name: "FU", title: "FU" },
-    { name: "sourceType", title: "Source type" },
+    { name: "sourceType", title: "Data source" },
     { name: "A1A3", title: "A1-A3" },
     { name: "A4", title: "A4" },
     { name: "B4_m", title: "B4 (m)" },

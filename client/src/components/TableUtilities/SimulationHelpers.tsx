@@ -1,5 +1,5 @@
 export function reduceEmissionNumber(emissionNumber: number) {
-  var reducedNumber = emissionNumber * 0.7;
+  var reducedNumber = emissionNumber * 0.6;
   return roundTo(reducedNumber, 3);
 }
 

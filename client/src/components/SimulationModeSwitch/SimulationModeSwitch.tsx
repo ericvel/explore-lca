@@ -50,9 +50,10 @@ const SimulationModeSwitch = () => {
           onChange={handleSimulationModeChanged}
           name='simulationChecked'
           color='primary'
+          // size="small"
         />
       }
-      label='Simulation mode'
+      label='Edit mode'
     />
   );
 };

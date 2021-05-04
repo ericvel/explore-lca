@@ -46,6 +46,13 @@ const useStyles = makeStyles((/* theme: Theme */) =>
       color: theme.palette.simulated.main,
       fontWeight: "bolder",
     },
+    dialogContent: {
+      paddingTop: theme.spacing(2),
+      paddingBottom: theme.spacing(2),
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
+      overflow: "auto"
+    }
   }));
 
 const sourceTypes = [
@@ -120,28 +127,31 @@ export const Popup = ({
   const classes = useStyles();
 
   return (
-    <Dialog open={open} onClose={onCancelChanges}>
+    <Dialog open={open} onClose={onCancelChanges} fullWidth maxWidth='xs'>
       <DialogTitle disableTypography>
         <Typography variant='h6' component='h2'>
-          Simulate material details
+          Edit material details
         </Typography>
         <Typography noWrap variant='subtitle2' component='h3'>
           {row.name}
         </Typography>
       </DialogTitle>
-      <DialogContent>
-        {/* <Typography variant='body2' component='p' color='textSecondary'>
-          Simulated fields are marked with{" "}
-          <Typography
-            variant='body1'
-            component='span'
-            display='inline'
-            className={classes.subtitleAsterisk}
-          >
-            *
+      {/* Replace DialogContent with div to avoid rendering unecessary scrollbar */}
+      <div className={classes.dialogContent}>
+        {sourceType !== originalRow.sourceType && (
+          <Typography variant='body2' component='p' color='textSecondary'>
+            Edited/affected fields are marked with{" "}
+            <Typography
+              variant='body1'
+              component='span'
+              display='inline'
+              className={classes.subtitleAsterisk}
+            >
+              *
+            </Typography>
           </Typography>
-        </Typography> */}
-        <Grid container spacing={3}>
+        )}
+        <Grid container /* alignItems='center' */ spacing={3}>
           <Grid item xs={6}>
             <FormGroup>
               <TextField
@@ -149,7 +159,8 @@ export const Popup = ({
                 required={sourceType !== originalRow.sourceType}
                 margin='normal'
                 name='sourceType'
-                label='Source type'
+                label='Data source'
+                variant='outlined'
                 value={sourceType || " "}
                 onChange={handleSourceTypeChange}
                 InputLabelProps={{
@@ -173,7 +184,7 @@ export const Popup = ({
                   </MenuItem>
                 ))}
               </TextField>
-              <TextField
+              {/* <TextField
                 margin='normal'
                 name='materialCat'
                 label='Category'
@@ -195,20 +206,24 @@ export const Popup = ({
                     </InputAdornment>
                   ),
                 }}
-              />
-              <TextField
+              /> */}
+              {/* <TextField
                 margin='normal'
                 name='RSL_mi'
                 label='RSL'
                 value={row.RSL_mi || "0"}
                 onChange={onChange}
                 disabled
-              />
+              /> */}
             </FormGroup>
           </Grid>
           <Grid item xs={6}>
             <FormGroup>
-              <Tooltip enterDelay={500} placement="bottom" title={LCAPhaseTooltip.A1A3}>
+              <Tooltip
+                enterDelay={500}
+                placement='bottom'
+                title={LCAPhaseTooltip.A1A3}
+              >
                 <TextField
                   required={A1A3 !== originalRow.A1A3}
                   margin='normal'
@@ -224,7 +239,11 @@ export const Popup = ({
                   }}
                 />
               </Tooltip>
-              <Tooltip enterDelay={500} placement="bottom" title={LCAPhaseTooltip.A4}>
+              <Tooltip
+                enterDelay={500}
+                placement='bottom'
+                title={LCAPhaseTooltip.A4}
+              >
                 <TextField
                   margin='normal'
                   name='A4'
@@ -234,7 +253,11 @@ export const Popup = ({
                   disabled
                 />
               </Tooltip>
-              <Tooltip enterDelay={500} placement="bottom" title={LCAPhaseTooltip.B4m}>
+              <Tooltip
+                enterDelay={500}
+                placement='bottom'
+                title={LCAPhaseTooltip.B4m}
+              >
                 <TextField
                   margin='normal'
                   name='B4_m'
@@ -244,7 +267,11 @@ export const Popup = ({
                   disabled
                 />
               </Tooltip>
-              <Tooltip enterDelay={500} placement="bottom" title={LCAPhaseTooltip.B4t}>
+              <Tooltip
+                enterDelay={500}
+                placement='bottom'
+                title={LCAPhaseTooltip.B4t}
+              >
                 <TextField
                   margin='normal'
                   name='B4_t'
@@ -257,7 +284,7 @@ export const Popup = ({
             </FormGroup>
           </Grid>
         </Grid>
-      </DialogContent>
+      </div>
       <DialogActions>
         <Button onClick={onCancelChanges} color='primary'>
           Cancel

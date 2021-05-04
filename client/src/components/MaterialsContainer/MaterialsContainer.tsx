@@ -20,10 +20,12 @@ import FormLabel from "@material-ui/core/FormLabel";
 import Select from "@material-ui/core/Select";
 import Tooltip from "@material-ui/core/Tooltip";
 import Skeleton from "@material-ui/lab/Skeleton";
+import Divider from "@material-ui/core/Divider";
 
 import BuildingElementsView from "./BuildingElementsView";
 import ProductView from "./ProductView";
 import CategoryView from "./CategoryView";
+import SimulationModeSwitch from "components/SimulationModeSwitch";
 import { GroupBy } from "interfaces/enums";
 import {
   groupByMaterial,
@@ -36,6 +38,11 @@ const useStyles = makeStyles((theme: Theme) =>
       marginRight: theme.spacing(2),
       minWidth: 180,
     },
+    verticalDivider: {
+      marginRight: theme.spacing(2),
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1)
+    }
   })
 );
 
@@ -150,68 +157,84 @@ const MaterialsContainer = (props: any) => {
 
   return (
     <div>
-      <Grid container spacing={3} alignItems='center' justify='space-between'>
+      <Grid
+        container
+        spacing={3}
+        alignItems='center'
+        justify='space-between'
+        direction='row'
+      >
         <Grid item>
-          <Typography variant='h5' color='textSecondary' gutterBottom>
+          <Typography variant='h5' color='textSecondary'>
             Materials
           </Typography>
         </Grid>
         <Grid item>
-          <Tooltip
-            title='Disable simulation mode to select different grouping'
-            // open={tooltipOpen}
-            disableFocusListener={!isSimulationModeActive}
-            disableHoverListener={!isSimulationModeActive}
-            disableTouchListener={!isSimulationModeActive}
-          >
-            <FormControl className={classes.formControl} variant='outlined'>
-              <InputLabel>Group by</InputLabel>
-              <Select
-                displayEmpty
-                value={groupBy}
-                label='Group by'
-                onChange={handleSelectChange}
-                onMouseEnter={() => handleTooltip(true)}
-                onMouseLeave={() => handleTooltip(false)}
-                onOpen={() => handleTooltip(false)}
+          <Grid container alignItems='center'>
+            <Grid item>
+              <SimulationModeSwitch />
+            </Grid>
+            <Divider orientation='vertical' flexItem className={classes.verticalDivider} />
+            <Grid item>
+              <Tooltip
+                title='Disable Edit mode to select different grouping'
+                // open={tooltipOpen}
+                disableFocusListener={!isSimulationModeActive}
+                disableHoverListener={!isSimulationModeActive}
+                disableTouchListener={!isSimulationModeActive}
               >
-                <MenuItem value={GroupBy.Product}>Product</MenuItem>
-                <MenuItem
-                  value={GroupBy.BuildingElement}
-                  disabled={isSimulationModeActive}
+                <FormControl className={classes.formControl} variant='outlined'>
+                  <InputLabel>Group by</InputLabel>
+                  <Select
+                    displayEmpty
+                    value={groupBy}
+                    label='Group by'
+                    onChange={handleSelectChange}
+                    onMouseEnter={() => handleTooltip(true)}
+                    onMouseLeave={() => handleTooltip(false)}
+                    onOpen={() => handleTooltip(false)}
+                  >
+                    <MenuItem value={GroupBy.Product}>Product</MenuItem>
+                    <MenuItem
+                      value={GroupBy.BuildingElement}
+                      disabled={isSimulationModeActive}
+                    >
+                      Building element
+                    </MenuItem>
+                    <MenuItem
+                      value={GroupBy.Category}
+                      disabled={isSimulationModeActive}
+                    >
+                      Category
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              <FormControl component='fieldset'>
+                <FormLabel component='legend' color='secondary'>
+                  Display mode
+                </FormLabel>
+                <RadioGroup
+                  value={displayMode}
+                  onChange={handleRadioButtonChange}
+                  row
                 >
-                  Building element
-                </MenuItem>
-                <MenuItem
-                  value={GroupBy.Category}
-                  disabled={isSimulationModeActive}
-                >
-                  Category
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </Tooltip>
-          <FormControl component='fieldset'>
-            <FormLabel component='legend' color='secondary'>
-              Display mode
-            </FormLabel>
-            <RadioGroup
-              value={displayMode}
-              onChange={handleRadioButtonChange}
-              row
-            >
-              <FormControlLabel
-                value='table'
-                control={<Radio />}
-                label='Table'
-              />
-              <FormControlLabel
-                value='chart'
-                control={<Radio />}
-                label='Chart'
-              />
-            </RadioGroup>
-          </FormControl>
+                  <FormControlLabel
+                    value='table'
+                    control={<Radio />}
+                    label='Table'
+                  />
+                  <FormControlLabel
+                    value='chart'
+                    control={<Radio />}
+                    label='Chart'
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       {loading || props.parentIsLoading ? (

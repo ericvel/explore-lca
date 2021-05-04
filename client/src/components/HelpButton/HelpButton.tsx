@@ -22,6 +22,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -35,6 +36,9 @@ const styles = (theme: Theme) =>
       top: theme.spacing(1),
       color: theme.palette.grey[500],
     },
+    middleDivider: {
+      marginTop: theme.spacing(2),
+    }
   });
 
 export interface DialogTitleProps extends WithStyles<typeof styles> {
@@ -85,6 +89,7 @@ const terminologyDictionary = [
     definition: "Material replacements throughout the study lifetime period",
   },
   { term: "B4 (t)", definition: "Transportation of material replacements" },
+  { term: "RSL", definition: "Reference service life" },
 ];
 
 function HelpButton() {
@@ -105,11 +110,11 @@ function HelpButton() {
         </IconButton>
       </Tooltip>
       <Dialog onClose={handleClose} open={open}>
-        <DialogTitle id='customized-dialog-title' onClose={handleClose}>
-          Help
-        </DialogTitle>
-        <DialogContent dividers>
-          <Typography variant='h6'>How to use</Typography>
+        {/* <DialogTitle id='customized-dialog-title' onClose={handleClose}>
+          How to use
+        </DialogTitle> */}
+        <DialogContent /* dividers */>
+          {<Typography variant='h6'>How to use</Typography>}
           <Typography>
             <ul>
               <li>
@@ -117,10 +122,8 @@ function HelpButton() {
                 its <b>materials</b> and <b>building elements</b>.
               </li>
               <li>
-                Turn on <b>simulation mode</b> (
-                <i>top-right in building details</i>) to edit a building's
-                materials and see how the changes affect the rest of the
-                building.
+                Turn on <b>Edit mode</b> to edit a building's materials and see
+                how the changes affect the rest of the building.
               </li>
               <li>
                 Select multiple rows to <b>compare</b> the emission values of
@@ -128,6 +131,7 @@ function HelpButton() {
               </li>
             </ul>
           </Typography>
+          <Divider variant='middle' light style={{marginBottom: "16px"}} />
           <Typography variant='h6'>Terminology</Typography>
           <List>
             {terminologyDictionary.map((entry, index) => (
@@ -151,7 +155,7 @@ function HelpButton() {
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose} color='primary'>
-            OK
+            Close
           </Button>
         </DialogActions>
       </Dialog>
