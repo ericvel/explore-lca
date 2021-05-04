@@ -99,7 +99,7 @@ function SingleBuildingView() {
     <div className={classes.content}>
       <Grid container spacing={3} className={classes.buildingSection}>
         <Grid item container alignItems='flex-start' justify='space-between'>
-          <Grid item xs={8}>
+          <Grid item>
             <Typography variant='h4' color='textPrimary'>
               {building_name}
             </Typography>
