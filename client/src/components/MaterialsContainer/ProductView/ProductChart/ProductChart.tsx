@@ -134,6 +134,13 @@ const ProductChart = (props: Props) => {
     }
   };
 
+  const handleOptionChange = (e: any) => {
+    if(e.fullName === 'argumentAxis.visualRange') {
+        const range = e.value;
+        setVisualRange(range);
+    }
+}
+
   const height = 200 + chartData.length * 30;
 
   const classes = useStyles();
@@ -148,6 +155,7 @@ const ProductChart = (props: Props) => {
         rotated={true}
         onDrawn={onDrawn}
         ref={chartRef}
+        onOptionChanged={handleOptionChange}
       >
         <Size height={500} />
         <CommonSeriesSettings
