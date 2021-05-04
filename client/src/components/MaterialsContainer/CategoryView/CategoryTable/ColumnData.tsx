@@ -8,7 +8,7 @@ class ColumnData {
     { name: "quantity", title: "Quantity" },
     { name: "FU", title: "FU" },
     { name: "materialCat", title: "Category" },
-    { name: "sourceType", title: "Source type" },
+    { name: "sourceType", title: "Data source" },
     { name: "RSL_mi", title: "RSL" },
     { name: "A1A3", title: "A1-A3" },
     { name: "A4", title: "A4" },

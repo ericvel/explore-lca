@@ -18,6 +18,8 @@ import {
   Tooltip,
   Size,
   Label,
+  ScrollBar,
+  ZoomAndPan,
 } from "devextreme-react/chart";
 
 import {
@@ -73,6 +75,7 @@ const ProductChart = (props: Props) => {
   );
 
   const [chartData, setChartData] = useState<IMaterialChartItem[]>([]);
+  const [visualRange, setVisualRange] = useState<String[]>([]);
   const isSimulationModeActive = useSelector(
     (state: IRootState) => state.isSimulationModeActive
   );
@@ -84,6 +87,11 @@ const ProductChart = (props: Props) => {
   useEffect(() => {
     const sortedChartData = sortByEE(props.data) as IMaterialChartItem[];
     setChartData(sortedChartData);
+    let range = [
+      sortedChartData[sortedChartData.length - 1]?.name,
+      sortedChartData[sortedChartData.length - 11]?.name,
+    ];
+    setVisualRange(range);
   }, [props.data]);
 
   const customizeTooltip = (arg: any) => {
@@ -126,6 +134,13 @@ const ProductChart = (props: Props) => {
     }
   };
 
+  const handleOptionChange = (e: any) => {
+    if(e.fullName === 'argumentAxis.visualRange') {
+        const range = e.value;
+        setVisualRange(range);
+    }
+}
+
   const height = 200 + chartData.length * 30;
 
   const classes = useStyles();
@@ -140,8 +155,9 @@ const ProductChart = (props: Props) => {
         rotated={true}
         onDrawn={onDrawn}
         ref={chartRef}
+        onOptionChanged={handleOptionChange}
       >
-        <Size height={height > 500 ? height : 500} />
+        <Size height={500} />
         <CommonSeriesSettings
           argumentField='name'
           type='stackedBar'
@@ -160,9 +176,13 @@ const ProductChart = (props: Props) => {
             }}
           />
         </ValueAxis>
-        <ArgumentAxis>
+        {console.log("Name 0: ", chartData[chartData.length - 1]?.name)}
+        {console.log("Name 8: ", chartData[chartData.length - 11]?.name)}
+        <ArgumentAxis visualRange={visualRange} >
           <Label customizeText={wrapArgumentAxisLabel} />
         </ArgumentAxis>
+        <ScrollBar visible={true} />
+        <ZoomAndPan argumentAxis='pan' />
         <Legend
           verticalAlignment='bottom'
           horizontalAlignment='center'
@@ -174,7 +194,7 @@ const ProductChart = (props: Props) => {
           location='edge'
           customizeTooltip={customizeTooltip}
           zIndex={1200}
-          arrowLength={6}          
+          arrowLength={6}
           format={{
             format: (value: string) => parseFloat(value).toLocaleString(),
           }}

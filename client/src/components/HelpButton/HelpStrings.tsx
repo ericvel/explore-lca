@@ -21,7 +21,7 @@ class HelpStrings {
           </Typography>
         </li>
         <li>
-          Turn on <b>simulation mode</b> to edit a building's materials and see how the changes affect the rest of the building.
+          Turn on <b>Edit mode</b> to edit a building's materials and see how the changes affect the rest of the building.
         </li>
         <li>
           Select multiple rows to <b>compare</b> the emission values of different buildings.

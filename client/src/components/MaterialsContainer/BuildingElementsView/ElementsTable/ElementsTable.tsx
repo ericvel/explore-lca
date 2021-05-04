@@ -7,8 +7,6 @@ import {
   Theme,
   createStyles,
   makeStyles,
-  withStyles,
-  emphasize,
 } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";

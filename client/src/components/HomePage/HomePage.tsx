@@ -36,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function HomePage() {
-  
   const classes = useStyles();
 
   return (
@@ -50,7 +49,9 @@ function HomePage() {
           className={classes.titleBar}
         >
           <Grid item>
-            <Typography variant='h2'>bLCAd Tool - GUI</Typography>
+            <Typography variant='h2' component='h1'>
+              ExploreLCA
+            </Typography>
           </Grid>
 
           <Grid item>

@@ -42,6 +42,8 @@ const useStyles = makeStyles((/* theme: Theme */) =>
     editCell: {
       paddingTop: theme.spacing(0),
       paddingBottom: theme.spacing(0),
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(0),
     },
     simulatedField: {
       color: theme.palette.simulated.main,
@@ -183,7 +185,14 @@ export const EditCell = ({ children, style, ...restProps }: any) => {
     <VirtualTable.Cell
       {...restProps}
       children={restProps.row.parentId === null ? children : null}
-      style={{ paddingTop: "0px", paddingBottom: "0px", ...style }}
+      // className={useStyles().editCell}
+      style={{
+        paddingTop: "0px",
+        paddingBottom: "0px",
+        paddingLeft: "16px",
+        paddingRight: "0px",
+        ...style,
+      }}
     />
   );
 };
@@ -195,11 +204,11 @@ const SimulatedFieldCell = ({ value, style, ...restProps }: any) => (
       ...style,
     }}
   >
-    <Tooltip title="Simulated value">
+    <Tooltip title='Simulated value'>
       <span
         style={{
           color: theme.palette.simulated.main,
-          fontWeight: "bold"
+          fontWeight: "bold",
         }}
       >
         {typeof value === "number" ? value.toLocaleString() : value}

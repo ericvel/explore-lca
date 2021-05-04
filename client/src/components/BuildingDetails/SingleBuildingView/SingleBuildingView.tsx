@@ -20,7 +20,7 @@ import Switch from "@material-ui/core/Switch";
 
 import MaterialsContainer from "components/MaterialsContainer";
 import SingleBuildingChart from "./SingleBuildingChart";
-import SimulationModeSwitch from "./SimulationModeSwitch";
+import SimulationModeSwitch from "components/SimulationModeSwitch";
 import SettingsButton from "components/SettingsButton";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -99,7 +99,7 @@ function SingleBuildingView() {
     <div className={classes.content}>
       <Grid container spacing={3} className={classes.buildingSection}>
         <Grid item container alignItems='flex-start' justify='space-between'>
-          <Grid item xs={8}>
+          <Grid item>
             <Typography variant='h4' color='textPrimary'>
               {building_name}
             </Typography>
@@ -107,9 +107,9 @@ function SingleBuildingView() {
               {building_identifier}
             </Typography>
           </Grid>
-          <Grid item>
+          {/* <Grid item>
             <SimulationModeSwitch />
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid item xs={6}>
           <Grid container alignItems='center' justify='space-between' className={classes.heading}>

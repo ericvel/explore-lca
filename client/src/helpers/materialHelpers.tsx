@@ -161,7 +161,7 @@ export const groupByMaterial = (materials: IMaterialInventory[]) => {
 export const createChildRows = (materials: IMaterialInventory[]) => {
   const childRows: IMaterialTableChildRow[] = materials.map((m) => ({
     idmaterialInventory: m.idmaterialInventory,
-    name: "ID: " + String(m.idmaterialInventory),
+    name: "Inventory: " + String(m.idmaterialInventory),
     buildingElementName: m.buildingElementName,
     quantity: m.quantity,
     FU: m.FU,

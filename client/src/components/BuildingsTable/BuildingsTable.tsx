@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import allActions from "redux/actions";
 import { IRootState } from "redux/reducers";
 
+import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
@@ -22,12 +23,14 @@ import {
   TableHeaderRow,
   ColumnChooser,
   TableColumnVisibility,
+  Table,
   VirtualTable,
   TableSelection,
   TableFixedColumns,
 } from "@devexpress/dx-react-grid-material-ui";
 import { Template, TemplatePlaceholder } from "@devexpress/dx-react-core";
 import _ from "lodash";
+import classNames from "clsx";
 
 import {
   DecimalTypeProvider,
@@ -37,9 +40,70 @@ import ColumnData from "./ColumnData";
 import LoadingIndicator from "components/LoadingIndicator";
 import AlertSnackbar from "components/AlertSnackbar";
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    selected: {
+      backgroundColor: "#EEEEEE",
+    },
+    customRow: {
+      "@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none)": {
+        "&:hover": {
+          cursor: "pointer",
+          "& > *": {
+            backdropFilter: "brightness(97%)",
+          },
+          "& .buildingTableFixedCell": {
+            filter: "brightness(97%)",
+          },
+        },
+      },
+      // fallback for Firefox (not supporting backdrop-filter)
+      "@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none))": {
+        "&:hover": {
+          cursor: "pointer",
+          backgroundColor: "#F6F6F6",
+          "& .buildingTableFixedCell": {
+            backgroundColor: "#F6F6F6",
+          },
+        },
+      }
+    },
+  })
+);
+
 const getRowId = (row: any) => row[Object.keys(row)[0]];
 const Root = (props: any) => (
   <Grid.Root {...props} style={{ height: "100%" }} />
+);
+
+const CustomTableRow = (props: any) => {
+  const {
+    className,
+    highlighted,
+    selectByRowClick,
+    onToggle,
+    ...restProps
+  } = props;
+  const classes = useStyles();
+
+  return (
+    <Table.Row
+      {...restProps}
+      className={classNames(
+        { [classes.selected]: highlighted, [classes.customRow]: true },
+        className
+      )}
+      onClick={(e: any) => {
+        if (!selectByRowClick) return;
+        e.stopPropagation();
+        onToggle();
+      }}
+    />
+  );
+};
+
+const CustomFixedCell = ({ ...props }: any) => (
+  <TableFixedColumns.Cell {...props} className='buildingTableFixedCell' />
 );
 
 const getHiddenColumnsFilteringExtensions = (hiddenColumnNames: string[]) =>
@@ -192,8 +256,12 @@ function BuildingsTable() {
           selectByRowClick
           highlightRow={true}
           showSelectionColumn={multipleSwitchChecked}
+          rowComponent={CustomTableRow}
         />
-        <TableFixedColumns leftColumns={leftColumns} />
+        <TableFixedColumns
+          leftColumns={leftColumns}
+          cellComponent={CustomFixedCell}
+        />
         <TableColumnVisibility
           defaultHiddenColumnNames={defaultHiddenColumnNames}
           columnExtensions={tableColumnVisibilityColumnExtensions}
