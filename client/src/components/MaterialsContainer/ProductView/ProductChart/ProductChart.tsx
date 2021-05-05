@@ -87,11 +87,13 @@ const ProductChart = (props: Props) => {
   useEffect(() => {
     const sortedChartData = sortByEE(props.data) as IMaterialChartItem[];
     setChartData(sortedChartData);
-    let range = [
-      sortedChartData[sortedChartData.length - 1]?.name,
-      sortedChartData[sortedChartData.length - 11]?.name,
-    ];
-    setVisualRange(range);
+    if (sortedChartData.length > 9) {
+      let range = [
+        sortedChartData[sortedChartData.length - 1]?.name,
+        sortedChartData[sortedChartData.length - 11]?.name,
+      ];
+      setVisualRange(range);
+    }
   }, [props.data]);
 
   const customizeTooltip = (arg: any) => {
@@ -135,11 +137,12 @@ const ProductChart = (props: Props) => {
   };
 
   const handleOptionChange = (e: any) => {
-    if(e.fullName === 'argumentAxis.visualRange') {
-        const range = e.value;
-        setVisualRange(range);
+    if (e.fullName === "argumentAxis.visualRange") {
+      if (!visualRange.length) return;
+      const range = e.value;
+      setVisualRange(range);
     }
-}
+  };
 
   const height = 200 + chartData.length * 30;
 
@@ -176,12 +179,10 @@ const ProductChart = (props: Props) => {
             }}
           />
         </ValueAxis>
-        {console.log("Name 0: ", chartData[chartData.length - 1]?.name)}
-        {console.log("Name 8: ", chartData[chartData.length - 11]?.name)}
-        <ArgumentAxis visualRange={visualRange} >
+        <ArgumentAxis visualRange={visualRange}>
           <Label customizeText={wrapArgumentAxisLabel} />
         </ArgumentAxis>
-        <ScrollBar visible={true} />
+        <ScrollBar visible={visualRange.length} />
         <ZoomAndPan argumentAxis='pan' />
         <Legend
           verticalAlignment='bottom'
