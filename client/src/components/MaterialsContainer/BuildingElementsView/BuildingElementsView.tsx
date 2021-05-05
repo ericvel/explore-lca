@@ -215,38 +215,40 @@ const BuildingElementsView = (props: any) => {
 
         <Grid item xs={12}>
           {childElements?.length ? (
-            displayMode === "table" ? (
-              <React.Fragment>
-                <Grid
-                  container
-                  alignItems='center'
-                  justify='center'
-                  spacing={1}
-                  className={classes.infoContainer}
-                >
-                  <Grid item className={classes.infoIconGridItem}>
-                    <InfoOutlinedIcon
-                      className={classes.infoIcon}
-                      fontSize='small'
-                    />
-                  </Grid>
-                  <Grid item>
-                    <Typography
-                      variant='body2'
-                      color='textSecondary'
-                      align='center'
-                    >
-                      Click on a building element to see its sub-elements
-                    </Typography>
-                  </Grid>
+            [
+              <Grid
+                container
+                alignItems='center'
+                justify='center'
+                spacing={1}
+                className={classes.infoContainer}
+              >
+                <Grid item className={classes.infoIconGridItem}>
+                  <InfoOutlinedIcon
+                    className={classes.infoIcon}
+                    fontSize='small'
+                  />
                 </Grid>
-                <Paper>
-                  <ElementsTable />
-                </Paper>
-              </React.Fragment>
-            ) : (
-              <ElementsChart />
-            )
+                <Grid item>
+                  <Typography
+                    variant='body2'
+                    color='textSecondary'
+                    align='center'
+                  >
+                    Click on a building element to see its sub-elements
+                  </Typography>
+                </Grid>
+              </Grid>,
+              displayMode === "table" ? (
+                <React.Fragment>
+                  <Paper>
+                    <ElementsTable />
+                  </Paper>
+                </React.Fragment>
+              ) : (
+                <ElementsChart />
+              ),
+            ]
           ) : (
             <ProductView
               materials={getElementMaterials(
