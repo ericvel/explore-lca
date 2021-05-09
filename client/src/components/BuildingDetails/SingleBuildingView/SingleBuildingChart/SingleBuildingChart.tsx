@@ -29,7 +29,7 @@ import {
   Label,
 } from "devextreme-react/chart";
 
-import { roundTo } from "components/TableUtilities/SimulationHelpers";
+import { calculatePercentageChange } from "helpers/simulationHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -223,21 +223,20 @@ const SingleBuildingChart = () => {
       if (isSeriesSimulated(fieldName)) {
         const originalValue = Number(selectedBuildings[0][fieldName]);
         const simulatedValue = emissionValues[fieldName];
-        // console.log("Original value: " + originalValue);
-        // console.log("Simulated value: " + simulatedValue);
 
-        const percentageChange =
-          ((originalValue - simulatedValue) / originalValue) * 100;
+        const percentageChange = calculatePercentageChange(
+          originalValue,
+          simulatedValue
+        );
 
-        console.log("Percentage change: " + percentageChange + "%");
         const emissionStringLine = props.valueText + "\n";
-        const percentStringLine =
-          "(-" +
-          parseFloat(percentageChange.toFixed(1)).toLocaleString() +
-          "%)";
+        const percentStringLine = "(-" + percentageChange +"%)";
         const tooltipText = emissionStringLine + percentStringLine;
 
-        return { text: tooltipText, fontColor: "#8CF29C" };
+        return {
+          text: tooltipText,
+          fontColor: theme.palette.reducedEmission.light,
+        };
       }
     }
   };

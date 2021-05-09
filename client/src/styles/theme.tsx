@@ -8,6 +8,11 @@ const theme = createMuiTheme({
       light: "#ff9d3f",
       dark: "#b53d00",
     },
+    reducedEmission: {
+      main: "#59bf6d",
+      light: "#8cf29c",
+      dark: "#208e40"
+    }
   },
 });
 
