@@ -27,6 +27,7 @@ router.get("/", (req, res) => {
       switch (err.code) {
         case "ETIMEDOUT":
           res.status(504).send(err);
+          break;
         default:
           res.status(400).send(err);
       }

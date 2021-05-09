@@ -32,7 +32,10 @@ import Typography from "@material-ui/core/Typography";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import theme from "styles/theme";
 
-import { reduceEmissionNumber } from "./SimulationHelpers";
+import {
+  reduceEmissionNumber,
+  calculatePercentageChange,
+} from "helpers/simulationHelpers";
 import { LCAPhaseTooltip } from "interfaces/enums";
 
 const useStyles = makeStyles((/* theme: Theme */) =>
@@ -51,7 +54,10 @@ const useStyles = makeStyles((/* theme: Theme */) =>
       paddingBottom: theme.spacing(2),
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
-      overflow: "auto"
+      overflow: "auto",
+    },
+    reducedEmissionAdornment: {
+      color: theme.palette.reducedEmission.main
     }
   }));
 
@@ -84,6 +90,7 @@ export const Popup = ({
   const [originalRow, setOriginalRow] = useState<IMaterialTableRow>(row);
   const [sourceType, setSourceType] = useState<string>(row.sourceType);
   const [A1A3, setA1A3] = useState<number>(row.A1A3);
+  const [percentageChange, setPercentageChange] = useState("");
 
   const materialProducts = useSelector(
     (state: IRootState) => state.materialProducts
@@ -108,8 +115,12 @@ export const Popup = ({
   ) => {
     setSourceType(event.target.value);
     if (event.target.value === "TestSource") {
-      const simulatedValue = reduceEmissionNumber(originalRow.A1A3);
+      const reductionFactorId = originalRow.name.length % 5;
+      const simulatedValue = reduceEmissionNumber(originalRow.A1A3, reductionFactorId);
       setA1A3(simulatedValue);
+      setPercentageChange(
+        calculatePercentageChange(originalRow.A1A3, simulatedValue)
+      );
       const textFieldEvent = {
         target: { name: "A1A3", value: simulatedValue },
       };
@@ -229,7 +240,7 @@ export const Popup = ({
                   margin='normal'
                   name='A1A3'
                   label='A1-A3'
-                  value={A1A3 || "0"}
+                  value={A1A3?.toLocaleString() || "0"}
                   onChange={onChange}
                   disabled
                   InputLabelProps={{
@@ -237,6 +248,17 @@ export const Popup = ({
                       asterisk: classes.labelAsterisk,
                     },
                   }}
+                  InputProps={
+                    A1A3 !== originalRow.A1A3
+                      ? {
+                          endAdornment: (
+                            <InputAdornment position='end' disableTypography className={classes.reducedEmissionAdornment}>
+                              {"(-" + calculatePercentageChange(originalRow.A1A3, A1A3) + "%)"}
+                            </InputAdornment>
+                          ),
+                        }
+                      : undefined
+                  }
                 />
               </Tooltip>
               <Tooltip
@@ -248,7 +270,7 @@ export const Popup = ({
                   margin='normal'
                   name='A4'
                   label='A4'
-                  value={row.A4 || "0"}
+                  value={row.A4?.toLocaleString() || "0"}
                   onChange={onChange}
                   disabled
                 />
@@ -262,7 +284,7 @@ export const Popup = ({
                   margin='normal'
                   name='B4_m'
                   label='B4 (m)'
-                  value={row.B4_m || "0"}
+                  value={row.B4_m?.toLocaleString() || "0"}
                   onChange={onChange}
                   disabled
                 />
@@ -276,7 +298,7 @@ export const Popup = ({
                   margin='normal'
                   name='B4_t'
                   label='B4 (t)'
-                  value={row.B4_t || "0"}
+                  value={row.B4_t?.toLocaleString() || "0"}
                   onChange={onChange}
                   disabled
                 />

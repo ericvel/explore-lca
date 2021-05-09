@@ -29,7 +29,7 @@ import {
   Label,
 } from "devextreme-react/chart";
 
-import { roundTo } from "components/TableUtilities/SimulationHelpers";
+import { calculatePercentageChange } from "helpers/simulationHelpers";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -82,6 +82,14 @@ const SingleBuildingChart = () => {
   const simulatedData = useSelector((state: IRootState) => state.simulatedData);
   const checkedEEMetrics = useSelector((state: IRootState) => state.EEMetric);
 
+  var initialEmissionValues = {
+    A1A3: 0,
+    A4: 0,
+    B4_m: 0,
+    B4_t: 0,
+  };
+
+  const [emissionValues, setEmissionValues] = useState(initialEmissionValues);
   const [chartData, setChartData] = useState<ISingleChartDataItem[]>([]);
 
   useEffect(() => {
@@ -89,6 +97,7 @@ const SingleBuildingChart = () => {
     var A4: number;
     var B4_m: number;
     var B4_t: number;
+
     var nonSimulatedValues = {
       A1A3: Number(selectedBuildings[0].A1A3) || 0.0,
       A4: Number(selectedBuildings[0].A4) || 0.0,
@@ -116,6 +125,15 @@ const SingleBuildingChart = () => {
       B4_m = Number(selectedBuildings[0].B4_m) || 0.0;
       B4_t = Number(selectedBuildings[0].B4_t) || 0.0;
     }
+
+    const emissions = {
+      A1A3: A1A3,
+      A4: A4,
+      B4_m: B4_m,
+      B4_t: B4_t,
+    };
+
+    setEmissionValues(emissions);
 
     // Divides by floor area if setting is checked
     if (checkedEEMetrics.perSqM) {
@@ -195,7 +213,31 @@ const SingleBuildingChart = () => {
       case "B4 (t)":
         return "B4_t";
       default:
-        return "";
+        return "A1A3";
+    }
+  };
+
+  const customizeTooltip = (props: any) => {
+    if (isSimulationModeActive) {
+      const fieldName = labelToFieldname(props.argument);
+      if (isSeriesSimulated(fieldName)) {
+        const originalValue = Number(selectedBuildings[0][fieldName]);
+        const simulatedValue = emissionValues[fieldName];
+
+        const percentageChange = calculatePercentageChange(
+          originalValue,
+          simulatedValue
+        );
+
+        const emissionStringLine = props.valueText + "\n";
+        const percentStringLine = "(-" + percentageChange +"%)";
+        const tooltipText = emissionStringLine + percentStringLine;
+
+        return {
+          text: tooltipText,
+          fontColor: theme.palette.reducedEmission.light,
+        };
+      }
     }
   };
 
@@ -254,6 +296,7 @@ const SingleBuildingChart = () => {
             format: (value: string) => parseFloat(value).toLocaleString(),
           }}
           interactive
+          customizeTooltip={customizeTooltip}
         />
       </Chart>
     </Paper>

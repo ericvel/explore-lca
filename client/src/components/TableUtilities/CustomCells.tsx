@@ -49,6 +49,9 @@ const useStyles = makeStyles((/* theme: Theme */) =>
       color: theme.palette.simulated.main,
       // fontWeight: "bolder",
     },
+    reducedEmissionTooltip: {
+      color: theme.palette.reducedEmission.main,
+    },
   }));
 
 export const GroupCell = ({
@@ -204,7 +207,7 @@ const SimulatedFieldCell = ({ value, style, ...restProps }: any) => (
       ...style,
     }}
   >
-    <Tooltip title='Simulated value'>
+    <Tooltip title='Edited value'>
       <span
         style={{
           color: theme.palette.simulated.main,
