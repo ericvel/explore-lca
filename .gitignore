@@ -12,17 +12,12 @@ node_modules/
 /build
 
 # config and credentials
-dbconfig.js
 .runtimeconfig.json
-firebase_config.js
-firebase_config_secret.js
-# misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
 .env.production.local
 .env
+
+# misc
+.DS_Store
 
 npm-debug.log*
 yarn-debug.log*
