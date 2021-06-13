@@ -1,5 +1,5 @@
 # ExploreLCA
-ExploreLCA is a web application for exploring and visualising data from the bLCAd tool.
+ExploreLCA is a web application for exploring and visualising life cycle assessments of buildings found in the bLCAd tool.
 
 ![Main view](screenshots/mainview.png)
 
