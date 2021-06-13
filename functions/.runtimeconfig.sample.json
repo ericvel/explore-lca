@@ -1,0 +1,13 @@
+{
+    "mysql": {
+      "user": "xxx",
+      "pwd": "xxx",
+      "host": "xxx",
+      "db": "xxx",
+      "url": "xxx",
+      "sslca": "xxx",
+      "sslcert": "xxx",
+      "sslkey": "xxx"
+    }
+  }
+  
