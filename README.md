@@ -24,7 +24,7 @@ npm install
 Create a copy of *.env.sample* and rename it to *.env*.  
 Replace the placeholder values with values from your MySQL database and Firebase project.
 
-Run the React App and the Node server at the same
+Run the React App and the Node server at the same time
 ```
 npm run dev
 ```
